@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rqm-qiskit"
+version = "0.1.0"
+description = "SU(2)-native geometric bridge layer for Qiskit"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "RQM Technologies" }]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "qiskit",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+simulator = [
+    "qiskit-aer",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
