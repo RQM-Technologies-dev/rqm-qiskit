@@ -17,29 +17,27 @@ pip install -e ".[dev,simulator]"
 All examples can be run from the project root directory:
 
 ```bash
-# Quickstart: prepare |+>, apply R_y rotation, measure
-python examples/basic_single_qubit.py
+# Quaternion demo: show quaternion representations of qubit states
+python examples/quaternion_state_demo.py
 
-# Bloch sphere demo: inspect Bloch vectors before and after a gate
-python examples/bloch_rotation_demo.py
+# Bloch vs quaternion: compare Bloch-vector and quaternion descriptions
+python examples/bloch_vs_quaternion_demo.py
 
-# Simulator counts demo: run multiple circuits, print formatted summaries
+# Simulator counts demo: run circuits on Aer, print formatted summaries
 python examples/simulator_counts_demo.py
 ```
 
 ## What Each Example Does
 
-### `basic_single_qubit.py`
-- Creates the |+⟩ state
-- Applies an R_y(π/4) rotation gate
-- Measures the result using the Aer simulator (2048 shots)
-- Prints a formatted counts summary
+### `quaternion_state_demo.py`
+- Shows each standard qubit state (|0>, |1>, |+>, |->) as a unit quaternion
+- Demonstrates quaternion composition as gate composition
+- Verifies that the quaternion's SU(2) matrix produces the correct state from |0>
 
-### `bloch_rotation_demo.py`
-- Creates a state from Bloch angles (θ, φ)
-- Prints the Bloch vector before and after applying gates
-- Demonstrates both R_y and R_z rotations
-- Shows the text-mode circuit diagram
+### `bloch_vs_quaternion_demo.py`
+- Compares the Bloch-vector and quaternion representations of the same state
+- Applies R_y and R_z gates and shows both descriptions before and after
+- Demonstrates how quaternion multiplication composes two rotations exactly
 
 ### `simulator_counts_demo.py`
 - Runs three different 1-qubit circuits on the Aer sampler

@@ -173,3 +173,55 @@ def test_repr_contains_alpha_beta():
 def test_invalid_state_not_a_number():
     with pytest.raises((TypeError, ValueError)):
         RQMState("not", "numbers")  # type: ignore[arg-type]
+
+
+# ---------------------------------------------------------------------------
+# to_quaternion()
+# ---------------------------------------------------------------------------
+
+
+def test_to_quaternion_returns_quaternion():
+    from rqm_qiskit import Quaternion
+
+    q = RQMState.zero().to_quaternion()
+    assert isinstance(q, Quaternion)
+
+
+def test_to_quaternion_zero_state_is_identity():
+    """The |0> state should map to the identity quaternion."""
+    q = RQMState.zero().to_quaternion()
+    assert math.isclose(q.w, 1.0, abs_tol=1e-10)
+    assert math.isclose(q.x, 0.0, abs_tol=1e-10)
+    assert math.isclose(q.y, 0.0, abs_tol=1e-10)
+    assert math.isclose(q.z, 0.0, abs_tol=1e-10)
+
+
+def test_to_quaternion_is_unit():
+    """Quaternions from all standard states should be unit quaternions."""
+    for state in [RQMState.zero(), RQMState.one(), RQMState.plus(), RQMState.minus()]:
+        q = state.to_quaternion()
+        assert math.isclose(q.norm(), 1.0, abs_tol=1e-10)
+
+
+def test_to_quaternion_su2_prepares_state():
+    """q.to_su2_matrix() @ |0> should equal the original state vector."""
+    import numpy as np
+
+    for state in [RQMState.plus(), RQMState.minus(), RQMState.one()]:
+        q = state.to_quaternion()
+        result = q.to_su2_matrix() @ np.array([1.0, 0.0])
+        expected = np.array([state.alpha, state.beta])
+        assert np.allclose(result, expected, atol=1e-10), (
+            f"State {state} quaternion does not prepare it from |0>"
+        )
+
+
+def test_to_quaternion_plus_state():
+    """The |+> state should give the Ry(π/2) quaternion."""
+    q = RQMState.plus().to_quaternion()
+    expected_w = math.cos(math.pi / 4)
+    expected_y = math.sin(math.pi / 4)
+    assert math.isclose(q.w, expected_w, abs_tol=1e-10)
+    assert math.isclose(q.x, 0.0, abs_tol=1e-10)
+    assert math.isclose(q.y, expected_y, abs_tol=1e-10)
+    assert math.isclose(q.z, 0.0, abs_tol=1e-10)

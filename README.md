@@ -1,31 +1,74 @@
 # rqm-qiskit
 
-**SU(2)-native geometric bridge layer for Qiskit** — describe quantum states and
-gates in rotation-first language, then run them on Qiskit simulators and IBM Quantum.
+**Quaternion-native geometric bridge layer for Qiskit** — describe quantum states and
+gates in the language of unit quaternions and SU(2) rotations, then run them on Qiskit
+simulators and IBM Quantum hardware.
 
 ---
 
 ## What Is This?
 
 `rqm-qiskit` is a clean, beginner-friendly Python package that sits **on top of
-Qiskit** and provides a geometric, SU(2)-native interface for 1-qubit quantum work.
+Qiskit** and provides a quaternion-native interface for 1-qubit quantum work.
 
-Instead of building circuits gate-by-gate from scratch, you describe states and
-rotations in the language of Bloch spheres and SU(2) matrices, then let the library
-translate them into standard Qiskit `QuantumCircuit` objects for simulation or IBM
-Quantum execution.
+The key insight:
+
+> A single-qubit state lives on the Bloch sphere.  
+> Rotations of the Bloch sphere are SU(2) transformations.  
+> SU(2) is isomorphic to the group of unit quaternions.
+
+Therefore, **unit quaternions are the natural algebraic object for 1-qubit quantum
+states and gates**.  `rqm-qiskit` exposes that geometry directly, while Qiskit
+handles circuits, transpilation, simulation, and IBM Quantum execution.
+
+The stack:
+
+```
+Quaternion / geometric representation
+        ↓
+SU(2) rotations
+        ↓
+Qiskit circuit representation
+        ↓
+Simulator or IBM Quantum hardware
+```
 
 **This package is not trying to replace Qiskit.**  
 It is a bridge layer — Qiskit does all the heavy lifting under the hood.
 
 ---
 
+## Quaternion Intuition for Qubits
+
+A unit quaternion `q = w + x·i + y·j + z·k` (with `|q| = 1`) corresponds to an
+SU(2) matrix via:
+
+```
+U = [[w − i·z,  −(y + i·x)],
+     [y − i·x,   w + i·z  ]]
+```
+
+This means:
+
+| Operation | Quaternion form |
+|-----------|----------------|
+| Identity (no rotation) | `q = 1` |
+| R_x(θ) | `q = cos(θ/2) + sin(θ/2)·i` |
+| R_y(θ) | `q = cos(θ/2) + sin(θ/2)·j` |
+| R_z(θ) | `q = cos(θ/2) + sin(θ/2)·k` |
+| Compose two gates | `q_total = q2 * q1` (right-to-left) |
+
+Every `RQMGate` exposes its `quaternion` property.  Every `RQMState` exposes
+`to_quaternion()` — the rotation that prepares it from `|0>`.
+
+---
+
 ## Why Does This Exist?
 
-- **Rotation-first thinking**: quantum computation on a single qubit is just rotations
-  on the Bloch sphere.  `rqm-qiskit` makes that concrete.
-- **Educational clarity**: fewer raw matrix operations, more geometric intuition.
-- **IBM Quantum ready**: built on Qiskit so the path to real hardware is straightforward.
+- **Geometric intuition**: unit quaternions make SU(2) rotations concrete and composable.
+- **Quaternionic quantum mechanics**: a foundation for richer RQM educational tooling.
+- **Educational clarity**: fewer raw matrix operations, more geometric understanding.
+- **IBM Quantum ready**: built on Qiskit so the path to real hardware is direct.
 
 ---
 
@@ -59,7 +102,7 @@ pip install -e ".[dev,simulator]"
 from rqm_qiskit import RQMState, RQMGate, RQMCircuit
 
 state = RQMState.plus()
-gate = RQMGate.ry(0.5)
+gate = RQMGate.ry(0.6)
 
 circ = RQMCircuit(1)
 circ.prepare_state(state)
@@ -69,7 +112,24 @@ circ.measure_all()
 print(circ.draw_text())
 ```
 
-Run the circuit on the local Aer simulator:
+Inspect the quaternion geometry:
+
+```python
+# State as a unit quaternion
+q_state = state.to_quaternion()
+print(q_state.pretty())           # Quaternion(0.7071 +0.0000i +0.7071j +0.0000k)  |q| = 1.000000
+
+# Gate as a unit quaternion
+q_gate = gate.quaternion
+print(q_gate.pretty())
+
+# Compose two gates as a single quaternion product
+gate2 = RQMGate.rz(0.3)
+q_composed = gate2.quaternion * gate.quaternion  # apply gate first, then gate2
+print(q_composed.to_su2_matrix())  # the combined 2×2 SU(2) matrix
+```
+
+Run on the local Aer simulator:
 
 ```python
 from rqm_qiskit import format_counts_summary
@@ -87,23 +147,25 @@ print(format_counts_summary(counts))
 rqm-qiskit/
   src/
     rqm_qiskit/
-      state.py      – RQMState: normalized 1-qubit state
-      gates.py      – RQMGate: SU(2) rotation gate (x, y, z)
-      circuit.py    – RQMCircuit: thin wrapper around QuantumCircuit
-      convert.py    – state_to_quantum_circuit, gate_to_quantum_circuit
-      results.py    – summarize_counts, format_counts_summary
-      ibm.py        – Aer sampler helper + IBM Runtime stub
-      utils.py      – internal utilities
-  tests/            – pytest test suite
-  examples/         – runnable example scripts
+      quaternion.py  – Quaternion: unit quaternion with SU(2) conversion
+      state.py       – RQMState: normalized 1-qubit state + to_quaternion()
+      gates.py       – RQMGate: SU(2) rotation (x, y, z) + quaternion property
+      circuit.py     – RQMCircuit: thin wrapper around QuantumCircuit
+      convert.py     – state_to_quantum_circuit, gate_to_quantum_circuit
+      results.py     – summarize_counts, format_counts_summary
+      ibm.py         – Aer sampler helper + IBM Runtime stub
+      utils.py       – internal utilities
+  tests/             – pytest test suite (114 tests)
+  examples/          – runnable example scripts
 ```
 
 ---
 
 ## Current Scope (v0.1.0)
 
-- ✅ `RQMState` — normalized 1-qubit states with Bloch-sphere helpers
-- ✅ `RQMGate` — R_x, R_y, R_z rotation gates
+- ✅ `Quaternion` — unit quaternion with SU(2) matrix conversion and composition
+- ✅ `RQMState` — normalized 1-qubit states; `to_quaternion()` gives the preparation rotation
+- ✅ `RQMGate` — R_x, R_y, R_z gates; `gate.quaternion` exposes the quaternion form
 - ✅ `RQMCircuit` — prepare, rotate, measure, draw
 - ✅ Conversion helpers to/from Qiskit `QuantumCircuit`
 - ✅ Measurement result summaries
@@ -117,7 +179,7 @@ rqm-qiskit/
 
 | Version | Features |
 |---------|----------|
-| 0.1.0   | 1-qubit states, gates, circuits, local simulation |
+| 0.1.0   | 1-qubit states, gates, quaternion layer, local simulation |
 | 0.2.0   | IBM Runtime `SamplerV2` integration |
 | 0.3.0   | 2-qubit entanglement, CNOT, Bell states |
 | 0.4.0   | Noise models, density matrices |
@@ -134,8 +196,8 @@ pytest
 ## Running Examples
 
 ```bash
-python examples/basic_single_qubit.py
-python examples/bloch_rotation_demo.py
+python examples/quaternion_state_demo.py
+python examples/bloch_vs_quaternion_demo.py
 python examples/simulator_counts_demo.py
 ```
 

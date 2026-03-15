@@ -17,6 +17,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from qiskit.quantum_info import Statevector
+    from rqm_qiskit.quaternion import Quaternion
 
 
 class RQMState:
@@ -148,6 +149,35 @@ class RQMState:
         from qiskit.quantum_info import Statevector
 
         return Statevector([self._alpha, self._beta])
+
+    def to_quaternion(self) -> "Quaternion":
+        """Return the unit quaternion representing the rotation that prepares this state from |0>.
+
+        For a state |psi> = alpha|0> + beta|1>, the preparation unitary is:
+            U = [[alpha, -beta*],
+                 [beta,  alpha*]]
+
+        Using the SU(2) ↔ unit-quaternion isomorphism (U = [[w−iz, −(y+ix)], [y−ix, w+iz]]):
+            w =  Re(alpha)
+            x = -Im(beta)
+            y =  Re(beta)
+            z = -Im(alpha)
+
+        The returned quaternion satisfies:
+            quaternion.to_su2_matrix() @ |0> ≈ |psi>
+
+        Returns
+        -------
+        :class:`~rqm_qiskit.Quaternion`
+            A unit quaternion.
+        """
+        from rqm_qiskit.quaternion import Quaternion
+
+        w = self._alpha.real
+        x = -self._beta.imag
+        y = self._beta.real
+        z = -self._alpha.imag
+        return Quaternion(w, x, y, z)
 
     def pretty(self) -> str:
         """Return a human-readable string representation of the state."""

@@ -166,3 +166,41 @@ def test_repr_contains_axis_and_angle():
     r = repr(RQMGate("y", 2.5))
     assert "axis" in r
     assert "angle" in r
+
+
+# ---------------------------------------------------------------------------
+# quaternion property
+# ---------------------------------------------------------------------------
+
+
+def test_quaternion_property_returns_quaternion():
+    from rqm_qiskit import Quaternion
+
+    q = RQMGate.rx(1.0).quaternion
+    assert isinstance(q, Quaternion)
+
+
+def test_quaternion_property_is_unit():
+    """Gate quaternions should all be unit quaternions."""
+    for axis in ("x", "y", "z"):
+        q = RQMGate(axis, 1.23).quaternion
+        assert math.isclose(q.norm(), 1.0, abs_tol=1e-10)
+
+
+def test_quaternion_su2_matches_gate_matrix():
+    """quaternion.to_su2_matrix() must equal gate.to_matrix() for all axes."""
+    import numpy as np
+
+    for axis in ("x", "y", "z"):
+        gate = RQMGate(axis, 0.9)
+        assert np.allclose(gate.quaternion.to_su2_matrix(), gate.to_matrix(), atol=1e-12)
+
+
+def test_quaternion_zero_angle_is_identity():
+    """A zero-angle gate should give the identity quaternion."""
+    for axis in ("x", "y", "z"):
+        q = RQMGate(axis, 0.0).quaternion
+        assert math.isclose(q.w, 1.0, abs_tol=1e-10)
+        assert math.isclose(q.x, 0.0, abs_tol=1e-10)
+        assert math.isclose(q.y, 0.0, abs_tol=1e-10)
+        assert math.isclose(q.z, 0.0, abs_tol=1e-10)

@@ -21,6 +21,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from qiskit.circuit import Gate
+    from rqm_qiskit.quaternion import Quaternion
 
 _VALID_AXES = {"x", "y", "z"}
 
@@ -92,6 +93,22 @@ class RQMGate:
     def angle(self) -> float:
         """Rotation angle in radians."""
         return self._angle
+
+    @property
+    def quaternion(self) -> "Quaternion":
+        """The unit quaternion representing this gate.
+
+        Uses :meth:`~rqm_qiskit.Quaternion.from_axis_angle` so that the
+        quaternion's SU(2) matrix matches :meth:`to_matrix` exactly.
+
+        Returns
+        -------
+        :class:`~rqm_qiskit.Quaternion`
+            A unit quaternion.
+        """
+        from rqm_qiskit.quaternion import Quaternion
+
+        return Quaternion.from_axis_angle(self._axis, self._angle)
 
     # ------------------------------------------------------------------
     # Methods
