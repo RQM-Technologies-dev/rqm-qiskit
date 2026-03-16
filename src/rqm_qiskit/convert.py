@@ -6,12 +6,27 @@ canonical rqm-compiler IR (Circuit / CompiledCircuit / Operation) and
 lowers it into Qiskit QuantumCircuit objects.  No gate semantics are
 defined here — all canonical meaning belongs to rqm-compiler.
 
+Single lowering path
+--------------------
+``compiled_circuit_to_qiskit`` is the **only** lowering path from compiler IR
+to Qiskit.  All other public helpers in this module route through it:
+
+- ``gate_to_quantum_circuit``  builds a 1-operation rqm-compiler Circuit and
+  calls ``compiled_circuit_to_qiskit``.  It does NOT call Qiskit rotation-gate
+  constructors directly.
+
+The sole exception is ``state_to_quantum_circuit``, which must stay outside
+this path because Qiskit's ``initialize`` instruction is not represented in the
+rqm-compiler IR.  It is therefore inherently Qiskit-specific.
+
 Public functions
 ----------------
 - ``compiled_circuit_to_qiskit`` : lower an rqm-compiler Circuit or
   CompiledCircuit into a Qiskit QuantumCircuit.
-- ``state_to_quantum_circuit``   : convenience wrapper for 1-qubit state prep.
-- ``gate_to_quantum_circuit``    : convenience wrapper for a single-gate circuit.
+- ``state_to_quantum_circuit``   : Qiskit-specific 1-qubit state prep via
+  ``initialize`` (intentionally outside the main lowering path).
+- ``gate_to_quantum_circuit``    : convenience wrapper; routes through
+  ``compiled_circuit_to_qiskit``.
 """
 
 from __future__ import annotations
@@ -210,6 +225,13 @@ def state_to_quantum_circuit(state: RQMState) -> QuantumCircuit:
     The returned circuit uses Qiskit's ``initialize`` instruction to
     prepare the qubit in the given state.
 
+    .. note::
+        This helper intentionally does **not** route through
+        :func:`compiled_circuit_to_qiskit`.  Qiskit's ``initialize``
+        instruction is not represented in the rqm-compiler IR, so state
+        preparation is inherently Qiskit-specific and cannot be expressed
+        as a canonical ``rqm_compiler.Operation``.
+
     Parameters
     ----------
     state:
@@ -237,6 +259,14 @@ def gate_to_quantum_circuit(gate: RQMGate) -> QuantumCircuit:
 
     The returned circuit applies the rotation gate to qubit 0.
 
+    Routing
+    -------
+    This helper converts ``gate`` to an :class:`rqm_compiler.Operation` via
+    :meth:`~rqm_qiskit.RQMGate.to_operation`, wraps it in a 1-qubit
+    :class:`rqm_compiler.Circuit`, and lowers it through
+    :func:`compiled_circuit_to_qiskit`.  There is no separate Qiskit
+    gate-construction path.
+
     Parameters
     ----------
     gate:
@@ -253,6 +283,8 @@ def gate_to_quantum_circuit(gate: RQMGate) -> QuantumCircuit:
     >>> qc = gate_to_quantum_circuit(RQMGate.rx(1.57))
     >>> print(qc.draw(output="text"))
     """
-    qc = QuantumCircuit(1)
-    qc.append(gate.to_qiskit_gate(), [0])
-    return qc
+    from rqm_compiler import Circuit
+
+    c = Circuit(1)
+    c.add(gate.to_operation(qubit=0))
+    return compiled_circuit_to_qiskit(c)
