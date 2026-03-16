@@ -6,6 +6,42 @@ simulators and IBM Quantum hardware.
 
 ---
 
+## Architecture
+
+`rqm-qiskit` is built on top of two layers:
+
+```
+rqm-core  (canonical math: Quaternion, SU(2), Bloch, spinor)
+       ↓
+rqm-qiskit  (Qiskit bridge: RQMState, RQMGate, RQMCircuit, IBM helpers)
+       ↓
+Qiskit / IBM Quantum
+```
+
+### Relationship to rqm-core
+
+All canonical quaternion, SU(2), Bloch, and spinor mathematics lives in
+**[rqm-core](https://github.com/RQM-Technologies-dev/rqm-core)**.  This is the
+single source of truth for shared math across the RQM ecosystem.
+
+`rqm-qiskit` is a **bridge layer** that:
+- Imports and re-exports `Quaternion` from rqm-core (with `pretty()` added for
+  convenience).
+- Uses rqm-core's `spinor_to_quaternion` and `state_to_bloch` inside `RQMState`.
+- Uses rqm-core's `axis_angle_to_su2` inside `RQMGate.to_matrix()`.
+- Adds everything Qiskit-specific: `RQMState`, `RQMGate`, `RQMCircuit`,
+  `QuantumCircuit` conversions, simulator/IBM bridge helpers, and result
+  formatting.
+
+This separation is **intentional** and keeps the ecosystem modular:
+
+| Package | Responsibility |
+|---------|----------------|
+| `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
+| `rqm-qiskit` | Qiskit bridge, circuit building, IBM Quantum execution |
+
+---
+
 ## What Is This?
 
 `rqm-qiskit` is a clean, beginner-friendly Python package that sits **on top of

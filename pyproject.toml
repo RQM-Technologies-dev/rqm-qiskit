@@ -13,6 +13,7 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy",
     "qiskit",
+    "rqm-core>=0.1.0",
 ]
 
 [project.optional-dependencies]

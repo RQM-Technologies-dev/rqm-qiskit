@@ -1,21 +1,17 @@
 """
 gates.py – RQMGate: a 1-qubit SU(2) rotation gate.
 
-Rotation matrices follow the standard convention:
-    R_x(θ) = [[cos(θ/2),    -i·sin(θ/2)],
-               [-i·sin(θ/2),  cos(θ/2)  ]]
-
-    R_y(θ) = [[cos(θ/2),   -sin(θ/2)],
-               [sin(θ/2),    cos(θ/2) ]]
-
-    R_z(θ) = [[e^{-iθ/2},  0         ],
-               [0,           e^{iθ/2} ]]
+SU(2) matrix generation delegates to rqm-core so that the math lives in
+one canonical place.  The Qiskit gate objects are built directly from
+Qiskit's rotation-gate library.
 """
 
 from __future__ import annotations
 
 import math
 from typing import TYPE_CHECKING
+
+from rqm_core.su2 import axis_angle_to_su2
 
 import numpy as np
 
@@ -117,33 +113,14 @@ class RQMGate:
     def to_matrix(self) -> np.ndarray:
         """Return the 2×2 complex unitary rotation matrix.
 
+        Delegates to :func:`rqm_core.su2.axis_angle_to_su2`.
+
         Returns
         -------
         numpy.ndarray
             Shape ``(2, 2)``, dtype ``complex128``.
         """
-        half = self._angle / 2.0
-        c = math.cos(half)
-        s = math.sin(half)
-
-        if self._axis == "x":
-            return np.array(
-                [[c, -1j * s],
-                 [-1j * s, c]],
-                dtype=complex,
-            )
-        if self._axis == "y":
-            return np.array(
-                [[c, -s],
-                 [s,  c]],
-                dtype=complex,
-            )
-        # axis == "z"
-        return np.array(
-            [[math.cos(-half) + 1j * math.sin(-half), 0],
-             [0, math.cos(half) + 1j * math.sin(half)]],
-            dtype=complex,
-        )
+        return axis_angle_to_su2(self._axis, self._angle)
 
     def to_qiskit_gate(self) -> "Gate":
         """Return the corresponding Qiskit gate object.
