@@ -52,6 +52,22 @@ rqm-notebooks   (interactive notebooks and tutorials)
 **no** Bloch conversions, and **no** canonical gate/circuit semantics of its
 own.  All canonical logic is delegated upward to rqm-core and rqm-compiler.
 
+### Architecture Guarantees
+
+These invariants are stable and hold across all public helpers in this package:
+
+| Guarantee | Detail |
+|-----------|--------|
+| **Canonical math lives in rqm-core** | Quaternion algebra, SU(2) matrices, Bloch-vector conversions, and spinor normalization are owned exclusively by `rqm-core`.  `rqm-qiskit` never reimplements them. |
+| **Canonical circuit IR lives in rqm-compiler** | `rqm_compiler.Circuit`, `rqm_compiler.Operation`, and the compilation pipeline are the single source of truth for gate and circuit semantics. |
+| **`compiled_circuit_to_qiskit()` is the primary lowering path** | Every helper that converts a gate or circuit to a Qiskit `QuantumCircuit` routes through `compiled_circuit_to_qiskit()`.  There is no second, parallel lowering path. |
+| **`state_to_quantum_circuit()` is the only documented exception** | State preparation uses Qiskit's `initialize` instruction, which has no equivalent in the rqm-compiler IR.  It therefore cannot route through the main lowering path and is explicitly documented as the sole exception. |
+
+In practice this means:
+- `RQMCircuit.to_qiskit()` calls `compiled_circuit_to_qiskit()` internally.
+- `gate_to_quantum_circuit()` builds a 1-op `rqm_compiler.Circuit` and calls `compiled_circuit_to_qiskit()`.
+- New helpers added in future versions **must** route through `compiled_circuit_to_qiskit()` unless there is an explicit, documented reason not to.
+
 ---
 
 ## What Is This?

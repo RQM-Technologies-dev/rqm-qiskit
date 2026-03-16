@@ -23,9 +23,9 @@ Public functions
 ----------------
 - ``compiled_circuit_to_qiskit`` : lower an rqm-compiler Circuit or
   CompiledCircuit into a Qiskit QuantumCircuit.
-- ``state_to_quantum_circuit``   : Qiskit-specific 1-qubit state prep via
+- ``state_to_quantum_circuit`` : Qiskit-specific 1-qubit state prep via
   ``initialize`` (intentionally outside the main lowering path).
-- ``gate_to_quantum_circuit``    : convenience wrapper; routes through
+- ``gate_to_quantum_circuit`` : convenience wrapper; routes through
   ``compiled_circuit_to_qiskit``.
 """
 
