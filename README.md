@@ -8,14 +8,14 @@ simulators and IBM Quantum hardware.
 
 ## Architecture
 
-`rqm-qiskit` is built on top of two layers:
+`rqm-qiskit` sits in the middle of a three-layer dependency chain:
 
 ```
-rqm-core  (canonical math: Quaternion, SU(2), Bloch, spinor)
+rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor)
        ↓
-rqm-qiskit  (Qiskit bridge: RQMState, RQMGate, RQMCircuit, IBM helpers)
+rqm-qiskit      (Qiskit bridge: RQMState, RQMGate, RQMCircuit, IBM helpers)
        ↓
-Qiskit / IBM Quantum
+rqm-notebooks   (interactive notebooks and tutorials)
 ```
 
 ### Relationship to rqm-core
@@ -24,7 +24,7 @@ All canonical quaternion, SU(2), Bloch, and spinor mathematics lives in
 **[rqm-core](https://github.com/RQM-Technologies-dev/rqm-core)**.  This is the
 single source of truth for shared math across the RQM ecosystem.
 
-`rqm-qiskit` is a **bridge layer** that:
+`rqm-qiskit` is a **pure bridge layer** that:
 - Imports and re-exports `Quaternion` from rqm-core (with `pretty()` added for
   convenience).
 - Uses rqm-core's `spinor_to_quaternion` and `state_to_bloch` inside `RQMState`.
@@ -32,6 +32,7 @@ single source of truth for shared math across the RQM ecosystem.
 - Adds everything Qiskit-specific: `RQMState`, `RQMGate`, `RQMCircuit`,
   `QuantumCircuit` conversions, simulator/IBM bridge helpers, and result
   formatting.
+- Contains **no duplicated quaternion, spinor, or Bloch math**.
 
 This separation is **intentional** and keeps the ecosystem modular:
 
@@ -39,6 +40,7 @@ This separation is **intentional** and keeps the ecosystem modular:
 |---------|----------------|
 | `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
 | `rqm-qiskit` | Qiskit bridge, circuit building, IBM Quantum execution |
+| `rqm-notebooks` | Jupyter notebooks, tutorials, interactive demonstrations |
 
 ---
 
@@ -110,14 +112,25 @@ Every `RQMGate` exposes its `quaternion` property.  Every `RQMState` exposes
 
 ## Installation
 
+Since `rqm-core` (the math dependency) is not yet published to PyPI, install
+it from GitHub first:
+
 ```bash
-pip install rqm-qiskit
+pip install "git+https://github.com/RQM-Technologies-dev/rqm-core.git"
 ```
 
-To also run local simulations (recommended):
+Then install `rqm-qiskit` (which will pull `rqm-core` from GitHub automatically):
 
 ```bash
-pip install "rqm-qiskit[simulator]"
+pip install "git+https://github.com/RQM-Technologies-dev/rqm-qiskit.git"
+```
+
+To also run local simulations (recommended), clone the repo and install with extras:
+
+```bash
+git clone https://github.com/RQM-Technologies-dev/rqm-qiskit.git
+cd rqm-qiskit
+pip install ".[simulator]"
 ```
 
 For development:
@@ -191,7 +204,7 @@ rqm-qiskit/
       results.py     – summarize_counts, format_counts_summary
       ibm.py         – Aer sampler helper + IBM Runtime stub
       utils.py       – internal utilities
-  tests/             – pytest test suite (114 tests)
+  tests/             – pytest test suite (126 tests)
   examples/          – runnable example scripts
 ```
 
@@ -226,6 +239,8 @@ rqm-qiskit/
 ## Running Tests
 
 ```bash
+# Install development dependencies (rqm-core comes from GitHub automatically)
+pip install -e ".[dev]"
 pytest
 ```
 
