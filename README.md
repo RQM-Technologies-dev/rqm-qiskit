@@ -204,7 +204,7 @@ rqm-qiskit/
       results.py     – summarize_counts, format_counts_summary
       ibm.py         – Aer sampler helper + IBM Runtime stub
       utils.py       – internal utilities
-  tests/             – pytest test suite (114 tests)
+  tests/             – pytest test suite (126 tests)
   examples/          – runnable example scripts
 ```
 

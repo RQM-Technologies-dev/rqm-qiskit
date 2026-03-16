@@ -13,6 +13,8 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy",
     "qiskit",
+    # rqm-core has no published PyPI release or git tag yet; pinned to latest
+    # known-good commit.  Update this SHA when a tagged release is available.
     "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@5fce909b442a852de4aaf7cd306a53e5131e24fe",
 ]
 

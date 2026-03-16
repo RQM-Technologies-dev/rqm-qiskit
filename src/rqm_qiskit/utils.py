@@ -1,23 +1,10 @@
 """
 utils.py – Internal utility helpers for rqm_qiskit.
 
-These are small, generic helpers used across the package.
-They are not part of the public API and may change without notice.
+This module is intentionally minimal.  All shared quantum math (spinor
+normalization, Bloch conversions, SU(2) matrices, quaternion algebra) lives
+in ``rqm_core`` — the canonical source of truth for the RQM ecosystem.
 
-Note: spinor normalization and other quantum-math utilities come from
-``rqm_core`` (the canonical source of truth for shared math).
+Bridge-layer utilities are added here only if they are Qiskit-specific and
+do not duplicate anything already in rqm-core.
 """
-
-from __future__ import annotations
-
-import math
-
-
-def rad_to_deg(radians: float) -> float:
-    """Convert radians to degrees."""
-    return math.degrees(radians)
-
-
-def deg_to_rad(degrees: float) -> float:
-    """Convert degrees to radians."""
-    return math.radians(degrees)

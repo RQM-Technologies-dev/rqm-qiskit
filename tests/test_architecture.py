@@ -7,12 +7,7 @@ Qiskit bridge layer with no duplicated quaternion, spinor, or Bloch math.
 
 import math
 import numpy as np
-import pytest
 
-import rqm_core.quaternion as _core_quat_module
-import rqm_core.spinor as _core_spinor_module
-import rqm_core.bloch as _core_bloch_module
-import rqm_core.su2 as _core_su2_module
 from rqm_core.quaternion import Quaternion as CoreQuaternion
 
 
