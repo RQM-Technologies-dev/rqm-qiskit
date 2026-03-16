@@ -196,7 +196,7 @@ def test_from_axis_angle_x_pi_half():
 
 
 def test_from_axis_angle_invalid_axis():
-    with pytest.raises(ValueError, match="Invalid axis"):
+    with pytest.raises(ValueError, match="axis must be one of"):
         Quaternion.from_axis_angle("w", 1.0)
 
 

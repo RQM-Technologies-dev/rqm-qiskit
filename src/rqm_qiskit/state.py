@@ -4,16 +4,18 @@ state.py – RQMState: a normalized 1-qubit quantum state.
 Internally stores the state as (alpha, beta) in the computational basis:
     |psi> = alpha|0> + beta|1>
 
-All states are normalized automatically on construction.
+All states are normalized automatically on construction.  Bloch-sphere
+conversions and spinor-to-quaternion mapping delegate to rqm-core.
 """
 
 from __future__ import annotations
 
-import cmath
 import math
 from typing import TYPE_CHECKING
 
 import numpy as np
+from rqm_core.bloch import state_to_bloch
+from rqm_core.spinor import normalize_spinor, spinor_norm, spinor_to_quaternion
 
 if TYPE_CHECKING:
     from qiskit.quantum_info import Statevector
@@ -54,15 +56,14 @@ class RQMState:
         alpha = complex(alpha)
         beta = complex(beta)
 
-        norm = math.sqrt(abs(alpha) ** 2 + abs(beta) ** 2)
+        norm = spinor_norm(alpha, beta)
         if norm < self._NORM_TOLERANCE:
             raise ValueError(
                 "Cannot create an RQMState with zero norm. "
                 "At least one amplitude must be non-zero."
             )
 
-        self._alpha: complex = alpha / norm
-        self._beta: complex = beta / norm
+        self._alpha, self._beta = normalize_spinor(alpha, beta)
 
     @classmethod
     def from_bloch(cls, theta: float, phi: float) -> "RQMState":
@@ -78,8 +79,9 @@ class RQMState:
         phi:
             Azimuthal angle in radians.
         """
-        alpha = math.cos(theta / 2)
-        beta = cmath.exp(1j * phi) * math.sin(theta / 2)
+        from rqm_core.bloch import bloch_to_state
+
+        alpha, beta = bloch_to_state(theta, phi)
         return cls(alpha, beta)
 
     @classmethod
@@ -128,7 +130,7 @@ class RQMState:
 
     def norm(self) -> float:
         """Return the norm of the state vector (always 1.0 after normalization)."""
-        return math.sqrt(abs(self._alpha) ** 2 + abs(self._beta) ** 2)
+        return spinor_norm(self._alpha, self._beta)
 
     def bloch_vector(self) -> tuple[float, float, float]:
         """Return the Bloch-sphere Cartesian coordinates (x, y, z).
@@ -137,12 +139,10 @@ class RQMState:
             x = 2 * Re(conj(alpha) * beta)
             y = 2 * Im(conj(alpha) * beta)
             z = |alpha|^2 - |beta|^2
+
+        Delegates to :func:`rqm_core.bloch.state_to_bloch`.
         """
-        prod = self._alpha.conjugate() * self._beta
-        x = 2.0 * prod.real
-        y = 2.0 * prod.imag
-        z = abs(self._alpha) ** 2 - abs(self._beta) ** 2
-        return (x, y, z)
+        return state_to_bloch(self._alpha, self._beta)
 
     def as_qiskit_statevector(self) -> "Statevector":
         """Return the state as a Qiskit :class:`~qiskit.quantum_info.Statevector`."""
@@ -153,18 +153,9 @@ class RQMState:
     def to_quaternion(self) -> "Quaternion":
         """Return the unit quaternion representing the rotation that prepares this state from |0>.
 
-        For a state |psi> = alpha|0> + beta|1>, the preparation unitary is:
-            U = [[alpha, -beta*],
-                 [beta,  alpha*]]
-
-        Using the SU(2) ↔ unit-quaternion isomorphism (U = [[w−iz, −(y+ix)], [y−ix, w+iz]]):
-            w =  Re(alpha)
-            x = -Im(beta)
-            y =  Re(beta)
-            z = -Im(alpha)
-
-        The returned quaternion satisfies:
-            quaternion.to_su2_matrix() @ |0> ≈ |psi>
+        Delegates to :func:`rqm_core.spinor.spinor_to_quaternion` and
+        wraps the result in the rqm-qiskit :class:`~rqm_qiskit.Quaternion`
+        bridge type for full API compatibility.
 
         Returns
         -------
@@ -173,11 +164,8 @@ class RQMState:
         """
         from rqm_qiskit.quaternion import Quaternion
 
-        w = self._alpha.real
-        x = -self._beta.imag
-        y = self._beta.real
-        z = -self._alpha.imag
-        return Quaternion(w, x, y, z)
+        core_q = spinor_to_quaternion(self._alpha, self._beta)
+        return Quaternion(core_q.w, core_q.x, core_q.y, core_q.z)
 
     def pretty(self) -> str:
         """Return a human-readable string representation of the state."""
