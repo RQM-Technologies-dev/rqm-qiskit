@@ -3,11 +3,20 @@ Architecture tests: confirm that rqm-qiskit delegates math to rqm-core.
 
 These tests validate the structural requirement that rqm-qiskit is a pure
 Qiskit bridge layer with no duplicated quaternion, spinor, or Bloch math.
+
+Single-lowering-path invariant
+------------------------------
+The tests in the "Single lowering path" section below use
+``unittest.mock.patch`` to intercept calls to ``compiled_circuit_to_qiskit``
+and assert that every public gate/circuit lowering helper actually invokes it.
+This is an introspection-level guard: even if a future refactor changes the
+implementation it will trip these tests before the regression ships.
 """
 
 import math
 import tomllib
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
 import numpy as np
 
@@ -318,3 +327,87 @@ def test_compiled_circuit_to_qiskit_measure_adds_clbits():
     c.measure(0)
     qc = compiled_circuit_to_qiskit(c)
     assert qc.num_clbits >= 1
+
+
+# ---------------------------------------------------------------------------
+# Single lowering path: introspection-based invariant tests
+#
+# These tests use unittest.mock.patch to intercept calls to
+# compiled_circuit_to_qiskit and verify that the public gate/circuit
+# lowering helpers actually call it.  They are deliberately introspective
+# rather than output-based so that a future refactor that breaks the routing
+# will be caught before it ships, even if the outputs happen to be identical.
+# ---------------------------------------------------------------------------
+
+
+def test_gate_to_quantum_circuit_calls_compiled_circuit_to_qiskit():
+    """gate_to_quantum_circuit MUST call compiled_circuit_to_qiskit internally.
+
+    Patches the function inside the convert module and asserts it is invoked
+    exactly once per call to gate_to_quantum_circuit.
+    """
+    from rqm_qiskit import RQMGate
+    import rqm_qiskit.convert as convert_module
+
+    for axis, angle in [("x", 1.2), ("y", 0.8), ("z", 2.1)]:
+        gate = RQMGate(axis, angle)
+        with patch.object(
+            convert_module,
+            "compiled_circuit_to_qiskit",
+            wraps=convert_module.compiled_circuit_to_qiskit,
+        ) as mock_fn:
+            convert_module.gate_to_quantum_circuit(gate)
+            assert mock_fn.call_count == 1, (
+                f"gate_to_quantum_circuit (axis={axis}) must call "
+                f"compiled_circuit_to_qiskit exactly once; "
+                f"got {mock_fn.call_count} call(s).  "
+                "This test guards the single-lowering-path invariant."
+            )
+
+
+def test_rqmcircuit_to_qiskit_calls_compiled_circuit_to_qiskit():
+    """RQMCircuit.to_qiskit() MUST call compiled_circuit_to_qiskit internally.
+
+    Patches the function inside the convert module and asserts it is invoked
+    when to_qiskit() is called on an RQMCircuit that has gate operations.
+    """
+    from rqm_qiskit import RQMCircuit, RQMGate
+    import rqm_qiskit.convert as convert_module
+
+    circ = RQMCircuit(1)
+    circ.apply_gate(RQMGate.ry(0.5))
+
+    with patch.object(
+        convert_module,
+        "compiled_circuit_to_qiskit",
+        wraps=convert_module.compiled_circuit_to_qiskit,
+    ) as mock_fn:
+        circ.to_qiskit()
+        assert mock_fn.call_count >= 1, (
+            "RQMCircuit.to_qiskit() must call compiled_circuit_to_qiskit; "
+            f"got {mock_fn.call_count} call(s).  "
+            "This test guards the single-lowering-path invariant."
+        )
+
+
+def test_state_to_quantum_circuit_does_not_call_compiled_circuit_to_qiskit():
+    """state_to_quantum_circuit must NOT call compiled_circuit_to_qiskit.
+
+    State preparation uses Qiskit's initialize instruction, which has no
+    rqm-compiler IR equivalent.  It is the only documented exception to the
+    single-lowering-path rule and must stay outside that path.
+    """
+    from rqm_qiskit import RQMState
+    import rqm_qiskit.convert as convert_module
+
+    with patch.object(
+        convert_module,
+        "compiled_circuit_to_qiskit",
+        wraps=convert_module.compiled_circuit_to_qiskit,
+    ) as mock_fn:
+        convert_module.state_to_quantum_circuit(RQMState.plus())
+        assert mock_fn.call_count == 0, (
+            "state_to_quantum_circuit is the only documented exception to the "
+            "single-lowering-path rule.  It must NOT call "
+            f"compiled_circuit_to_qiskit; got {mock_fn.call_count} call(s)."
+        )
