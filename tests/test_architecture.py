@@ -6,6 +6,9 @@ Qiskit bridge layer with no duplicated quaternion, spinor, or Bloch math.
 """
 
 import math
+import tomllib
+from pathlib import Path
+
 import numpy as np
 
 from rqm_core.quaternion import Quaternion as CoreQuaternion
@@ -143,6 +146,23 @@ def test_rqmgate_matrix_matches_rqm_core():
         mat_bridge = gate.to_matrix()
         mat_core = axis_angle_to_su2(axis, angle)
         assert np.allclose(mat_bridge, mat_core, atol=1e-12)
+
+
+# ---------------------------------------------------------------------------
+# Dependency-boundary guard: pyproject.toml must declare rqm-core
+# ---------------------------------------------------------------------------
+
+
+def test_pyproject_depends_on_rqm_core():
+    """rqm-qiskit must declare rqm-core as a dependency in pyproject.toml."""
+    data = tomllib.loads(
+        (Path(__file__).parent.parent / "pyproject.toml").read_text()
+    )
+    deps = data["project"]["dependencies"]
+    assert any("rqm-core" in d for d in deps), (
+        "pyproject.toml must list rqm-core as a dependency. "
+        "rqm-qiskit is a bridge layer and must not re-implement core math."
+    )
 
 
 # ---------------------------------------------------------------------------
