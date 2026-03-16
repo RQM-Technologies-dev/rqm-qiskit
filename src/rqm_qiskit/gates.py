@@ -17,6 +17,7 @@ import numpy as np
 
 if TYPE_CHECKING:
     from qiskit.circuit import Gate
+    from rqm_compiler import Operation
     from rqm_qiskit.quaternion import Quaternion
 
 _VALID_AXES = {"x", "y", "z"}
@@ -121,6 +122,31 @@ class RQMGate:
             Shape ``(2, 2)``, dtype ``complex128``.
         """
         return axis_angle_to_su2(self._axis, self._angle)
+
+    def to_operation(self, qubit: int = 0) -> "Operation":
+        """Return the corresponding :class:`~rqm_compiler.ops.Operation`.
+
+        Delegates gate ownership to rqm-compiler, the canonical gate/circuit
+        layer.  The axis maps to the rqm-compiler canonical gate name:
+        ``"x"`` → ``"rx"``, ``"y"`` → ``"ry"``, ``"z"`` → ``"rz"``.
+
+        Parameters
+        ----------
+        qubit:
+            Target qubit index (default 0).
+
+        Returns
+        -------
+        :class:`rqm_compiler.ops.Operation`
+            A canonical rqm-compiler operation descriptor.
+        """
+        from rqm_compiler import Operation
+
+        return Operation(
+            gate=f"r{self._axis}",
+            targets=[qubit],
+            params={"angle": self._angle},
+        )
 
     def to_qiskit_gate(self) -> "Gate":
         """Return the corresponding Qiskit gate object.

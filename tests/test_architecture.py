@@ -149,7 +149,7 @@ def test_rqmgate_matrix_matches_rqm_core():
 
 
 # ---------------------------------------------------------------------------
-# Dependency-boundary guard: pyproject.toml must declare rqm-core
+# Dependency-boundary guard: pyproject.toml must declare rqm-core and rqm-compiler
 # ---------------------------------------------------------------------------
 
 
@@ -162,6 +162,18 @@ def test_pyproject_depends_on_rqm_core():
     assert any("rqm-core" in d for d in deps), (
         "pyproject.toml must list rqm-core as a dependency. "
         "rqm-qiskit is a bridge layer and must not re-implement core math."
+    )
+
+
+def test_pyproject_depends_on_rqm_compiler():
+    """rqm-qiskit must declare rqm-compiler as a dependency in pyproject.toml."""
+    data = tomllib.loads(
+        (Path(__file__).parent.parent / "pyproject.toml").read_text()
+    )
+    deps = data["project"]["dependencies"]
+    assert any("rqm-compiler" in d for d in deps), (
+        "pyproject.toml must list rqm-compiler as a dependency. "
+        "rqm-qiskit delegates canonical circuit/gate ownership to rqm-compiler."
     )
 
 
@@ -178,3 +190,131 @@ def test_utils_has_no_duplicate_normalize():
         "rqm_qiskit.utils should not define a local normalize() "
         "that duplicates rqm_core.spinor.normalize_spinor."
     )
+
+
+# ---------------------------------------------------------------------------
+# rqm-compiler delegation: RQMGate → rqm_compiler.Operation
+# ---------------------------------------------------------------------------
+
+
+def test_rqmgate_to_operation_returns_compiler_operation():
+    """RQMGate.to_operation() must return an rqm_compiler.Operation."""
+    from rqm_qiskit import RQMGate
+    from rqm_compiler import Operation
+
+    for axis, angle in [("x", 1.2), ("y", 0.8), ("z", 2.1)]:
+        gate = RQMGate(axis, angle)
+        op = gate.to_operation(qubit=0)
+        assert isinstance(op, Operation), (
+            "RQMGate.to_operation() must return an rqm_compiler.Operation — "
+            "gate ownership belongs to rqm-compiler."
+        )
+
+
+def test_rqmgate_to_operation_gate_name():
+    """RQMGate.to_operation() gate name must follow the rqm-compiler canonical form."""
+    from rqm_qiskit import RQMGate
+
+    assert RQMGate.rx(1.0).to_operation().gate == "rx"
+    assert RQMGate.ry(1.0).to_operation().gate == "ry"
+    assert RQMGate.rz(1.0).to_operation().gate == "rz"
+
+
+def test_rqmgate_to_operation_angle_param():
+    """RQMGate.to_operation() must carry the rotation angle in params['angle']."""
+    from rqm_qiskit import RQMGate
+
+    angle = 1.23456
+    op = RQMGate.ry(angle).to_operation(qubit=2)
+    assert math.isclose(op.params["angle"], angle, abs_tol=1e-14)
+    assert op.targets == [2]
+
+
+# ---------------------------------------------------------------------------
+# rqm-compiler delegation: RQMCircuit uses CompilerCircuit internally
+# ---------------------------------------------------------------------------
+
+
+def test_rqmcircuit_exposes_compiler_circuit():
+    """RQMCircuit.compiler_circuit must return an rqm_compiler.Circuit."""
+    from rqm_qiskit import RQMCircuit
+    from rqm_compiler import Circuit
+
+    circ = RQMCircuit(1)
+    assert isinstance(circ.compiler_circuit, Circuit), (
+        "RQMCircuit.compiler_circuit must be an rqm_compiler.Circuit — "
+        "canonical circuit ownership belongs to rqm-compiler."
+    )
+
+
+def test_rqmcircuit_apply_gate_adds_to_compiler_circuit():
+    """RQMCircuit.apply_gate() must delegate to rqm-compiler Circuit."""
+    from rqm_qiskit import RQMCircuit, RQMGate
+
+    circ = RQMCircuit(1)
+    assert len(circ.compiler_circuit) == 0
+
+    circ.apply_gate(RQMGate.ry(0.5))
+    assert len(circ.compiler_circuit) == 1
+
+    op = circ.compiler_circuit.operations[0]
+    assert op.gate == "ry"
+    assert math.isclose(op.params["angle"], 0.5, abs_tol=1e-14)
+
+
+def test_rqmcircuit_measure_all_adds_to_compiler_circuit():
+    """RQMCircuit.measure_all() must add measure operations to the compiler circuit."""
+    from rqm_qiskit import RQMCircuit
+
+    circ = RQMCircuit(2)
+    circ.measure_all()
+    gates = [op.gate for op in circ.compiler_circuit.operations]
+    assert gates.count("measure") == 2, (
+        "measure_all() on a 2-qubit circuit must add 2 measure operations "
+        "to the underlying rqm-compiler Circuit."
+    )
+
+
+# ---------------------------------------------------------------------------
+# compiled_circuit_to_qiskit: the bridge translation function
+# ---------------------------------------------------------------------------
+
+
+def test_compiled_circuit_to_qiskit_accepts_circuit():
+    """compiled_circuit_to_qiskit must accept an rqm_compiler.Circuit."""
+    from rqm_compiler import Circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+    from qiskit import QuantumCircuit
+
+    c = Circuit(1)
+    c.ry(0, math.pi / 2)
+    qc = compiled_circuit_to_qiskit(c)
+    assert isinstance(qc, QuantumCircuit)
+    assert qc.num_qubits == 1
+    assert len(qc.data) > 0
+
+
+def test_compiled_circuit_to_qiskit_accepts_compiled_circuit():
+    """compiled_circuit_to_qiskit must accept an rqm_compiler.CompiledCircuit."""
+    from rqm_compiler import Circuit, compile_circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+    from qiskit import QuantumCircuit
+
+    c = Circuit(1)
+    c.rz(0, 1.0)
+    compiled = compile_circuit(c)
+    qc = compiled_circuit_to_qiskit(compiled)
+    assert isinstance(qc, QuantumCircuit)
+    assert len(qc.data) > 0
+
+
+def test_compiled_circuit_to_qiskit_measure_adds_clbits():
+    """compiled_circuit_to_qiskit must add classical bits for measure operations."""
+    from rqm_compiler import Circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+
+    c = Circuit(1)
+    c.h(0)
+    c.measure(0)
+    qc = compiled_circuit_to_qiskit(c)
+    assert qc.num_clbits >= 1

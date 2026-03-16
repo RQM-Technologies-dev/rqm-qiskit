@@ -1,53 +1,64 @@
 # rqm-qiskit
 
-**Quaternion-native geometric bridge layer for Qiskit** — describe quantum states and
-gates in the language of unit quaternions and SU(2) rotations, then run them on Qiskit
-simulators and IBM Quantum hardware.
+**Thin Qiskit bridge layer for the RQM quantum ecosystem** — translates
+canonical RQM circuits and gates (owned by rqm-compiler) into Qiskit
+primitives and runs them on Aer simulators or IBM Quantum hardware.
 
 ---
 
 ## Architecture
 
-`rqm-qiskit` sits in the middle of a three-layer dependency chain:
+`rqm-qiskit` occupies a single, well-defined layer in the RQM dependency
+spine:
 
 ```
 rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor)
        ↓
-rqm-qiskit      (Qiskit bridge: RQMState, RQMGate, RQMCircuit, IBM helpers)
+rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
+       ↓
+rqm-qiskit      (Qiskit bridge: circuit lowering, IBM execution helpers)
        ↓
 rqm-notebooks   (interactive notebooks and tutorials)
 ```
 
-### Relationship to rqm-core
-
-All canonical quaternion, SU(2), Bloch, and spinor mathematics lives in
-**[rqm-core](https://github.com/RQM-Technologies-dev/rqm-core)**.  This is the
-single source of truth for shared math across the RQM ecosystem.
-
-`rqm-qiskit` is a **pure bridge layer** that:
-- Imports and re-exports `Quaternion` from rqm-core (with `pretty()` added for
-  convenience).
-- Uses rqm-core's `spinor_to_quaternion` and `state_to_bloch` inside `RQMState`.
-- Uses rqm-core's `axis_angle_to_su2` inside `RQMGate.to_matrix()`.
-- Adds everything Qiskit-specific: `RQMState`, `RQMGate`, `RQMCircuit`,
-  `QuantumCircuit` conversions, simulator/IBM bridge helpers, and result
-  formatting.
-- Contains **no duplicated quaternion, spinor, or Bloch math**.
-
-This separation is **intentional** and keeps the ecosystem modular:
+### Layer responsibilities
 
 | Package | Responsibility |
 |---------|----------------|
 | `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
-| `rqm-qiskit` | Qiskit bridge, circuit building, IBM Quantum execution |
+| `rqm-compiler` | Canonical gate/circuit IR (`Circuit`, `Operation`), normalization, compilation pipeline |
+| `rqm-qiskit` | Lower rqm-compiler IR to Qiskit `QuantumCircuit`; Aer/IBM execution helpers; thin user-facing wrappers |
 | `rqm-notebooks` | Jupyter notebooks, tutorials, interactive demonstrations |
+
+### What rqm-qiskit owns
+
+- `compiled_circuit_to_qiskit()` — the primary bridge: translates an
+  `rqm_compiler.Circuit` or `rqm_compiler.CompiledCircuit` into a Qiskit
+  `QuantumCircuit`.
+- `RQMCircuit` — a thin façade over `rqm_compiler.Circuit` that adds
+  Qiskit-specific state preparation (`initialize`) and exposes
+  `.to_qiskit()`.
+- `RQMGate` — adds `.to_operation()` (→ `rqm_compiler.Operation`) and
+  `.to_qiskit_gate()` (→ Qiskit gate object) on top of the rqm-core SU(2)
+  matrix.
+- `RQMState` — adds Qiskit-facing helpers (`.vector()`, `.as_statevector()`)
+  on top of rqm-core spinor/Bloch math.
+- `run_on_aer_sampler()` / IBM Runtime helpers in `ibm.py`.
+- Result formatting in `results.py`.
+
+### What rqm-qiskit does NOT own
+
+`rqm-qiskit` contains **no** quaternion math, **no** spinor normalization,
+**no** Bloch conversions, and **no** canonical gate/circuit semantics of its
+own.  All canonical logic is delegated upward to rqm-core and rqm-compiler.
 
 ---
 
 ## What Is This?
 
-`rqm-qiskit` is a clean, beginner-friendly Python package that sits **on top of
-Qiskit** and provides a quaternion-native interface for 1-qubit quantum work.
+`rqm-qiskit` is a clean, beginner-friendly Python package that bridges
+**rqm-compiler** (the canonical RQM circuit layer) and **Qiskit** (the
+execution engine).
 
 The key insight:
 
@@ -55,24 +66,13 @@ The key insight:
 > Rotations of the Bloch sphere are SU(2) transformations.  
 > SU(2) is isomorphic to the group of unit quaternions.
 
-Therefore, **unit quaternions are the natural algebraic object for 1-qubit quantum
-states and gates**.  `rqm-qiskit` exposes that geometry directly, while Qiskit
-handles circuits, transpilation, simulation, and IBM Quantum execution.
-
-The stack:
-
-```
-Quaternion / geometric representation
-        ↓
-SU(2) rotations
-        ↓
-Qiskit circuit representation
-        ↓
-Simulator or IBM Quantum hardware
-```
+Therefore, **unit quaternions are the natural algebraic object for 1-qubit
+quantum states and gates**.  rqm-core owns that algebra; rqm-compiler owns
+circuit structure; rqm-qiskit exposes the geometry to Qiskit users and
+handles execution.
 
 **This package is not trying to replace Qiskit.**  
-It is a bridge layer — Qiskit does all the heavy lifting under the hood.
+It is a thin bridge — Qiskit does all the heavy lifting under the hood.
 
 ---
 
@@ -112,14 +112,15 @@ Every `RQMGate` exposes its `quaternion` property.  Every `RQMState` exposes
 
 ## Installation
 
-Since `rqm-core` (the math dependency) is not yet published to PyPI, install
-it from GitHub first:
+Since `rqm-core` and `rqm-compiler` are not yet published to PyPI, install
+them from GitHub first:
 
 ```bash
 pip install "git+https://github.com/RQM-Technologies-dev/rqm-core.git"
+pip install "git+https://github.com/RQM-Technologies-dev/rqm-compiler.git"
 ```
 
-Then install `rqm-qiskit` (which will pull `rqm-core` from GitHub automatically):
+Then install `rqm-qiskit` (which will pull both dependencies automatically):
 
 ```bash
 pip install "git+https://github.com/RQM-Technologies-dev/rqm-qiskit.git"
@@ -178,6 +179,24 @@ q_composed = gate2.quaternion * gate.quaternion  # apply gate first, then gate2
 print(q_composed.to_su2_matrix())  # the combined 2×2 SU(2) matrix
 ```
 
+Use the rqm-compiler circuit directly:
+
+```python
+from rqm_compiler import Circuit, compile_circuit
+from rqm_qiskit.convert import compiled_circuit_to_qiskit
+
+# Build a backend-neutral circuit in rqm-compiler
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+c.measure(0)
+c.measure(1)
+
+# Lower to Qiskit
+qc = compiled_circuit_to_qiskit(c)
+print(qc.draw(output="text"))
+```
+
 Run on the local Aer simulator:
 
 ```python
@@ -196,15 +215,15 @@ print(format_counts_summary(counts))
 rqm-qiskit/
   src/
     rqm_qiskit/
-      quaternion.py  – Quaternion: unit quaternion with SU(2) conversion
-      state.py       – RQMState: normalized 1-qubit state + to_quaternion()
-      gates.py       – RQMGate: SU(2) rotation (x, y, z) + quaternion property
-      circuit.py     – RQMCircuit: thin wrapper around QuantumCircuit
-      convert.py     – state_to_quantum_circuit, gate_to_quantum_circuit
+      quaternion.py  – Quaternion: thin shim re-exporting from rqm-core
+      state.py       – RQMState: Qiskit-bridge wrapper over rqm-core spinor math
+      gates.py       – RQMGate: to_operation() → rqm_compiler.Operation; to_qiskit_gate()
+      circuit.py     – RQMCircuit: façade over rqm_compiler.Circuit + to_qiskit()
+      convert.py     – compiled_circuit_to_qiskit(); state/gate convenience wrappers
       results.py     – summarize_counts, format_counts_summary
       ibm.py         – Aer sampler helper + IBM Runtime stub
       utils.py       – internal utilities
-  tests/             – pytest test suite (126 tests)
+  tests/             – pytest test suite (137 tests)
   examples/          – runnable example scripts
 ```
 
@@ -212,11 +231,11 @@ rqm-qiskit/
 
 ## Current Scope (v0.1.0)
 
-- ✅ `Quaternion` — unit quaternion with SU(2) matrix conversion and composition
-- ✅ `RQMState` — normalized 1-qubit states; `to_quaternion()` gives the preparation rotation
-- ✅ `RQMGate` — R_x, R_y, R_z gates; `gate.quaternion` exposes the quaternion form
-- ✅ `RQMCircuit` — prepare, rotate, measure, draw
-- ✅ Conversion helpers to/from Qiskit `QuantumCircuit`
+- ✅ `Quaternion` — thin re-export from rqm-core with `pretty()` convenience
+- ✅ `RQMState` — normalized 1-qubit states; delegates math to rqm-core
+- ✅ `RQMGate` — R_x, R_y, R_z gates; `to_operation()` → rqm-compiler IR
+- ✅ `RQMCircuit` — façade over rqm-compiler `Circuit`; `to_qiskit()` lowers to Qiskit
+- ✅ `compiled_circuit_to_qiskit()` — primary bridge: rqm-compiler IR → `QuantumCircuit`
 - ✅ Measurement result summaries
 - ✅ Local Aer simulation via `run_on_aer_sampler()`
 - 🚧 IBM Runtime execution (placeholder, not yet implemented)
@@ -228,7 +247,7 @@ rqm-qiskit/
 
 | Version | Features |
 |---------|----------|
-| 0.1.0   | 1-qubit states, gates, quaternion layer, local simulation |
+| 0.1.0   | 1-qubit states, gates, quaternion layer, local simulation; rqm-compiler bridge |
 | 0.2.0   | IBM Runtime `SamplerV2` integration |
 | 0.3.0   | 2-qubit entanglement, CNOT, Bell states |
 | 0.4.0   | Noise models, density matrices |
@@ -239,7 +258,7 @@ rqm-qiskit/
 ## Running Tests
 
 ```bash
-# Install development dependencies (rqm-core comes from GitHub automatically)
+# Install development dependencies (rqm-core and rqm-compiler from GitHub)
 pip install -e ".[dev]"
 pytest
 ```

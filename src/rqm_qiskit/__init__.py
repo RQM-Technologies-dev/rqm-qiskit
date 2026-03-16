@@ -1,32 +1,38 @@
 """
-rqm_qiskit – Quaternion-native geometric bridge layer for Qiskit.
+rqm_qiskit – Thin Qiskit bridge layer for the RQM ecosystem.
 
-The stack:
-    Quaternion / geometric representation
-            ↓
-    SU(2) rotations
-            ↓
-    Qiskit circuit representation
-            ↓
-    Simulator or IBM Quantum hardware
+Architecture
+------------
+rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor)
+       ↓
+rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
+       ↓
+rqm-qiskit      (Qiskit bridge: circuit lowering, IBM execution helpers)
+       ↓
+rqm-notebooks   (interactive notebooks and tutorials)
 
 Public API
 ----------
-- Quaternion     : unit quaternion for SU(2) rotations and state geometry
-- RQMState       : normalized 1-qubit state with Bloch-sphere and quaternion helpers
-- RQMGate        : SU(2) rotation gate (x, y, z axes) backed by a quaternion
-- RQMCircuit     : thin wrapper around Qiskit QuantumCircuit
-- state_to_quantum_circuit  : convert RQMState to QuantumCircuit
-- gate_to_quantum_circuit   : convert RQMGate to QuantumCircuit
-- summarize_counts          : summarize measurement counts dict
-- format_counts_summary     : human-readable summary string
+- Quaternion     : unit quaternion shim (re-exports rqm-core)
+- RQMState       : normalized 1-qubit state; delegates math to rqm-core
+- RQMGate        : SU(2) rotation gate with to_operation() → rqm_compiler.Operation
+- RQMCircuit     : thin façade over rqm_compiler.Circuit with to_qiskit()
+- compiled_circuit_to_qiskit : primary bridge: rqm-compiler IR → QuantumCircuit
+- state_to_quantum_circuit   : convenience: RQMState → QuantumCircuit
+- gate_to_quantum_circuit    : convenience: RQMGate → QuantumCircuit
+- summarize_counts           : summarize measurement counts dict
+- format_counts_summary      : human-readable summary string
 """
 
 from rqm_qiskit.quaternion import Quaternion
 from rqm_qiskit.state import RQMState
 from rqm_qiskit.gates import RQMGate
 from rqm_qiskit.circuit import RQMCircuit
-from rqm_qiskit.convert import state_to_quantum_circuit, gate_to_quantum_circuit
+from rqm_qiskit.convert import (
+    compiled_circuit_to_qiskit,
+    state_to_quantum_circuit,
+    gate_to_quantum_circuit,
+)
 from rqm_qiskit.results import summarize_counts, format_counts_summary
 
 __all__ = [
@@ -34,6 +40,7 @@ __all__ = [
     "RQMState",
     "RQMGate",
     "RQMCircuit",
+    "compiled_circuit_to_qiskit",
     "state_to_quantum_circuit",
     "gate_to_quantum_circuit",
     "summarize_counts",
