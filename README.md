@@ -18,7 +18,15 @@ rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
        ↓
 rqm-qiskit      (Qiskit bridge: circuit lowering, IBM execution helpers)
        ↓
+[rqm-optimize]  (optional: circuit optimization — see Optimization section)
+       ↓
 rqm-notebooks   (interactive notebooks and tutorials)
+```
+
+The full pipeline with optional optimization:
+
+```
+compile → lower → optimize → run
 ```
 
 ### Layer responsibilities
@@ -286,6 +294,37 @@ python examples/quaternion_state_demo.py
 python examples/bloch_vs_quaternion_demo.py
 python examples/simulator_counts_demo.py
 ```
+
+---
+
+## Optimization (Optional)
+
+For improved circuit performance, use [`rqm-optimize`](https://github.com/RQM-Technologies-dev/rqm-optimize):
+
+```python
+from rqm_compiler import Circuit, compile_circuit
+from rqm_qiskit.convert import compiled_circuit_to_qiskit
+from rqm_optimize import optimize  # installed separately — not a dependency of rqm-qiskit
+
+compiled = compile_circuit(my_circuit)
+qc = compiled_circuit_to_qiskit(compiled)
+qc = optimize(qc)
+```
+
+`rqm-optimize` is a **completely separate, optional package**.  `rqm-qiskit`
+does **not** depend on it, import it, or couple to it in any way.  Install it
+only when you need it:
+
+```bash
+pip install "git+https://github.com/RQM-Technologies-dev/rqm-optimize.git"
+```
+
+> **Important boundaries:**
+> - ❌ Do **not** add `rqm-optimize` as a dependency of `rqm-qiskit`
+> - ❌ Do **not** import `rqm_optimize` inside `rqm-qiskit` source code
+> - ❌ Do **not** couple the two repositories
+>
+> Keep optimization **optional and external**.
 
 ---
 
