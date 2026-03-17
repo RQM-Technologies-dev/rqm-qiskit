@@ -3,11 +3,20 @@ Architecture tests: confirm that rqm-qiskit delegates math to rqm-core.
 
 These tests validate the structural requirement that rqm-qiskit is a pure
 Qiskit bridge layer with no duplicated quaternion, spinor, or Bloch math.
+
+Single-lowering-path invariant
+------------------------------
+The tests in the "Single lowering path" section below use
+``unittest.mock.patch`` to intercept calls to ``compiled_circuit_to_qiskit``
+and assert that every public gate/circuit lowering helper actually invokes it.
+This is an introspection-level guard: even if a future refactor changes the
+implementation it will trip these tests before the regression ships.
 """
 
 import math
 import tomllib
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
 import numpy as np
 
@@ -149,7 +158,7 @@ def test_rqmgate_matrix_matches_rqm_core():
 
 
 # ---------------------------------------------------------------------------
-# Dependency-boundary guard: pyproject.toml must declare rqm-core
+# Dependency-boundary guard: pyproject.toml must declare rqm-core and rqm-compiler
 # ---------------------------------------------------------------------------
 
 
@@ -162,6 +171,18 @@ def test_pyproject_depends_on_rqm_core():
     assert any("rqm-core" in d for d in deps), (
         "pyproject.toml must list rqm-core as a dependency. "
         "rqm-qiskit is a bridge layer and must not re-implement core math."
+    )
+
+
+def test_pyproject_depends_on_rqm_compiler():
+    """rqm-qiskit must declare rqm-compiler as a dependency in pyproject.toml."""
+    data = tomllib.loads(
+        (Path(__file__).parent.parent / "pyproject.toml").read_text()
+    )
+    deps = data["project"]["dependencies"]
+    assert any("rqm-compiler" in d for d in deps), (
+        "pyproject.toml must list rqm-compiler as a dependency. "
+        "rqm-qiskit delegates canonical circuit/gate ownership to rqm-compiler."
     )
 
 
@@ -178,3 +199,305 @@ def test_utils_has_no_duplicate_normalize():
         "rqm_qiskit.utils should not define a local normalize() "
         "that duplicates rqm_core.spinor.normalize_spinor."
     )
+
+
+# ---------------------------------------------------------------------------
+# rqm-compiler delegation: RQMGate → rqm_compiler.Operation
+# ---------------------------------------------------------------------------
+
+
+def test_rqmgate_to_operation_returns_compiler_operation():
+    """RQMGate.to_operation() must return an rqm_compiler.Operation."""
+    from rqm_qiskit import RQMGate
+    from rqm_compiler import Operation
+
+    for axis, angle in [("x", 1.2), ("y", 0.8), ("z", 2.1)]:
+        gate = RQMGate(axis, angle)
+        op = gate.to_operation(qubit=0)
+        assert isinstance(op, Operation), (
+            "RQMGate.to_operation() must return an rqm_compiler.Operation — "
+            "gate ownership belongs to rqm-compiler."
+        )
+
+
+def test_rqmgate_to_operation_gate_name():
+    """RQMGate.to_operation() gate name must follow the rqm-compiler canonical form."""
+    from rqm_qiskit import RQMGate
+
+    assert RQMGate.rx(1.0).to_operation().gate == "rx"
+    assert RQMGate.ry(1.0).to_operation().gate == "ry"
+    assert RQMGate.rz(1.0).to_operation().gate == "rz"
+
+
+def test_rqmgate_to_operation_angle_param():
+    """RQMGate.to_operation() must carry the rotation angle in params['angle']."""
+    from rqm_qiskit import RQMGate
+
+    angle = 1.23456
+    op = RQMGate.ry(angle).to_operation(qubit=2)
+    assert math.isclose(op.params["angle"], angle, abs_tol=1e-14)
+    assert op.targets == [2]
+
+
+# ---------------------------------------------------------------------------
+# rqm-compiler delegation: RQMCircuit uses CompilerCircuit internally
+# ---------------------------------------------------------------------------
+
+
+def test_rqmcircuit_exposes_compiler_circuit():
+    """RQMCircuit.compiler_circuit must return an rqm_compiler.Circuit."""
+    from rqm_qiskit import RQMCircuit
+    from rqm_compiler import Circuit
+
+    circ = RQMCircuit(1)
+    assert isinstance(circ.compiler_circuit, Circuit), (
+        "RQMCircuit.compiler_circuit must be an rqm_compiler.Circuit — "
+        "canonical circuit ownership belongs to rqm-compiler."
+    )
+
+
+def test_rqmcircuit_apply_gate_adds_to_compiler_circuit():
+    """RQMCircuit.apply_gate() must delegate to rqm-compiler Circuit."""
+    from rqm_qiskit import RQMCircuit, RQMGate
+
+    circ = RQMCircuit(1)
+    assert len(circ.compiler_circuit) == 0
+
+    circ.apply_gate(RQMGate.ry(0.5))
+    assert len(circ.compiler_circuit) == 1
+
+    op = circ.compiler_circuit.operations[0]
+    assert op.gate == "ry"
+    assert math.isclose(op.params["angle"], 0.5, abs_tol=1e-14)
+
+
+def test_rqmcircuit_measure_all_adds_to_compiler_circuit():
+    """RQMCircuit.measure_all() must add measure operations to the compiler circuit."""
+    from rqm_qiskit import RQMCircuit
+
+    circ = RQMCircuit(2)
+    circ.measure_all()
+    gates = [op.gate for op in circ.compiler_circuit.operations]
+    assert gates.count("measure") == 2, (
+        "measure_all() on a 2-qubit circuit must add 2 measure operations "
+        "to the underlying rqm-compiler Circuit."
+    )
+
+
+# ---------------------------------------------------------------------------
+# compiled_circuit_to_qiskit: the bridge translation function
+# ---------------------------------------------------------------------------
+
+
+def test_compiled_circuit_to_qiskit_accepts_circuit():
+    """compiled_circuit_to_qiskit must accept an rqm_compiler.Circuit."""
+    from rqm_compiler import Circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+    from qiskit import QuantumCircuit
+
+    c = Circuit(1)
+    c.ry(0, math.pi / 2)
+    qc = compiled_circuit_to_qiskit(c)
+    assert isinstance(qc, QuantumCircuit)
+    assert qc.num_qubits == 1
+    assert len(qc.data) > 0
+
+
+def test_compiled_circuit_to_qiskit_accepts_compiled_circuit():
+    """compiled_circuit_to_qiskit must accept an rqm_compiler.CompiledCircuit."""
+    from rqm_compiler import Circuit, compile_circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+    from qiskit import QuantumCircuit
+
+    c = Circuit(1)
+    c.rz(0, 1.0)
+    compiled = compile_circuit(c)
+    qc = compiled_circuit_to_qiskit(compiled)
+    assert isinstance(qc, QuantumCircuit)
+    assert len(qc.data) > 0
+
+
+def test_compiled_circuit_to_qiskit_measure_adds_clbits():
+    """compiled_circuit_to_qiskit must add classical bits for measure operations."""
+    from rqm_compiler import Circuit
+    from rqm_qiskit.convert import compiled_circuit_to_qiskit
+
+    c = Circuit(1)
+    c.h(0)
+    c.measure(0)
+    qc = compiled_circuit_to_qiskit(c)
+    assert qc.num_clbits >= 1
+
+
+# ---------------------------------------------------------------------------
+# Single lowering path: introspection-based invariant tests
+#
+# These tests use unittest.mock.patch to intercept calls to
+# compiled_circuit_to_qiskit and verify that the public gate/circuit
+# lowering helpers actually call it.  They are deliberately introspective
+# rather than output-based so that a future refactor that breaks the routing
+# will be caught before it ships, even if the outputs happen to be identical.
+# ---------------------------------------------------------------------------
+
+
+def test_gate_to_quantum_circuit_calls_compiled_circuit_to_qiskit():
+    """gate_to_quantum_circuit MUST call compiled_circuit_to_qiskit internally.
+
+    Patches the function inside the convert module and asserts it is invoked
+    exactly once per call to gate_to_quantum_circuit.
+    """
+    from rqm_qiskit import RQMGate
+    import rqm_qiskit.convert as convert_module
+
+    for axis, angle in [("x", 1.2), ("y", 0.8), ("z", 2.1)]:
+        gate = RQMGate(axis, angle)
+        with patch.object(
+            convert_module,
+            "compiled_circuit_to_qiskit",
+            wraps=convert_module.compiled_circuit_to_qiskit,
+        ) as mock_fn:
+            convert_module.gate_to_quantum_circuit(gate)
+            assert mock_fn.call_count == 1, (
+                f"gate_to_quantum_circuit (axis={axis}) must call "
+                f"compiled_circuit_to_qiskit exactly once; "
+                f"got {mock_fn.call_count} call(s).  "
+                "This test guards the single-lowering-path invariant."
+            )
+
+
+def test_rqmcircuit_to_qiskit_calls_compiled_circuit_to_qiskit():
+    """RQMCircuit.to_qiskit() MUST call compiled_circuit_to_qiskit internally.
+
+    Patches the function inside the convert module and asserts it is invoked
+    when to_qiskit() is called on an RQMCircuit that has gate operations.
+    """
+    from rqm_qiskit import RQMCircuit, RQMGate
+    import rqm_qiskit.convert as convert_module
+
+    circ = RQMCircuit(1)
+    circ.apply_gate(RQMGate.ry(0.5))
+
+    with patch.object(
+        convert_module,
+        "compiled_circuit_to_qiskit",
+        wraps=convert_module.compiled_circuit_to_qiskit,
+    ) as mock_fn:
+        circ.to_qiskit()
+        assert mock_fn.call_count >= 1, (
+            "RQMCircuit.to_qiskit() must call compiled_circuit_to_qiskit; "
+            f"got {mock_fn.call_count} call(s).  "
+            "This test guards the single-lowering-path invariant."
+        )
+
+
+def test_state_to_quantum_circuit_does_not_call_compiled_circuit_to_qiskit():
+    """state_to_quantum_circuit must NOT call compiled_circuit_to_qiskit.
+
+    State preparation uses Qiskit's initialize instruction, which has no
+    rqm-compiler IR equivalent.  It is the only documented exception to the
+    single-lowering-path rule and must stay outside that path.
+    """
+    from rqm_qiskit import RQMState
+    import rqm_qiskit.convert as convert_module
+
+    with patch.object(
+        convert_module,
+        "compiled_circuit_to_qiskit",
+        wraps=convert_module.compiled_circuit_to_qiskit,
+    ) as mock_fn:
+        convert_module.state_to_quantum_circuit(RQMState.plus())
+        assert mock_fn.call_count == 0, (
+            "state_to_quantum_circuit is the only documented exception to the "
+            "single-lowering-path rule.  It must NOT call "
+            f"compiled_circuit_to_qiskit; got {mock_fn.call_count} call(s)."
+        )
+
+
+# ---------------------------------------------------------------------------
+# Meta-test: all public lowering entrypoints route through compiled_circuit_to_qiskit
+#
+# This test auto-discovers every public function in rqm_qiskit.convert and
+# asserts that each one either:
+#   (a) calls compiled_circuit_to_qiskit(), OR
+#   (b) is explicitly listed in LOWERING_EXCEPTIONS.
+#
+# The value over the individual per-function tests above is automation:
+# if a contributor adds a new public lowering helper without routing it
+# through compiled_circuit_to_qiskit(), this test will fail immediately,
+# even before any output-based test would notice.
+# ---------------------------------------------------------------------------
+
+
+def test_all_lowering_entrypoints_route_through_compiled():
+    """Every public helper in rqm_qiskit.convert must call compiled_circuit_to_qiskit
+    OR be explicitly listed in LOWERING_EXCEPTIONS.
+
+    The test auto-discovers public functions at import time so it catches
+    newly added helpers automatically.  To add a new helper:
+
+    * If it routes through compiled_circuit_to_qiskit: add it to FIXTURES.
+    * If it is a documented exception: add it to LOWERING_EXCEPTIONS with a
+      comment explaining why.
+    """
+    import inspect
+    import rqm_qiskit.convert as convert_module
+    from rqm_qiskit import RQMGate, RQMState
+
+    # The primary lowering function is the path itself — skip it.
+    PRIMARY = "compiled_circuit_to_qiskit"
+
+    # Documented exceptions: public helpers that intentionally do NOT call
+    # compiled_circuit_to_qiskit, with the reason recorded here.
+    #
+    # state_to_quantum_circuit: uses Qiskit's `initialize` instruction, which
+    #   has no rqm-compiler IR equivalent.  State preparation is inherently
+    #   Qiskit-specific and cannot be expressed as an rqm_compiler.Operation.
+
+    LOWERING_EXCEPTIONS: frozenset[str] = frozenset({"state_to_quantum_circuit"})
+
+    # Minimal valid argument fixtures so we can actually call each helper.
+    # Add an entry here whenever a new public lowering helper is introduced.
+    FIXTURES: dict[str, tuple] = {
+        "gate_to_quantum_circuit": (RQMGate.rx(1.0),),
+        "state_to_quantum_circuit": (RQMState.plus(),),
+    }
+
+    # --- Discover all public helpers (excluding PRIMARY itself) ---
+    public_helpers = [
+        name
+        for name, obj in inspect.getmembers(convert_module, inspect.isfunction)
+        if not name.startswith("_") and name != PRIMARY
+    ]
+
+    # --- Guard: any new helper must be registered in FIXTURES or EXCEPTIONS ---
+    missing = [
+        name
+        for name in public_helpers
+        if name not in FIXTURES and name not in LOWERING_EXCEPTIONS
+    ]
+    assert not missing, (
+        "New public function(s) detected in rqm_qiskit.convert that are not yet "
+        "covered by test_all_lowering_entrypoints_route_through_compiled: "
+        f"{missing}. "
+        "Add each to FIXTURES (if it must route through compiled_circuit_to_qiskit) "
+        "or to LOWERING_EXCEPTIONS (if it is a documented exception to the rule)."
+    )
+
+    # --- Assert each non-exception helper calls the primary lowering path ---
+    for name in public_helpers:
+        if name in LOWERING_EXCEPTIONS:
+            continue
+        fn = getattr(convert_module, name)
+        args = FIXTURES[name]
+        with patch.object(
+            convert_module,
+            PRIMARY,
+            wraps=getattr(convert_module, PRIMARY),
+        ) as mock_fn:
+            fn(*args)
+            assert mock_fn.call_count >= 1, (
+                f"rqm_qiskit.convert.{name}() must call {PRIMARY}() "
+                f"(got {mock_fn.call_count} call(s)). "
+                f"Either fix the routing or add '{name}' to LOWERING_EXCEPTIONS "
+                "with a documented reason."
+            )
