@@ -1,8 +1,111 @@
 # rqm-qiskit
 
+[![PyPI version](https://img.shields.io/pypi/v/rqm-qiskit.svg)](https://pypi.org/project/rqm-qiskit/)
+[![Python versions](https://img.shields.io/pypi/pyversions/rqm-qiskit.svg)](https://pypi.org/project/rqm-qiskit/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-docs.rqmtechnologies.com-blue)](https://docs.rqmtechnologies.com)
+[![Website](https://img.shields.io/badge/website-rqmtechnologies.com-blue)](https://rqmtechnologies.com)
+
 **Thin Qiskit bridge layer for the RQM quantum ecosystem** — translates
 canonical RQM circuits and gates (owned by rqm-compiler) into Qiskit
 primitives and runs them on Aer simulators or IBM Quantum hardware.
+
+---
+
+## 🌐 RQM Platform
+
+This repository is part of the RQM Technologies ecosystem.
+
+→ Website: https://rqmtechnologies.com  
+→ Documentation: https://docs.rqmtechnologies.com
+
+---
+
+## Where This Fits
+
+```
+rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor)
+       ↓
+rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
+       ↓
+rqm-qiskit      ← you are here
+       ↓
+IBM Quantum / Aer simulator
+```
+
+This package provides the **Qiskit execution backend** for programs compiled
+through the RQM compiler stack.  It contains no quaternion math and no
+canonical circuit semantics of its own — all canonical logic is delegated
+upward to `rqm-core` and `rqm-compiler`.
+
+---
+
+## Installation
+
+```bash
+pip install rqm-qiskit
+```
+
+> **Note:** `rqm-core` and `rqm-compiler` are installed automatically as
+> dependencies when `rqm-qiskit` is available on PyPI.  Until then, install
+> all three from GitHub:
+>
+> ```bash
+> pip install "git+https://github.com/RQM-Technologies-dev/rqm-core.git"
+> pip install "git+https://github.com/RQM-Technologies-dev/rqm-compiler.git"
+> pip install "git+https://github.com/RQM-Technologies-dev/rqm-qiskit.git"
+> ```
+
+To include the local Aer simulator:
+
+```bash
+pip install "rqm-qiskit[simulator]"
+```
+
+---
+
+## Quick Example
+
+```python
+from rqm_qiskit import RQMState, RQMGate, RQMCircuit
+from rqm_qiskit.ibm import run_on_aer_sampler
+from rqm_qiskit import format_counts_summary
+
+# Build a 1-qubit circuit
+circ = RQMCircuit(1)
+circ.prepare_state(RQMState.plus())
+circ.apply_gate(RQMGate.ry(0.6))
+circ.measure_all()
+
+# Run on the local Aer simulator
+counts = run_on_aer_sampler(circ.to_qiskit(), shots=1024)
+print(format_counts_summary(counts))
+```
+
+Or lower a backend-neutral `rqm-compiler` circuit directly to Qiskit:
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit.convert import compiled_circuit_to_qiskit
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+c.measure(0)
+c.measure(1)
+
+qc = compiled_circuit_to_qiskit(c)
+print(qc.draw(output="text"))
+```
+
+---
+
+## Next Steps
+
+- 📖 Documentation: https://docs.rqmtechnologies.com
+- 🌐 Website: https://rqmtechnologies.com
+- 📦 Related packages: [`rqm-core`](https://github.com/RQM-Technologies-dev/rqm-core) · [`rqm-compiler`](https://github.com/RQM-Technologies-dev/rqm-compiler)
+- 🚀 Next: visit the [docs quickstart](https://docs.rqmtechnologies.com) to run your first circuit on IBM Quantum hardware
 
 ---
 
@@ -126,31 +229,7 @@ Every `RQMGate` exposes its `quaternion` property.  Every `RQMState` exposes
 
 ---
 
-## Installation
-
-Since `rqm-core` and `rqm-compiler` are not yet published to PyPI, install
-them from GitHub first:
-
-```bash
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-core.git"
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-compiler.git"
-```
-
-Then install `rqm-qiskit` (which will pull both dependencies automatically):
-
-```bash
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-qiskit.git"
-```
-
-To also run local simulations (recommended), clone the repo and install with extras:
-
-```bash
-git clone https://github.com/RQM-Technologies-dev/rqm-qiskit.git
-cd rqm-qiskit
-pip install ".[simulator]"
-```
-
-For development:
+## Development Setup
 
 ```bash
 git clone https://github.com/RQM-Technologies-dev/rqm-qiskit.git

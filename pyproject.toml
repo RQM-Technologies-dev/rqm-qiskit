@@ -5,11 +5,33 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rqm-qiskit"
 version = "0.1.0"
-description = "SU(2)-native geometric bridge layer for Qiskit"
+description = "Qiskit execution backend for the RQM quantum compiler stack"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "RQM Technologies" }]
 requires-python = ">=3.10"
+keywords = [
+    "quantum computing",
+    "qiskit",
+    "quaternion",
+    "SU(2)",
+    "Bloch sphere",
+    "quantum circuits",
+    "IBM Quantum",
+    "RQM",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "numpy",
     "qiskit",
@@ -22,6 +44,12 @@ dependencies = [
     # update SHA when a tagged release is available.
     "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@07a08848b5fcf173e6998949777639f525c58452",
 ]
+
+[project.urls]
+Homepage = "https://rqmtechnologies.com"
+Documentation = "https://docs.rqmtechnologies.com"
+Source = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
+Issues = "https://github.com/RQM-Technologies-dev/rqm-qiskit/issues"
 
 [project.optional-dependencies]
 dev = [
