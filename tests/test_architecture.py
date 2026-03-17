@@ -411,3 +411,93 @@ def test_state_to_quantum_circuit_does_not_call_compiled_circuit_to_qiskit():
             "single-lowering-path rule.  It must NOT call "
             f"compiled_circuit_to_qiskit; got {mock_fn.call_count} call(s)."
         )
+
+
+# ---------------------------------------------------------------------------
+# Meta-test: all public lowering entrypoints route through compiled_circuit_to_qiskit
+#
+# This test auto-discovers every public function in rqm_qiskit.convert and
+# asserts that each one either:
+#   (a) calls compiled_circuit_to_qiskit(), OR
+#   (b) is explicitly listed in LOWERING_EXCEPTIONS.
+#
+# The value over the individual per-function tests above is automation:
+# if a contributor adds a new public lowering helper without routing it
+# through compiled_circuit_to_qiskit(), this test will fail immediately,
+# even before any output-based test would notice.
+# ---------------------------------------------------------------------------
+
+
+def test_all_lowering_entrypoints_route_through_compiled():
+    """Every public helper in rqm_qiskit.convert must call compiled_circuit_to_qiskit
+    OR be explicitly listed in LOWERING_EXCEPTIONS.
+
+    The test auto-discovers public functions at import time so it catches
+    newly added helpers automatically.  To add a new helper:
+
+    * If it routes through compiled_circuit_to_qiskit: add it to FIXTURES.
+    * If it is a documented exception: add it to LOWERING_EXCEPTIONS with a
+      comment explaining why.
+    """
+    import inspect
+    import rqm_qiskit.convert as convert_module
+    from rqm_qiskit import RQMGate, RQMState
+
+    # The primary lowering function is the path itself — skip it.
+    PRIMARY = "compiled_circuit_to_qiskit"
+
+    # Documented exceptions: public helpers that intentionally do NOT call
+    # compiled_circuit_to_qiskit, with the reason recorded here.
+    #
+    # state_to_quantum_circuit: uses Qiskit's `initialize` instruction, which
+    #   has no rqm-compiler IR equivalent.  State preparation is inherently
+    #   Qiskit-specific and cannot be expressed as an rqm_compiler.Operation.
+
+    LOWERING_EXCEPTIONS: frozenset[str] = frozenset({"state_to_quantum_circuit"})
+
+    # Minimal valid argument fixtures so we can actually call each helper.
+    # Add an entry here whenever a new public lowering helper is introduced.
+    FIXTURES: dict[str, tuple] = {
+        "gate_to_quantum_circuit": (RQMGate.rx(1.0),),
+        "state_to_quantum_circuit": (RQMState.plus(),),
+    }
+
+    # --- Discover all public helpers (excluding PRIMARY itself) ---
+    public_helpers = [
+        name
+        for name, obj in inspect.getmembers(convert_module, inspect.isfunction)
+        if not name.startswith("_") and name != PRIMARY
+    ]
+
+    # --- Guard: any new helper must be registered in FIXTURES or EXCEPTIONS ---
+    missing = [
+        name
+        for name in public_helpers
+        if name not in FIXTURES and name not in LOWERING_EXCEPTIONS
+    ]
+    assert not missing, (
+        "New public function(s) detected in rqm_qiskit.convert that are not yet "
+        "covered by test_all_lowering_entrypoints_route_through_compiled: "
+        f"{missing}. "
+        "Add each to FIXTURES (if it must route through compiled_circuit_to_qiskit) "
+        "or to LOWERING_EXCEPTIONS (if it is a documented exception to the rule)."
+    )
+
+    # --- Assert each non-exception helper calls the primary lowering path ---
+    for name in public_helpers:
+        if name in LOWERING_EXCEPTIONS:
+            continue
+        fn = getattr(convert_module, name)
+        args = FIXTURES[name]
+        with patch.object(
+            convert_module,
+            PRIMARY,
+            wraps=getattr(convert_module, PRIMARY),
+        ) as mock_fn:
+            fn(*args)
+            assert mock_fn.call_count >= 1, (
+                f"rqm_qiskit.convert.{name}() must call {PRIMARY}() "
+                f"(got {mock_fn.call_count} call(s)). "
+                f"Either fix the routing or add '{name}' to LOWERING_EXCEPTIONS "
+                "with a documented reason."
+            )
