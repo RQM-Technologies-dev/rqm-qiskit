@@ -136,26 +136,16 @@ Every `RQMGate` exposes its `quaternion` property.  Every `RQMState` exposes
 
 ## Installation
 
-Since `rqm-core` and `rqm-compiler` are not yet published to PyPI, install
-them from GitHub first:
+Install from PyPI:
 
 ```bash
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-core.git"
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-compiler.git"
+pip install rqm-qiskit
 ```
 
-Then install `rqm-qiskit` (which will pull both dependencies automatically):
+To also run local simulations (recommended):
 
 ```bash
-pip install "git+https://github.com/RQM-Technologies-dev/rqm-qiskit.git"
-```
-
-To also run local simulations (recommended), clone the repo and install with extras:
-
-```bash
-git clone https://github.com/RQM-Technologies-dev/rqm-qiskit.git
-cd rqm-qiskit
-pip install ".[simulator]"
+pip install "rqm-qiskit[simulator]"
 ```
 
 For development:
@@ -282,7 +272,7 @@ rqm-qiskit/
 ## Running Tests
 
 ```bash
-# Install development dependencies (rqm-core and rqm-compiler from GitHub)
+# Install development dependencies
 pip install -e ".[dev]"
 pytest
 ```
