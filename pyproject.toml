@@ -10,18 +10,29 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "RQM Technologies" }]
 requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
 dependencies = [
     "numpy",
     "qiskit",
-    # rqm-core has no published PyPI release or git tag yet; pinned to latest
-    # known-good commit.  Update this SHA when a tagged release is available.
-    "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@5fce909b442a852de4aaf7cd306a53e5131e24fe",
-    # rqm-compiler: canonical gate/circuit/lowering layer.  rqm-qiskit is a
-    # thin bridge that delegates circuit ownership to rqm-compiler and only
-    # adds Qiskit-specific adaptation.  Pinned to latest known-good commit;
-    # update SHA when a tagged release is available.
-    "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@07a08848b5fcf173e6998949777639f525c58452",
+    "rqm-core>=0.1.0",
+    "rqm-compiler>=0.1.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
+Repository = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
+"Bug Tracker" = "https://github.com/RQM-Technologies-dev/rqm-qiskit/issues"
 
 [project.optional-dependencies]
 dev = [
