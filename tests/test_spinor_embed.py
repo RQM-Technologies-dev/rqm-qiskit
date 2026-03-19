@@ -12,7 +12,7 @@ import pytest
 import numpy as np
 
 from rqm_qiskit import spinor_embed, Quaternion, RQMState
-from rqm_core.spinor import spinor_to_quaternion
+from rqm_core.spinor import spinor_embed as core_spinor_embed
 
 
 # ---------------------------------------------------------------------------
@@ -33,10 +33,10 @@ def test_spinor_embed_importable_from_rqm_qiskit_state():
 
 
 def test_spinor_embed_delegates_to_rqm_core():
-    """spinor_embed must produce the same result as rqm_core.spinor.spinor_to_quaternion."""
+    """spinor_embed must produce the same result as rqm_core.spinor.spinor_embed."""
     alpha, beta = 0.6 + 0j, 0.8 + 0j
     q_embed = spinor_embed(alpha, beta)
-    q_core = spinor_to_quaternion(alpha, beta)
+    q_core = core_spinor_embed(alpha, beta)
     assert math.isclose(q_embed.w, q_core.w, abs_tol=1e-12)
     assert math.isclose(q_embed.x, q_core.x, abs_tol=1e-12)
     assert math.isclose(q_embed.y, q_core.y, abs_tol=1e-12)

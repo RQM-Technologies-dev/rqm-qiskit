@@ -205,7 +205,11 @@ def test_match_gate_identifies_t():
 
 
 def test_match_gate_identifies_negative_h():
-    """match_gate must also recognize -q as the same gate (double-cover)."""
+    """match_gate must also recognize -q as the same gate (SU(2) double-cover of SO(3)).
+
+    SU(2) is a double cover of SO(3): both q and -q encode the same physical
+    rotation.  Gate matching must therefore check both representatives.
+    """
     q = gate_h()
     neg_q = Quaternion(-q.w, -q.x, -q.y, -q.z)
     assert match_gate(neg_q) == "h"
