@@ -5,6 +5,10 @@ The canonical quaternion / SU(2) mathematics now lives in rqm-core.  This
 module re-exports ``Quaternion`` for backward compatibility and adds a
 ``pretty()`` method that is specific to the rqm-qiskit bridge layer.
 
+New core methods (``from_axis_angle_vec``, ``to_axis_angle``,
+``canonicalize``, ``rotate_vector``) are inherited from rqm-core and
+available on the bridge class automatically.
+
 Users who previously did::
 
     from rqm_qiskit.quaternion import Quaternion
@@ -23,8 +27,9 @@ class Quaternion(_CoreQuaternion):
     Re-exports all mathematics from :class:`rqm_core.quaternion.Quaternion`.
     Adds :meth:`pretty` for human-readable bridge-layer output.
 
-    All core methods (``from_axis_angle``, ``identity``, arithmetic,
-    ``to_su2_matrix``, etc.) are inherited unchanged from rqm-core.
+    All core methods (``from_axis_angle``, ``from_axis_angle_vec``,
+    ``to_axis_angle``, ``canonicalize``, ``rotate_vector``, ``identity``,
+    arithmetic, ``to_su2_matrix``, etc.) are inherited unchanged from rqm-core.
     """
 
     def pretty(self) -> str:
