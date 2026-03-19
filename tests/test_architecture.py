@@ -501,3 +501,122 @@ def test_all_lowering_entrypoints_route_through_compiled():
                 f"Either fix the routing or add '{name}' to LOWERING_EXCEPTIONS "
                 "with a documented reason."
             )
+
+
+# ---------------------------------------------------------------------------
+# New rqm-core capabilities: named gate quaternions (rqm_core.gates)
+# ---------------------------------------------------------------------------
+
+
+def test_gate_factories_come_from_rqm_core():
+    """Named gate factories must be imported from rqm_core.gates, not defined locally."""
+    import rqm_qiskit.gates as gates_module
+    from rqm_core.gates import gate_h as core_gate_h
+
+    # The gate_h in rqm_qiskit.gates must be the same object as in rqm_core.gates
+    assert gates_module.gate_h is core_gate_h, (
+        "rqm_qiskit.gates.gate_h must re-export rqm_core.gates.gate_h, "
+        "not define its own copy.  Named gate math belongs in rqm-core."
+    )
+
+
+def test_match_gate_comes_from_rqm_core():
+    """match_gate must be imported from rqm_core.gates, not defined locally."""
+    import rqm_qiskit.gates as gates_module
+    from rqm_core.gates import match_gate as core_match_gate
+
+    assert gates_module.match_gate is core_match_gate, (
+        "rqm_qiskit.gates.match_gate must re-export rqm_core.gates.match_gate."
+    )
+
+
+def test_gate_rx_factory_produces_correct_su2():
+    """gate_rx from rqm-core must match RQMGate.rx matrix (architecture consistency)."""
+    from rqm_qiskit import RQMGate, gate_rx
+    import numpy as np
+
+    for angle in [0.0, 0.5, math.pi / 2, math.pi]:
+        assert np.allclose(
+            gate_rx(angle).to_su2_matrix(),
+            RQMGate.rx(angle).to_matrix(),
+            atol=1e-12,
+        ), f"gate_rx({angle}) mismatches RQMGate.rx({angle}).to_matrix()"
+
+
+# ---------------------------------------------------------------------------
+# New rqm-core capabilities: spinor_embed
+# ---------------------------------------------------------------------------
+
+
+def test_spinor_embed_comes_from_rqm_core():
+    """spinor_embed must be the same function as rqm_core.spinor.spinor_embed."""
+    from rqm_qiskit.state import spinor_embed as bridge_embed
+    from rqm_core.spinor import spinor_embed as core_embed
+
+    assert bridge_embed is core_embed, (
+        "rqm_qiskit.state.spinor_embed must re-export rqm_core.spinor.spinor_embed, "
+        "not define its own copy.  Spinor embedding belongs in rqm-core."
+    )
+
+
+# ---------------------------------------------------------------------------
+# New rqm-core capabilities: Quaternion extended methods
+# ---------------------------------------------------------------------------
+
+
+def test_quaternion_from_axis_angle_vec_inherited_from_rqm_core():
+    """Quaternion.from_axis_angle_vec must be inherited from rqm-core, not defined in bridge."""
+    from rqm_qiskit import Quaternion
+    from rqm_core.quaternion import Quaternion as CoreQ
+
+    # from_axis_angle_vec must exist and must not be overridden in the bridge class
+    assert "from_axis_angle_vec" not in Quaternion.__dict__, (
+        "from_axis_angle_vec must NOT be defined in rqm_qiskit.Quaternion directly. "
+        "It belongs in rqm_core.Quaternion and should be inherited."
+    )
+    assert hasattr(Quaternion, "from_axis_angle_vec"), (
+        "Quaternion.from_axis_angle_vec must be accessible (inherited from rqm-core)."
+    )
+    assert hasattr(CoreQ, "from_axis_angle_vec"), (
+        "rqm_core.Quaternion must define from_axis_angle_vec."
+    )
+
+
+def test_quaternion_to_axis_angle_inherited_from_rqm_core():
+    """Quaternion.to_axis_angle must be inherited from rqm-core."""
+    from rqm_qiskit import Quaternion
+
+    assert "to_axis_angle" not in Quaternion.__dict__, (
+        "to_axis_angle must NOT be defined in rqm_qiskit.Quaternion directly."
+    )
+    assert hasattr(Quaternion, "to_axis_angle")
+
+
+def test_quaternion_canonicalize_inherited_from_rqm_core():
+    """Quaternion.canonicalize must be inherited from rqm-core."""
+    from rqm_qiskit import Quaternion
+
+    assert "canonicalize" not in Quaternion.__dict__, (
+        "canonicalize must NOT be defined in rqm_qiskit.Quaternion directly."
+    )
+    assert hasattr(Quaternion, "canonicalize")
+
+
+def test_quaternion_rotate_vector_inherited_from_rqm_core():
+    """Quaternion.rotate_vector must be inherited from rqm-core."""
+    from rqm_qiskit import Quaternion
+
+    assert "rotate_vector" not in Quaternion.__dict__, (
+        "rotate_vector must NOT be defined in rqm_qiskit.Quaternion directly."
+    )
+    assert hasattr(Quaternion, "rotate_vector")
+
+
+def test_quaternion_ecosystem_convention_w_nonneg():
+    """The w ≥ 0 canonical convention must be enforced by rqm-core's canonicalize."""
+    from rqm_qiskit import Quaternion
+
+    q = Quaternion(-0.5, -0.5, -0.5, -0.5).normalize()
+    assert q.w < 0.0
+    q_canon = q.canonicalize()
+    assert q_canon.w >= 0.0, "canonicalize() must produce w ≥ 0 representative"

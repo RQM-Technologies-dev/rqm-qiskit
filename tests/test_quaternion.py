@@ -278,3 +278,180 @@ def test_repr_contains_components():
     assert "x=" in r
     assert "y=" in r
     assert "z=" in r
+
+
+# ---------------------------------------------------------------------------
+# from_axis_angle_vec (inherited from rqm-core)
+# ---------------------------------------------------------------------------
+
+
+def test_from_axis_angle_vec_x_axis():
+    """from_axis_angle_vec([1,0,0], θ) must equal from_axis_angle('x', θ)."""
+    angle = 1.2
+    q_vec = Quaternion.from_axis_angle_vec([1.0, 0.0, 0.0], angle)
+    q_label = Quaternion.from_axis_angle("x", angle)
+    assert math.isclose(q_vec.w, q_label.w, abs_tol=1e-12)
+    assert math.isclose(q_vec.x, q_label.x, abs_tol=1e-12)
+    assert math.isclose(q_vec.y, q_label.y, abs_tol=1e-12)
+    assert math.isclose(q_vec.z, q_label.z, abs_tol=1e-12)
+
+
+def test_from_axis_angle_vec_arbitrary_axis():
+    """from_axis_angle_vec with a non-cardinal axis should return a unit quaternion."""
+    q = Quaternion.from_axis_angle_vec([1.0, 1.0, 1.0], math.pi / 3)
+    assert math.isclose(q.norm(), 1.0, abs_tol=1e-10)
+
+
+def test_from_axis_angle_vec_unnormalized_axis():
+    """Axis vector is normalized internally; scaling must not change the quaternion."""
+    q1 = Quaternion.from_axis_angle_vec([2.0, 0.0, 0.0], 1.0)
+    q2 = Quaternion.from_axis_angle_vec([1.0, 0.0, 0.0], 1.0)
+    assert q1 == q2
+
+
+def test_from_axis_angle_vec_zero_axis_raises():
+    with pytest.raises(ValueError):
+        Quaternion.from_axis_angle_vec([0.0, 0.0, 0.0], 1.0)
+
+
+def test_from_axis_angle_vec_zero_angle_is_identity():
+    q = Quaternion.from_axis_angle_vec([1.0, 1.0, 0.0], 0.0)
+    assert math.isclose(q.w, 1.0, abs_tol=1e-10)
+    assert math.isclose(q.x, 0.0, abs_tol=1e-10)
+    assert math.isclose(q.y, 0.0, abs_tol=1e-10)
+    assert math.isclose(q.z, 0.0, abs_tol=1e-10)
+
+
+# ---------------------------------------------------------------------------
+# to_axis_angle (inherited from rqm-core)
+# ---------------------------------------------------------------------------
+
+
+def test_to_axis_angle_x_rotation():
+    """R_x(π/2) → axis=(1,0,0), angle=π/2."""
+    q = Quaternion.from_axis_angle("x", math.pi / 2)
+    axis, angle = q.to_axis_angle()
+    assert math.isclose(axis[0], 1.0, abs_tol=1e-10)
+    assert math.isclose(axis[1], 0.0, abs_tol=1e-10)
+    assert math.isclose(axis[2], 0.0, abs_tol=1e-10)
+    assert math.isclose(angle, math.pi / 2, abs_tol=1e-10)
+
+
+def test_to_axis_angle_z_rotation():
+    """R_z(π/4) → axis=(0,0,1), angle=π/4."""
+    q = Quaternion.from_axis_angle("z", math.pi / 4)
+    axis, angle = q.to_axis_angle()
+    assert math.isclose(axis[2], 1.0, abs_tol=1e-10)
+    assert math.isclose(angle, math.pi / 4, abs_tol=1e-10)
+
+
+def test_to_axis_angle_arbitrary_axis_round_trip():
+    """from_axis_angle_vec → to_axis_angle should recover the original angle."""
+    original_angle = 1.1
+    q = Quaternion.from_axis_angle_vec([1.0, 1.0, 0.0], original_angle)
+    _, recovered_angle = q.to_axis_angle()
+    assert math.isclose(recovered_angle, original_angle, abs_tol=1e-10)
+
+
+def test_to_axis_angle_identity_returns_zero_angle():
+    """Identity quaternion → angle ≈ 0, axis is arbitrary."""
+    _, angle = Quaternion.identity().to_axis_angle()
+    assert math.isclose(angle, 0.0, abs_tol=1e-10)
+
+
+# ---------------------------------------------------------------------------
+# canonicalize (inherited from rqm-core)
+# ---------------------------------------------------------------------------
+
+
+def test_canonicalize_positive_w_unchanged():
+    """Quaternion with w > 0 should be unchanged by canonicalize."""
+    q = Quaternion.from_axis_angle("y", 0.5)
+    assert q.w > 0
+    qc = q.canonicalize()
+    assert math.isclose(qc.w, q.w, abs_tol=1e-12)
+
+
+def test_canonicalize_negative_w_flipped():
+    """Quaternion with w < 0 should have all components negated."""
+    q = Quaternion(-0.8, 0.1, 0.2, 0.3).normalize()
+    assert q.w < 0
+    qc = q.canonicalize()
+    assert qc.w >= 0.0
+
+
+def test_canonicalize_is_unit():
+    """Canonical representative must also be a unit quaternion."""
+    q = Quaternion(-1.0, 0.0, 0.0, 0.0)
+    assert math.isclose(q.canonicalize().norm(), 1.0, abs_tol=1e-10)
+
+
+def test_canonicalize_same_su2_matrix():
+    """Both q and -q represent the same SU(2) double-cover of the same SO(3) rotation.
+
+    In SU(2), q and -q are distinct elements whose matrices differ by a global sign.
+    However, they represent the same physical rotation (same Bloch-sphere action).
+    The canonical form (w ≥ 0) picks one representative consistently.
+    """
+    q = Quaternion(0.5, 0.5, 0.5, 0.5)
+    neg_q = Quaternion(-0.5, -0.5, -0.5, -0.5)
+    # SU(2) matrices differ by a global sign (global phase of -1)
+    assert np.allclose(q.to_su2_matrix(), -neg_q.to_su2_matrix(), atol=1e-12), (
+        "q and -q must have SU(2) matrices that are negatives of each other"
+    )
+    # Canonical form picks the representative with w >= 0
+    assert q.canonicalize().w >= 0.0
+    assert neg_q.canonicalize().w >= 0.0
+    # Both canonical forms must be the same quaternion
+    assert q.canonicalize() == neg_q.canonicalize()
+
+
+# ---------------------------------------------------------------------------
+# rotate_vector (inherited from rqm-core)
+# ---------------------------------------------------------------------------
+
+
+def test_rotate_vector_identity_is_noop():
+    """Identity quaternion should leave any vector unchanged."""
+    v = (1.0, 2.0, 3.0)
+    result = Quaternion.identity().rotate_vector(v)
+    assert math.isclose(result[0], 1.0, abs_tol=1e-12)
+    assert math.isclose(result[1], 2.0, abs_tol=1e-12)
+    assert math.isclose(result[2], 3.0, abs_tol=1e-12)
+
+
+def test_rotate_vector_rx_pi_z_to_neg_z():
+    """R_x(π) should map (0, 0, 1) to (0, 0, -1) (Bloch north→south)."""
+    q = Quaternion.from_axis_angle("x", math.pi)
+    result = q.rotate_vector([0.0, 0.0, 1.0])
+    assert math.isclose(result[0], 0.0, abs_tol=1e-10)
+    assert math.isclose(result[1], 0.0, abs_tol=1e-10)
+    assert math.isclose(result[2], -1.0, abs_tol=1e-10)
+
+
+def test_rotate_vector_preserves_length():
+    """Rotation must not change the length of the vector."""
+    q = Quaternion.from_axis_angle_vec([1.0, 1.0, 1.0], 1.23)
+    v = [1.0, 2.0, 3.0]
+    original_len = math.sqrt(sum(x * x for x in v))
+    result = q.rotate_vector(v)
+    rotated_len = math.sqrt(sum(x * x for x in result))
+    assert math.isclose(original_len, rotated_len, abs_tol=1e-10)
+
+
+def test_rotate_vector_ry_pi_z_to_neg_z():
+    """R_y(π) should map (0, 0, 1) to (0, 0, -1)."""
+    q = Quaternion.from_axis_angle("y", math.pi)
+    result = q.rotate_vector([0.0, 0.0, 1.0])
+    assert math.isclose(result[2], -1.0, abs_tol=1e-10)
+
+
+def test_rotate_vector_matches_rotation_matrix():
+    """rotate_vector should match the 3×3 SO(3) rotation matrix."""
+    q = Quaternion.from_axis_angle("z", math.pi / 3)
+    v = np.array([1.0, 0.0, 0.0])
+    R = q.to_rotation_matrix()
+    expected = tuple(float(x) for x in R @ v)
+    result = q.rotate_vector(v)
+    for r, e in zip(result, expected):
+        assert math.isclose(r, e, abs_tol=1e-12)

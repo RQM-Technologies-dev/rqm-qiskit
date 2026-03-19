@@ -15,7 +15,12 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from rqm_core.bloch import state_to_bloch
-from rqm_core.spinor import normalize_spinor, spinor_norm, spinor_to_quaternion
+from rqm_core.spinor import (
+    normalize_spinor,
+    spinor_norm,
+    spinor_to_quaternion,
+    spinor_embed,
+)
 
 if TYPE_CHECKING:
     from qiskit.quantum_info import Statevector

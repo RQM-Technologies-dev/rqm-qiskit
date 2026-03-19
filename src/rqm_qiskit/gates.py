@@ -2,8 +2,9 @@
 gates.py – RQMGate: a 1-qubit SU(2) rotation gate.
 
 SU(2) matrix generation delegates to rqm-core so that the math lives in
-one canonical place.  The Qiskit gate objects are built directly from
-Qiskit's rotation-gate library.
+one canonical place.  Named gate quaternions and gate recognition are
+imported from rqm_core.gates — the ecosystem-wide gate dictionary.
+The Qiskit gate objects are built directly from Qiskit's rotation-gate library.
 """
 
 from __future__ import annotations
@@ -12,6 +13,15 @@ import math
 from typing import TYPE_CHECKING
 
 from rqm_core.su2 import axis_angle_to_su2
+from rqm_core.gates import (
+    gate_h,
+    gate_s,
+    gate_t,
+    gate_rx,
+    gate_ry,
+    gate_rz,
+    match_gate,
+)
 
 import numpy as np
 
