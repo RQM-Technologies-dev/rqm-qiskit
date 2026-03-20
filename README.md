@@ -56,9 +56,12 @@ compile → lower → optimize → run
 
 ### What rqm-qiskit does NOT own
 
-`rqm-qiskit` contains **no** quaternion math, **no** spinor normalization,
-**no** Bloch conversions, and **no** canonical gate/circuit semantics of its
-own.  All canonical logic is delegated upward to rqm-core and rqm-compiler.
+`rqm-qiskit` does not implement canonical math.  It delegates all math
+operations to rqm-core.
+
+Specifically, `rqm-qiskit` contains **no** quaternion math, **no** spinor
+normalization, **no** Bloch conversions, and **no** SU(2) decomposition of its
+own.  All canonical logic is delegated to rqm-core and rqm-compiler.
 
 ### Architecture Guarantees
 
@@ -231,14 +234,116 @@ rqm-qiskit/
     rqm_qiskit/
       quaternion.py  – Quaternion: thin shim re-exporting from rqm-core
       state.py       – RQMState: Qiskit-bridge wrapper over rqm-core spinor math
-      gates.py       – RQMGate: to_operation() → rqm_compiler.Operation; to_qiskit_gate()
+      gates.py       – RQMGate: dual-mode gate; re-exports gate factories from rqm-core
       circuit.py     – RQMCircuit: façade over rqm_compiler.Circuit + to_qiskit()
       convert.py     – compiled_circuit_to_qiskit(); state/gate convenience wrappers
+      translator.py  – QiskitTranslator, compile_to_qiskit_circuit
+      execution.py   – run_local, run_backend
+      backend.py     – QiskitBackend: unified entry point
+      result.py      – QiskitResult: structured result wrapper
+      bridges.py     – spinor_to_circuit, bloch_to_circuit (bridge functions)
       results.py     – summarize_counts, format_counts_summary
       ibm.py         – Aer sampler helper + IBM Runtime stub
       utils.py       – internal utilities
-  tests/             – pytest test suite (137 tests)
+  tests/             – pytest test suite (256 tests)
   examples/          – runnable example scripts
+  AGENTS.md          – coding agent rules
+```
+
+---
+
+## Convenience Bridges
+
+Two thin bridge functions map physical state representations to Qiskit circuits.
+**All physics is delegated to rqm-core; these functions own only the gate mapping.**
+
+### `spinor_to_circuit(alpha, beta, target=0)`
+
+Converts a spinor `(α, β)` to a `QuantumCircuit` that prepares qubit `target`
+in the corresponding state.
+
+Steps:
+1. Normalize `(α, β)` via `rqm_core.spinor.normalize_spinor`
+2. Convert to Bloch vector via `rqm_core.bloch.state_to_bloch`
+3. Map `(θ, φ)` → `RY(θ) RZ(φ)` Qiskit gates
+
+```python
+from rqm_qiskit import spinor_to_circuit
+import math
+
+s = 1 / math.sqrt(2)
+qc = spinor_to_circuit(s + 0j, s + 0j)   # |+⟩ state
+print(qc.draw())
+```
+
+### `bloch_to_circuit(theta, phi, target=0)`
+
+Converts Bloch angles `(θ, φ)` directly to a `QuantumCircuit`:
+- `RY(θ)` sets the polar angle
+- `RZ(φ)` sets the azimuthal angle
+
+```python
+from rqm_qiskit import bloch_to_circuit
+import math
+
+qc = bloch_to_circuit(math.pi / 2, 0.0)   # |+⟩ on Bloch equator
+print(qc.draw())
+```
+
+### `Quaternion` re-export
+
+`Quaternion` is re-exported from rqm-core.  Users can access it via either:
+
+```python
+from rqm_qiskit import Quaternion
+# or
+from rqm_core import Quaternion
+```
+
+Both refer to the same canonical implementation.
+
+---
+
+## Usage Modes
+
+### Mode 1 — Compiler-first (primary)
+
+Use `rqm_compiler.Circuit` as the canonical circuit IR, then lower to Qiskit
+via `QiskitBackend` or `compile_to_qiskit_circuit`:
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import QiskitBackend
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+c.measure(0)
+c.measure(1)
+
+backend = QiskitBackend()
+result = backend.run_local(c, shots=1024)
+print(result.counts)            # {"00": 512, "11": 512}
+print(result.most_likely_bitstring())
+```
+
+### Mode 2 — Bridge functions (educational / experimental)
+
+Use `spinor_to_circuit` or `bloch_to_circuit` for state preparation directly
+from physical parameters:
+
+```python
+from rqm_qiskit import spinor_to_circuit, QiskitBackend
+import math
+
+# Prepare |+⟩ state from spinor
+s = 1 / math.sqrt(2)
+qc = spinor_to_circuit(s + 0j, s + 0j)
+qc.measure_all()
+
+backend = QiskitBackend()
+counts = backend.run_local(qc, shots=1024).counts
+print(counts)    # approximately {"0": 512, "1": 512}
 ```
 
 ---
@@ -247,13 +352,17 @@ rqm-qiskit/
 
 - ✅ `Quaternion` — thin re-export from rqm-core with `pretty()` convenience
 - ✅ `RQMState` — normalized 1-qubit states; delegates math to rqm-core
-- ✅ `RQMGate` — R_x, R_y, R_z gates; `to_operation()` → rqm-compiler IR
+- ✅ `RQMGate` — dual-mode: rotation (R_x, R_y, R_z) or named gate (H, CNOT, …)
 - ✅ `RQMCircuit` — façade over rqm-compiler `Circuit`; `to_qiskit()` lowers to Qiskit
+- ✅ `QiskitBackend` — unified entry point: compile + run
+- ✅ `QiskitTranslator` — rqm-compiler IR → Qiskit `QuantumCircuit`
+- ✅ `compile_to_qiskit_circuit()` — convenience function
+- ✅ `run_local()` / `run_backend()` — execution helpers
+- ✅ `QiskitResult` — structured result wrapper (counts, probabilities, most-likely)
+- ✅ `spinor_to_circuit` / `bloch_to_circuit` — bridge functions (delegate to rqm-core)
 - ✅ `compiled_circuit_to_qiskit()` — primary bridge: rqm-compiler IR → `QuantumCircuit`
-- ✅ Measurement result summaries
-- ✅ Local Aer simulation via `run_on_aer_sampler()`
+- ✅ Local Aer simulation via `run_on_aer_sampler()` and `run_local()`
 - 🚧 IBM Runtime execution (placeholder, not yet implemented)
-- 🚧 Multi-qubit support (future work)
 
 ---
 
@@ -261,10 +370,9 @@ rqm-qiskit/
 
 | Version | Features |
 |---------|----------|
-| 0.1.0   | 1-qubit states, gates, quaternion layer, local simulation; rqm-compiler bridge |
+| 0.1.0   | Full architecture; compiler-first design; bridge functions; QiskitBackend/Translator/Result |
 | 0.2.0   | IBM Runtime `SamplerV2` integration |
-| 0.3.0   | 2-qubit entanglement, CNOT, Bell states |
-| 0.4.0   | Noise models, density matrices |
+| 0.3.0   | Noise models, density matrices |
 | 1.0.0   | Stable public API, full documentation |
 
 ---
@@ -284,6 +392,7 @@ python examples/quaternion_state_demo.py
 python examples/bloch_vs_quaternion_demo.py
 python examples/simulator_counts_demo.py
 ```
+
 
 ---
 

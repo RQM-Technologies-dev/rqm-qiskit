@@ -19,6 +19,7 @@ from rqm_core.spinor import (
     normalize_spinor,
     spinor_norm,
     spinor_to_quaternion,
+    # spinor_embed: re-exported from rqm-core (canonical implementation)
     spinor_embed,
 )
 

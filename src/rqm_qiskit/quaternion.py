@@ -1,13 +1,13 @@
 """
-quaternion.py – Compatibility shim that re-exports Quaternion from rqm-core.
+quaternion.py – Quaternion bridge class for the rqm-qiskit layer.
 
-The canonical quaternion / SU(2) mathematics now lives in rqm-core.  This
-module re-exports ``Quaternion`` for backward compatibility and adds a
-``pretty()`` method that is specific to the rqm-qiskit bridge layer.
+Re-exports :class:`rqm_core.quaternion.Quaternion` as a thin subclass that
+adds a ``pretty()`` convenience method and overrides arithmetic operators
+to return the bridge type for consistency.
 
-New core methods (``from_axis_angle_vec``, ``to_axis_angle``,
-``canonicalize``, ``rotate_vector``) are inherited from rqm-core and
-available on the bridge class automatically.
+All canonical quaternion math (``from_axis_angle``, ``from_axis_angle_vec``,
+``to_axis_angle``, ``canonicalize``, ``rotate_vector``, ``to_su2_matrix``,
+``to_rotation_matrix``) is inherited unchanged from rqm-core.
 
 Users who previously did::
 
@@ -24,13 +24,43 @@ from rqm_core.quaternion import Quaternion as _CoreQuaternion
 class Quaternion(_CoreQuaternion):
     """Unit quaternion for SU(2) rotations and state geometry.
 
-    Re-exports all mathematics from :class:`rqm_core.quaternion.Quaternion`.
-    Adds :meth:`pretty` for human-readable bridge-layer output.
+    Inherits all mathematics from :class:`rqm_core.quaternion.Quaternion`.
 
-    All core methods (``from_axis_angle``, ``from_axis_angle_vec``,
-    ``to_axis_angle``, ``canonicalize``, ``rotate_vector``, ``identity``,
-    arithmetic, ``to_su2_matrix``, etc.) are inherited unchanged from rqm-core.
+    Canonical methods inherited from rqm-core (NOT redefined here):
+    ``from_axis_angle``, ``from_axis_angle_vec``, ``to_axis_angle``,
+    ``canonicalize``, ``rotate_vector``, ``identity``, ``to_su2_matrix``,
+    ``to_rotation_matrix``, ``norm``, ``is_unit``.
+
+    Bridge additions:
+    - ``pretty()`` – human-readable formatted string.
+    - ``normalize``, ``conjugate``, ``inverse``, ``__mul__`` – thin wrappers
+      that ensure the bridge type is returned for arithmetic operations.
     """
+
+    # ------------------------------------------------------------------
+    # Overrides to ensure bridge operations return bridge Quaternion type
+    # (rqm-core arithmetic methods return CoreQuaternion instances)
+    # ------------------------------------------------------------------
+
+    def normalize(self) -> "Quaternion":
+        """Return a normalized unit quaternion (bridge Quaternion type)."""
+        r = super().normalize()
+        return Quaternion(r.w, r.x, r.y, r.z)
+
+    def conjugate(self) -> "Quaternion":
+        """Return the conjugate quaternion (bridge Quaternion type)."""
+        r = super().conjugate()
+        return Quaternion(r.w, r.x, r.y, r.z)
+
+    def inverse(self) -> "Quaternion":
+        """Return the inverse quaternion (bridge Quaternion type)."""
+        r = super().inverse()
+        return Quaternion(r.w, r.x, r.y, r.z)
+
+    def __mul__(self, other: "_CoreQuaternion") -> "Quaternion":
+        """Quaternion product (bridge Quaternion type)."""
+        r = super().__mul__(other)
+        return Quaternion(r.w, r.x, r.y, r.z)
 
     def pretty(self) -> str:
         """Return a human-readable string representation.
