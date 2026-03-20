@@ -40,17 +40,24 @@ compile → lower → optimize → run
 
 ### What rqm-qiskit owns
 
-- `compiled_circuit_to_qiskit()` — the primary bridge: translates an
-  `rqm_compiler.Circuit` or `rqm_compiler.CompiledCircuit` into a Qiskit
-  `QuantumCircuit`.
-- `RQMCircuit` — a thin façade over `rqm_compiler.Circuit` that adds
-  Qiskit-specific state preparation (`initialize`) and exposes
-  `.to_qiskit()`.
-- `RQMGate` — adds `.to_operation()` (→ `rqm_compiler.Operation`) and
-  `.to_qiskit_gate()` (→ Qiskit gate object) on top of the rqm-core SU(2)
-  matrix.
-- `RQMState` — adds Qiskit-facing helpers (`.vector()`, `.as_statevector()`)
-  on top of rqm-core spinor/Bloch math.
+**Primary entrypoints (prefer these):**
+- `QiskitBackend.run()` — one-call compile-and-execute; the canonical entry
+  point for running circuits.
+- `to_backend_circuit()` — translate an `rqm_compiler.Circuit` to a Qiskit
+  `QuantumCircuit` without executing it; use when you only need the circuit
+  object.
+
+**Internal lowering path (used by the entrypoints above):**
+- `compiled_circuit_to_qiskit()` — the core bridge function that all
+  translation helpers route through.
+
+**Compatibility helpers (use when the primary entrypoints are not enough):**
+- `RQMCircuit` — thin façade over `rqm_compiler.Circuit`; adds Qiskit-specific
+  state preparation (`initialize`) and `.to_qiskit()`.
+- `RQMGate` — adds `.to_operation()` and `.to_qiskit_gate()` on top of the
+  rqm-core SU(2) matrix.
+- `RQMState` — Qiskit-facing helpers (`.vector()`, `.as_statevector()`) on top
+  of rqm-core spinor/Bloch math.
 - `run_on_aer_sampler()` / IBM Runtime helpers in `ibm.py`.
 - Result formatting in `results.py`.
 
@@ -163,7 +170,111 @@ pip install -e ".[dev,simulator]"
 
 ---
 
+## Public API Hierarchy
+
+When in doubt, use the **highest-level entrypoint that fits your use case**.
+This keeps your code simple, readable, and forward-compatible.
+
+| Tier | Entrypoint | When to use |
+|------|-----------|-------------|
+| **1 — Run** | `QiskitBackend().run(circuit, shots=1024)` | Execute a circuit and get a result. **Start here.** |
+| **2 — Translate** | `to_backend_circuit(circuit)` | Get a Qiskit `QuantumCircuit` without running it (e.g. for inspection, serialisation, or custom execution). |
+| **3 — Compat helpers** | `compiled_circuit_to_qiskit()`, `compile_to_qiskit_circuit()`, `spinor_to_circuit()`, `bloch_to_circuit()`, `RQMCircuit`, `RQMGate`, `RQMState` | Lower-level access and educational / physics-oriented workflows. Reach for these only when Tiers 1–2 are not enough. |
+
+### Tier 1 — `QiskitBackend.run()`
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import QiskitBackend
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+c.measure(0)
+c.measure(1)
+
+result = QiskitBackend().run(c, shots=1024)
+print(result.counts)               # {"00": ~512, "11": ~512}
+print(result.most_likely_bitstring())
+print(result.to_dict())            # JSON-serialisable API-ready dict
+```
+
+### Tier 2 — `to_backend_circuit()`
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import to_backend_circuit
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+
+qc = to_backend_circuit(c)        # returns qiskit.QuantumCircuit
+print(qc.draw(output="text"))
+```
+
+### Tier 3 — Compatibility helpers
+
+Use the lower-level helpers when you need fine-grained control, are working
+with physical state representations (spinors, Bloch angles), or are following
+an educational / exploration workflow:
+
+```python
+# Physical-state preparation (bridge functions)
+from rqm_qiskit import spinor_to_circuit, bloch_to_circuit
+import math
+
+qc = bloch_to_circuit(math.pi / 2, 0.0)   # |+⟩ on Bloch equator
+
+# Named-gate / rotation-gate facades
+from rqm_qiskit import RQMState, RQMGate, RQMCircuit
+
+state = RQMState.plus()
+gate  = RQMGate.ry(0.6)
+circ  = RQMCircuit(1)
+circ.prepare_state(state)
+circ.apply_gate(gate)
+circ.measure_all()
+print(circ.draw_text())
+```
+
+---
+
 ## Quickstart
+
+The fastest path to a result:
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import QiskitBackend
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+c.measure(0)
+c.measure(1)
+
+result = QiskitBackend().run(c, shots=1024)
+print(result.counts)               # {"00": ~512, "11": ~512}
+print(result.most_likely_bitstring())
+print(result.to_dict())            # JSON-serialisable result for APIs
+```
+
+If you only need the translated `QuantumCircuit` (not execution):
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import to_backend_circuit
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+
+qc = to_backend_circuit(c)
+print(qc.draw(output="text"))
+```
+
+For physics-oriented / educational workflows (Tier 3 helpers):
 
 ```python
 from rqm_qiskit import RQMState, RQMGate, RQMCircuit
@@ -196,25 +307,7 @@ q_composed = gate2.quaternion * gate.quaternion  # apply gate first, then gate2
 print(q_composed.to_su2_matrix())  # the combined 2×2 SU(2) matrix
 ```
 
-Use the rqm-compiler circuit directly:
-
-```python
-from rqm_compiler import Circuit, compile_circuit
-from rqm_qiskit.convert import compiled_circuit_to_qiskit
-
-# Build a backend-neutral circuit in rqm-compiler
-c = Circuit(2)
-c.h(0)
-c.cx(0, 1)
-c.measure(0)
-c.measure(1)
-
-# Lower to Qiskit
-qc = compiled_circuit_to_qiskit(c)
-print(qc.draw(output="text"))
-```
-
-Run on the local Aer simulator:
+Run on the local Aer simulator (lower-level path):
 
 ```python
 from rqm_qiskit import format_counts_summary
@@ -237,7 +330,7 @@ rqm-qiskit/
       gates.py       – RQMGate: dual-mode gate; re-exports gate factories from rqm-core
       circuit.py     – RQMCircuit: façade over rqm_compiler.Circuit + to_qiskit()
       convert.py     – compiled_circuit_to_qiskit(); state/gate convenience wrappers
-      translator.py  – QiskitTranslator, compile_to_qiskit_circuit
+      translator.py  – QiskitTranslator, compile_to_qiskit_circuit, to_backend_circuit
       execution.py   – run_local, run_backend
       backend.py     – QiskitBackend: unified entry point
       result.py      – QiskitResult: structured result wrapper
@@ -306,10 +399,14 @@ Both refer to the same canonical implementation.
 
 ## Usage Modes
 
-### Mode 1 — Compiler-first (primary)
+See [Public API Hierarchy](#public-api-hierarchy) for the preferred entrypoint
+table.  The sections below expand on each tier with more context.
 
-Use `rqm_compiler.Circuit` as the canonical circuit IR, then lower to Qiskit
-via `QiskitBackend` or `compile_to_qiskit_circuit`:
+### Tier 1 — Execute (preferred)
+
+Use `QiskitBackend.run()` whenever you want to compile **and** run a circuit
+in one step.  The result is a `QiskitResult` with `.counts`, `.probabilities`,
+`.most_likely_bitstring()`, and `.to_dict()` (JSON-serialisable for APIs):
 
 ```python
 from rqm_compiler import Circuit
@@ -321,16 +418,33 @@ c.cx(0, 1)
 c.measure(0)
 c.measure(1)
 
-backend = QiskitBackend()
-result = backend.run_local(c, shots=1024)
-print(result.counts)            # {"00": 512, "11": 512}
-print(result.most_likely_bitstring())
+result = QiskitBackend().run(c, shots=1024)
+print(result.counts)              # {"00": ~512, "11": ~512}
+print(result.to_dict())           # {"counts": ..., "shots": 1024, "backend": "qiskit", ...}
 ```
 
-### Mode 2 — Bridge functions (educational / experimental)
+### Tier 2 — Translate only
 
-Use `spinor_to_circuit` or `bloch_to_circuit` for state preparation directly
-from physical parameters:
+Use `to_backend_circuit()` when you only need the `QuantumCircuit` object
+(e.g. to inspect it, serialise it, or hand it to a custom execution pipeline):
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import to_backend_circuit
+
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+
+qc = to_backend_circuit(c)
+print(qc.draw(output="text"))
+```
+
+### Tier 3 — Compatibility helpers (educational / experimental)
+
+Use `spinor_to_circuit`, `bloch_to_circuit`, `RQMCircuit`, `RQMGate`, or
+`RQMState` for state preparation directly from physical parameters, or for
+educational / exploration workflows where geometric intuition is the focus:
 
 ```python
 from rqm_qiskit import spinor_to_circuit, QiskitBackend
@@ -341,26 +455,32 @@ s = 1 / math.sqrt(2)
 qc = spinor_to_circuit(s + 0j, s + 0j)
 qc.measure_all()
 
-backend = QiskitBackend()
-counts = backend.run_local(qc, shots=1024).counts
-print(counts)    # approximately {"0": 512, "1": 512}
+result = QiskitBackend().run_local(qc, shots=1024)
+print(result.counts)    # approximately {"0": 512, "1": 512}
 ```
 
 ---
 
 ## Current Scope (v0.1.0)
 
+**Tier 1 — Execute:**
+- ✅ `QiskitBackend.run()` — one-call compile-and-execute; returns `QiskitResult`
+- ✅ `QiskitResult` — structured result wrapper (counts, probabilities, most-likely, `.to_dict()`)
+
+**Tier 2 — Translate:**
+- ✅ `to_backend_circuit()` — primary translation function; rqm-compiler IR → `QuantumCircuit`
+- ✅ `QiskitBackend.compile()` — alias on the backend class
+- ✅ `QiskitTranslator` — stateless translator class
+- ✅ `compile_to_qiskit_circuit()` — convenience function
+
+**Tier 3 — Compatibility helpers:**
 - ✅ `Quaternion` — thin re-export from rqm-core with `pretty()` convenience
 - ✅ `RQMState` — normalized 1-qubit states; delegates math to rqm-core
 - ✅ `RQMGate` — dual-mode: rotation (R_x, R_y, R_z) or named gate (H, CNOT, …)
 - ✅ `RQMCircuit` — façade over rqm-compiler `Circuit`; `to_qiskit()` lowers to Qiskit
-- ✅ `QiskitBackend` — unified entry point: compile + run
-- ✅ `QiskitTranslator` — rqm-compiler IR → Qiskit `QuantumCircuit`
-- ✅ `compile_to_qiskit_circuit()` — convenience function
-- ✅ `run_local()` / `run_backend()` — execution helpers
-- ✅ `QiskitResult` — structured result wrapper (counts, probabilities, most-likely)
+- ✅ `run_local()` / `run_backend()` — lower-level execution helpers
 - ✅ `spinor_to_circuit` / `bloch_to_circuit` — bridge functions (delegate to rqm-core)
-- ✅ `compiled_circuit_to_qiskit()` — primary bridge: rqm-compiler IR → `QuantumCircuit`
+- ✅ `compiled_circuit_to_qiskit()` — internal lowering path (also public)
 - ✅ Local Aer simulation via `run_on_aer_sampler()` and `run_local()`
 - 🚧 IBM Runtime execution (placeholder, not yet implemented)
 
@@ -398,16 +518,24 @@ python examples/simulator_counts_demo.py
 
 ## Optimization (Optional)
 
-For improved circuit performance, use [`rqm-optimize`](https://github.com/RQM-Technologies-dev/rqm-optimize):
+For improved circuit performance, use [`rqm-optimize`](https://github.com/RQM-Technologies-dev/rqm-optimize).
+Because `rqm-optimize` is outside the `rqm-qiskit` dependency boundary, apply
+it **before** passing the circuit to `rqm-qiskit` — do not expect
+`rqm-qiskit` to call it internally:
 
 ```python
-from rqm_compiler import Circuit, compile_circuit
-from rqm_qiskit.convert import compiled_circuit_to_qiskit
-from rqm_optimize import optimize  # installed separately — not a dependency of rqm-qiskit
+from rqm_compiler import Circuit
+from rqm_qiskit import to_backend_circuit
+from rqm_optimize import optimize_circuit  # installed separately
 
-compiled = compile_circuit(my_circuit)
-qc = compiled_circuit_to_qiskit(compiled)
-qc = optimize(qc)
+c = Circuit(2)
+c.h(0)
+c.cx(0, 1)
+
+# Optimize externally, then translate
+optimized, report = optimize_circuit(c)
+qc = to_backend_circuit(optimized)
+print(qc.draw(output="text"))
 ```
 
 `rqm-optimize` is a **completely separate, optional package**.  `rqm-qiskit`

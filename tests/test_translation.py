@@ -67,18 +67,17 @@ def test_to_backend_circuit_optimize_false_runs():
 
 
 def test_to_backend_circuit_optimize_true_raises_when_unavailable():
-    """to_backend_circuit(optimize=True) must raise ImportError if no optimizer installed."""
+    """to_backend_circuit(optimize=True) must raise ImportError when no optimizer is available.
+
+    rqm-qiskit only attempts rqm_compiler.optimize_circuit (not rqm_optimize,
+    which is an external package that must stay outside the dependency boundary).
+    """
     from rqm_qiskit import to_backend_circuit
 
-    # rqm-optimize is not installed in the test environment
-    try:
-        import rqm_optimize  # noqa: F401
-        # If it IS installed, just check we get a QuantumCircuit
-        qc = to_backend_circuit(_bell_circuit(), optimize=True)
-        assert isinstance(qc, QuantumCircuit)
-    except (ImportError, ModuleNotFoundError):
-        with pytest.raises(ImportError, match="optimize"):
-            to_backend_circuit(_bell_circuit(), optimize=True)
+    # rqm_compiler.optimize_circuit is not available in the current release;
+    # optimize=True must therefore raise ImportError with a helpful message.
+    with pytest.raises(ImportError, match="optimize"):
+        to_backend_circuit(_bell_circuit(), optimize=True)
 
 
 # ---------------------------------------------------------------------------

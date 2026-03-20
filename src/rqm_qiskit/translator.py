@@ -231,12 +231,12 @@ def to_backend_circuit(
 def _apply_optimization(
     source: "Union[Circuit, CompiledCircuit]",
 ) -> "Union[Circuit, CompiledCircuit]":
-    """Apply optimization passes to a circuit if an optimizer is available.
+    """Apply optimization passes to a circuit via rqm-compiler's built-in passes.
 
-    Attempts to import ``optimize_circuit`` from ``rqm_compiler`` (future
-    versions may include built-in passes), then falls back to the optional
-    ``rqm_optimize`` package which is the primary source of optimization today.
-    Raises :exc:`ImportError` if neither is available.
+    Raises :exc:`ImportError` if ``rqm_compiler.optimize_circuit`` is not
+    available.  To use an external optimizer (e.g. ``rqm-optimize``), call
+    that optimizer **before** passing the circuit to rqm-qiskit — do not
+    import it inside this package.
 
     Parameters
     ----------
@@ -246,15 +246,16 @@ def _apply_optimization(
     Returns
     -------
     Circuit or CompiledCircuit
-        The optimized circuit (type depends on the optimizer).
+        The optimized circuit.
 
     Raises
     ------
     ImportError
-        If no optimization backend is installed.  Install ``rqm-optimize``
-        to enable this feature: ``pip install rqm-optimize``.
+        If ``rqm_compiler.optimize_circuit`` is not available in the
+        installed version of rqm-compiler.
     """
-    # Try rqm_compiler first (may include optimization passes in future releases)
+    # Attempt rqm_compiler built-in optimization passes only.
+    # rqm-qiskit must not import rqm-optimize (architecture boundary).
     try:
         from rqm_compiler import optimize_circuit  # type: ignore[attr-defined]
         result = optimize_circuit(source)
@@ -263,15 +264,9 @@ def _apply_optimization(
     except (ImportError, AttributeError):
         pass
 
-    # Try optional rqm-optimize package (primary optimization source)
-    try:
-        from rqm_optimize import optimize_circuit  # type: ignore[import]
-        result = optimize_circuit(source)
-        return result[0] if isinstance(result, tuple) else result
-    except (ImportError, ModuleNotFoundError):
-        pass
-
     raise ImportError(
-        "optimize=True requires the rqm-optimize package. "
-        "Install it with: pip install rqm-optimize"
+        "optimize=True requires rqm_compiler.optimize_circuit, which is not "
+        "available in the installed version of rqm-compiler. "
+        "To use an external optimizer, apply it before passing the circuit "
+        "to rqm-qiskit (e.g. via rqm-optimize installed separately)."
     )

@@ -214,7 +214,9 @@ def _apply_operation(
         x = params.get("x", 0.0)
         y = params.get("y", 0.0)
         z = params.get("z", 0.0)
-        matrix = Quaternion(w, x, y, z).normalize().to_su2_matrix()
+        # rqm-compiler guarantees the quaternion is already unit-normalised;
+        # delegate the SU(2) matrix conversion entirely to rqm-core.
+        matrix = Quaternion(w, x, y, z).to_su2_matrix()
         qc.append(UnitaryGate(matrix), [targets[0]])
     elif gate == "barrier":
         if targets:
