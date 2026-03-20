@@ -172,14 +172,17 @@ pip install -e ".[dev,simulator]"
 
 ## Public API Hierarchy
 
+rqm-qiskit exposes a tiered API. Most users should use Tier 1.
+Lower tiers exist for inspection and advanced workflows.
+
 When in doubt, use the **highest-level entrypoint that fits your use case**.
 This keeps your code simple, readable, and forward-compatible.
 
-| Tier | Entrypoint | When to use |
-|------|-----------|-------------|
-| **1 — Run** | `QiskitBackend().run(circuit, shots=1024)` | Execute a circuit and get a result. **Start here.** |
-| **2 — Translate** | `to_backend_circuit(circuit)` | Get a Qiskit `QuantumCircuit` without running it (e.g. for inspection, serialisation, or custom execution). |
-| **3 — Compat helpers** | `compiled_circuit_to_qiskit()`, `compile_to_qiskit_circuit()`, `spinor_to_circuit()`, `bloch_to_circuit()`, `RQMCircuit`, `RQMGate`, `RQMState` | Lower-level access and educational / physics-oriented workflows. Reach for these only when Tiers 1–2 are not enough. |
+| Tier | Entrypoint | When to use | Stability |
+|------|-----------|-------------|-----------|
+| **1 — Run** | `QiskitBackend().run(circuit, shots=1024)` | Execute a circuit and get a result. **Start here.** | Stable |
+| **2 — Translate** | `to_backend_circuit(circuit)` | Get a Qiskit `QuantumCircuit` without running it (e.g. for inspection, serialisation, or custom execution). | Stable |
+| **3 — Compat helpers** | `compiled_circuit_to_qiskit()`, `compile_to_qiskit_circuit()`, `spinor_to_circuit()`, `bloch_to_circuit()`, `RQMCircuit`, `RQMGate`, `RQMState` | Lower-level access and educational / physics-oriented workflows. Reach for these only when Tiers 1–2 are not enough. | Subject to change |
 
 ### Tier 1 — `QiskitBackend.run()`
 
