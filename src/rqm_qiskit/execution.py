@@ -112,16 +112,20 @@ def run_backend(
             "See qiskit_ibm_runtime for IBM Quantum backends."
         )
 
-    from qiskit.primitives import StatevectorSampler
+    # Try to use the provided backend as an Aer simulator
+    try:
+        from qiskit_aer import AerSimulator
 
-    sampler = StatevectorSampler()
-    job = sampler.run([qc], shots=shots)
-    result = job.result()
-    pub_result = result[0]
+        if isinstance(backend, AerSimulator) or type(backend).__name__.startswith("Aer"):
+            from rqm_qiskit.ibm import run_on_aer_sampler
 
-    counts: dict[str, int] = {}
-    for reg_name in pub_result.data:
-        bit_array = getattr(pub_result.data, reg_name)
-        for bitstring, count in bit_array.get_counts().items():
-            counts[bitstring] = counts.get(bitstring, 0) + count
-    return counts
+            return run_on_aer_sampler(qc, shots=shots)
+    except ImportError:
+        pass
+
+    # Real IBM backends require qiskit_ibm_runtime – raise with helpful guidance
+    raise NotImplementedError(
+        "Real IBM Quantum backend execution requires qiskit_ibm_runtime. "
+        "Install it separately and use SamplerV2(backend).run([circuit], shots=shots). "
+        "rqm-qiskit does not bundle IBM Runtime as a dependency."
+    )

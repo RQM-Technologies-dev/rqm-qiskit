@@ -193,15 +193,15 @@ def test_gate_rz_pi_over_2_matches_gate_s():
 
 
 def test_match_gate_identifies_h():
-    assert match_gate(gate_h()) == "h"
+    assert match_gate(gate_h()) == "H"
 
 
 def test_match_gate_identifies_s():
-    assert match_gate(gate_s()) == "s"
+    assert match_gate(gate_s()) == "S"
 
 
 def test_match_gate_identifies_t():
-    assert match_gate(gate_t()) == "t"
+    assert match_gate(gate_t()) == "T"
 
 
 def test_match_gate_identifies_negative_h():
@@ -212,7 +212,7 @@ def test_match_gate_identifies_negative_h():
     """
     q = gate_h()
     neg_q = Quaternion(-q.w, -q.x, -q.y, -q.z)
-    assert match_gate(neg_q) == "h"
+    assert match_gate(neg_q) == "H"
 
 
 def test_match_gate_returns_none_for_unknown():
@@ -221,9 +221,11 @@ def test_match_gate_returns_none_for_unknown():
     assert match_gate(q) is None
 
 
-def test_match_gate_returns_none_for_identity():
-    """Identity quaternion is not a named gate in the library."""
-    assert match_gate(Quaternion.identity()) is None
+def test_match_gate_returns_named_for_identity():
+    """Identity quaternion is recognized as the 'I' (identity) gate by rqm-core."""
+    result = match_gate(Quaternion.identity())
+    # rqm_core.gates.match_gate returns "I" for the identity quaternion
+    assert result == "I"
 
 
 # ---------------------------------------------------------------------------

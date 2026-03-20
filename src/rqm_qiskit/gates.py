@@ -12,9 +12,8 @@ RQMGate operates in two modes:
   and :class:`~rqm_qiskit.translator.QiskitTranslator`.
 
 Named gate quaternion factories (``gate_h``, ``gate_s``, ``gate_t``,
-``gate_rx``, ``gate_ry``, ``gate_rz``) are defined here using
-:func:`rqm_core.quaternion.Quaternion.from_axis_angle` so that all
-arithmetic remains in rqm-core.
+``gate_rx``, ``gate_ry``, ``gate_rz``) and ``match_gate`` are re-exported
+directly from :mod:`rqm_core.gates`.  No math is defined locally.
 
 # NOTE:
 # Primary input type is rqm-compiler CompiledProgram.
@@ -32,80 +31,24 @@ import numpy as np
 from rqm_core.su2 import axis_angle_to_su2
 from rqm_core.quaternion import Quaternion as _CoreQuaternion
 
+# Named gate factories and gate recognition re-exported from rqm-core.
+# These are the canonical implementations; no math is duplicated here.
+from rqm_core.gates import (
+    gate_h,
+    gate_s,
+    gate_t,
+    gate_rx,
+    gate_ry,
+    gate_rz,
+    match_gate,
+)
+
 if TYPE_CHECKING:
     from qiskit.circuit import Gate
     from rqm_compiler import Operation
     from rqm_qiskit.quaternion import Quaternion
 
 _VALID_AXES = {"x", "y", "z"}
-
-# ---------------------------------------------------------------------------
-# Named gate quaternion factories
-# All arithmetic delegates to rqm_core.quaternion.Quaternion.from_axis_angle.
-# ---------------------------------------------------------------------------
-
-
-def gate_h() -> _CoreQuaternion:
-    """Hadamard gate quaternion: rotation by π around (x+z)/√2."""
-    from rqm_qiskit.quaternion import Quaternion as _BridgeQ
-
-    return _BridgeQ.from_axis_angle_vec(
-        [1.0 / math.sqrt(2), 0.0, 1.0 / math.sqrt(2)], math.pi
-    ).canonicalize()
-
-
-def gate_s() -> _CoreQuaternion:
-    """S gate quaternion: R_z(π/2)."""
-    return _CoreQuaternion.from_axis_angle("z", math.pi / 2)
-
-
-def gate_t() -> _CoreQuaternion:
-    """T gate quaternion: R_z(π/4)."""
-    return _CoreQuaternion.from_axis_angle("z", math.pi / 4)
-
-
-def gate_rx(angle: float) -> _CoreQuaternion:
-    """R_x rotation quaternion factory."""
-    return _CoreQuaternion.from_axis_angle("x", angle)
-
-
-def gate_ry(angle: float) -> _CoreQuaternion:
-    """R_y rotation quaternion factory."""
-    return _CoreQuaternion.from_axis_angle("y", angle)
-
-
-def gate_rz(angle: float) -> _CoreQuaternion:
-    """R_z rotation quaternion factory."""
-    return _CoreQuaternion.from_axis_angle("z", angle)
-
-
-def match_gate(q: _CoreQuaternion) -> "str | None":
-    """Identify a unit quaternion as a named gate.
-
-    Checks ``q`` against known named-gate SU(2) matrices, accounting for
-    the SU(2) double cover of SO(3) (i.e., ``q`` and ``-q`` are the same
-    physical rotation).
-
-    Parameters
-    ----------
-    q:
-        A unit quaternion to identify.
-
-    Returns
-    -------
-    str or None
-        The gate name (``"h"``, ``"s"``, or ``"t"``) if recognized,
-        otherwise ``None``.
-    """
-    mat = q.to_su2_matrix()
-    for name, factory in [("h", gate_h), ("s", gate_s), ("t", gate_t)]:
-        gate_mat = factory().to_su2_matrix()
-        if np.allclose(mat, gate_mat, atol=1e-10) or np.allclose(
-            mat, -gate_mat, atol=1e-10
-        ):
-            return name
-    return None
-
 
 # ---------------------------------------------------------------------------
 # Named gate → rqm-compiler gate name mapping
@@ -132,11 +75,13 @@ _NAMED_GATE_OPS: dict[str, str] = {
     "PHASE": "phaseshift",
 }
 
-_TWO_QUBIT_GATES: frozenset[str] = frozenset(
-    {"CX", "CNOT", "CY", "CZ", "SWAP", "ISWAP"}
-)
+# Controlled gates: one qubit is "control", one is "target".
+_CONTROLLED_GATES: frozenset[str] = frozenset({"CX", "CNOT", "CY", "CZ"})
 
+# Symmetric two-qubit gates: both qubits go in targets, no controls.
+_SYMMETRIC_TWO_QUBIT_GATES: frozenset[str] = frozenset({"SWAP", "ISWAP"})
 
+_TWO_QUBIT_GATES: frozenset[str] = _CONTROLLED_GATES | _SYMMETRIC_TWO_QUBIT_GATES
 
 
 # ---------------------------------------------------------------------------
@@ -326,7 +271,16 @@ class RQMGate:
         else:
             # Named gate mode
             op_name = _NAMED_GATE_OPS[self._gate_name]  # type: ignore[index]
-            if self._gate_name in _TWO_QUBIT_GATES:
+            if self._gate_name in _SYMMETRIC_TWO_QUBIT_GATES:
+                # SWAP, ISWAP: both qubits are targets (no control qubit)
+                t1 = self._target if self._target is not None else 0
+                t2 = self._control if self._control is not None else 1
+                return Operation(
+                    gate=op_name,
+                    targets=[t1, t2],
+                    controls=[],
+                )
+            elif self._gate_name in _CONTROLLED_GATES:
                 return Operation(
                     gate=op_name,
                     targets=[self._target],

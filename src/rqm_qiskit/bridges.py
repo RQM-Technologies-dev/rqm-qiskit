@@ -112,7 +112,7 @@ def bloch_to_circuit(
     return qc
 
 
-def quaternion_to_circuit(q=None, target: int = 0) -> QuantumCircuit:
+def quaternion_to_circuit(target: int = 0) -> QuantumCircuit:
     """[NOT IMPLEMENTED] Convert a quaternion to a Qiskit QuantumCircuit.
 
     SU(2) decomposition belongs in rqm-core, not in the rqm-qiskit bridge
