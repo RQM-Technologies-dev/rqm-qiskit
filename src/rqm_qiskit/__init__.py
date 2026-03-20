@@ -57,8 +57,8 @@ from rqm_qiskit.convert import (
 from rqm_qiskit.results import summarize_counts, format_counts_summary
 
 # New architecture components
-from rqm_qiskit.translator import QiskitTranslator, compile_to_qiskit_circuit, to_backend_circuit
-from rqm_qiskit.execution import run_local, run_backend
+from rqm_qiskit.translator import QiskitTranslator, compile_to_qiskit_circuit, to_backend_circuit, to_qiskit_circuit
+from rqm_qiskit.execution import run_local, run_backend, run_qiskit
 from rqm_qiskit.backend import QiskitBackend
 from rqm_qiskit.result import QiskitResult
 from rqm_qiskit.bridges import spinor_to_circuit, bloch_to_circuit
@@ -67,6 +67,8 @@ __all__ = [
     # Compiler-first (primary)
     "QiskitBackend",
     "QiskitTranslator",
+    "to_qiskit_circuit",
+    "run_qiskit",
     "compile_to_qiskit_circuit",
     "to_backend_circuit",
     "run_local",

@@ -19,11 +19,12 @@ Public API
 - ``QiskitTranslator`` : stateless translator class
 - ``compile_to_qiskit_circuit`` : convenience function delegating to the translator
 - ``to_backend_circuit`` : primary translation API (supports optimize toggle)
+- ``to_qiskit_circuit`` : new primary API with include_report support
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from qiskit import QuantumCircuit
 
@@ -51,6 +52,99 @@ class QiskitTranslator:
     >>> c.measure(0); c.measure(1)
     >>> qc = QiskitTranslator().compile_to_circuit(c)
     """
+
+    def to_quantum_circuit(
+        self,
+        circuit: "Union[Circuit, CompiledCircuit]",
+        *,
+        optimize: bool = False,
+        include_report: bool = False,
+    ) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
+        """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
+
+        This is the canonical entry point for the new architecture.
+        All compilation is delegated to rqm-compiler; this method only
+        performs descriptor → Qiskit gate mapping.
+
+        Parameters
+        ----------
+        circuit:
+            An :class:`rqm_compiler.Circuit` or
+            :class:`rqm_compiler.CompiledCircuit`.
+        optimize:
+            If ``True``, call ``optimize_circuit`` from rqm-compiler before
+            lowering.  Raises :exc:`ImportError` if not available.
+            Defaults to ``False``.
+        include_report:
+            If ``True``, return a ``(QuantumCircuit, report)`` tuple where
+            ``report`` is the compiler report (or ``None`` when
+            ``optimize=False``).
+            Defaults to ``False``.
+
+        Returns
+        -------
+        qiskit.QuantumCircuit
+            When ``include_report=False`` (default).
+        (qiskit.QuantumCircuit, report)
+            When ``include_report=True``.
+
+        Raises
+        ------
+        ImportError
+            If ``optimize=True`` but ``rqm_compiler.optimize_circuit`` is
+            not available.
+        """
+        from rqm_compiler import Circuit, CompiledCircuit, compile_circuit
+
+        report = None
+
+        if optimize:
+            optimized_circuit, report = _apply_optimization_with_report(circuit)
+            working = optimized_circuit
+        else:
+            if isinstance(circuit, CompiledCircuit):
+                working = circuit
+            else:
+                compiled = compile_circuit(circuit)
+                working = compiled
+
+        qc = compiled_circuit_to_qiskit(working)
+
+        if include_report:
+            return qc, report
+        return qc
+
+    def apply_gate(
+        self,
+        qc: QuantumCircuit,
+        descriptor: "dict[str, Any]",
+    ) -> None:
+        """Apply a single canonical gate descriptor to a Qiskit QuantumCircuit.
+
+        Parameters
+        ----------
+        qc:
+            The target :class:`qiskit.QuantumCircuit` (mutated in-place).
+        descriptor:
+            A canonical gate descriptor dict with keys:
+            ``gate``, ``targets``, ``controls``, ``params``.
+        """
+        from rqm_compiler.ops import Operation
+        from rqm_qiskit.convert import _apply_operation
+
+        op = Operation.from_descriptor(descriptor)
+        # Build a temporary key mapping for measure operations
+        key_to_clbit: dict[str, int] = {}
+        if op.gate == "measure":
+            key = op.params.get("key", f"m{op.targets[0]}")
+            if qc.num_clbits > 0:
+                # Find the classical bit index by iterating existing registers
+                clbit_idx = 0
+                for reg in qc.cregs:
+                    for i in range(reg.size):
+                        key_to_clbit[f"m{clbit_idx}"] = clbit_idx
+                        clbit_idx += 1
+        _apply_operation(qc, op, key_to_clbit)
 
     def compile_to_circuit(
         self,
@@ -228,6 +322,59 @@ def to_backend_circuit(
     return QiskitTranslator().compile_to_circuit(circuit, optimize=optimize)
 
 
+def to_qiskit_circuit(
+    circuit: "Union[Circuit, CompiledCircuit]",
+    *,
+    optimize: bool = False,
+    include_report: bool = False,
+) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
+    """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
+
+    This is the new primary translation API.  All compilation is delegated to
+    rqm-compiler; this function only performs descriptor → Qiskit gate mapping.
+
+    Parameters
+    ----------
+    circuit:
+        An :class:`rqm_compiler.Circuit` or :class:`rqm_compiler.CompiledCircuit`.
+    optimize:
+        If ``True``, call ``optimize_circuit`` from rqm-compiler before lowering.
+        Raises :exc:`ImportError` if not available in the installed rqm-compiler.
+        Defaults to ``False``.
+    include_report:
+        If ``True``, return a ``(QuantumCircuit, report)`` tuple where ``report``
+        is the compiler report (or ``None`` when ``optimize=False``).
+        Defaults to ``False``.
+
+    Returns
+    -------
+    qiskit.QuantumCircuit
+        When ``include_report=False`` (default).
+    (qiskit.QuantumCircuit, report)
+        When ``include_report=True``.
+
+    Raises
+    ------
+    ImportError
+        If ``optimize=True`` but ``rqm_compiler.optimize_circuit`` is not
+        available.
+
+    Examples
+    --------
+    >>> from rqm_compiler import Circuit
+    >>> from rqm_qiskit import to_qiskit_circuit
+    >>> c = Circuit(2)
+    >>> c.h(0); c.cx(0, 1); c.measure(0); c.measure(1)
+    >>> qc = to_qiskit_circuit(c)
+    >>> qc, report = to_qiskit_circuit(c, optimize=True, include_report=True)
+    """
+    return QiskitTranslator().to_quantum_circuit(
+        circuit,
+        optimize=optimize,
+        include_report=include_report,
+    )
+
+
 def _apply_optimization(
     source: "Union[Circuit, CompiledCircuit]",
 ) -> "Union[Circuit, CompiledCircuit]":
@@ -254,13 +401,45 @@ def _apply_optimization(
         If ``rqm_compiler.optimize_circuit`` is not available in the
         installed version of rqm-compiler.
     """
+    optimized, _ = _apply_optimization_with_report(source)
+    return optimized
+
+
+def _apply_optimization_with_report(
+    source: "Union[Circuit, CompiledCircuit]",
+) -> "tuple[Union[Circuit, CompiledCircuit], Any]":
+    """Apply optimization passes and return ``(optimized_circuit, report)``.
+
+    Raises :exc:`ImportError` if ``rqm_compiler.optimize_circuit`` is not
+    available.  To use an external optimizer (e.g. ``rqm-optimize``), call
+    that optimizer **before** passing the circuit to rqm-qiskit — do not
+    import it inside this package.
+
+    Parameters
+    ----------
+    source:
+        The circuit to optimize.
+
+    Returns
+    -------
+    (Circuit | CompiledCircuit, report)
+        The optimized circuit and compiler report.
+
+    Raises
+    ------
+    ImportError
+        If ``rqm_compiler.optimize_circuit`` is not available in the
+        installed version of rqm-compiler.
+    """
     # Attempt rqm_compiler built-in optimization passes only.
     # rqm-qiskit must not import rqm-optimize (architecture boundary).
     try:
         from rqm_compiler import optimize_circuit  # type: ignore[attr-defined]
         result = optimize_circuit(source)
         # Some versions return (circuit, report); accept both forms
-        return result[0] if isinstance(result, tuple) else result
+        if isinstance(result, tuple):
+            return result[0], result[1]
+        return result, None
     except (ImportError, AttributeError):
         pass
 
