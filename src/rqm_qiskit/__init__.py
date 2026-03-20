@@ -1,5 +1,5 @@
 """
-rqm_qiskit – Thin Qiskit bridge layer for the RQM ecosystem.
+rqm_qiskit – Qiskit translation and execution layer for the RQM compiler ecosystem.
 
 Architecture
 ------------
@@ -7,42 +7,52 @@ rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor, named gates)
        ↓
 rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
        ↓
-rqm-qiskit      (Qiskit bridge: circuit lowering, IBM execution helpers)
+rqm-qiskit      (Qiskit translation + execution)
        ↓
-rqm-notebooks   (interactive notebooks and tutorials)
+ Qiskit QuantumCircuit / transpilation / execution
 
-rqm-qiskit does not implement canonical math.  It delegates all math
-operations to rqm-core.
+rqm-qiskit does not implement canonical math or compiler logic.  It delegates
+all math operations to rqm-core and all compilation to rqm-compiler.
 
-Public API
-----------
-Compiler-first (primary):
-- QiskitBackend           : unified entry point (compile + run)
-- QiskitTranslator        : compiler IR → QuantumCircuit
-- compile_to_qiskit_circuit : convenience function
-- run_local               : run on Aer simulator
-- run_backend             : run on real backend
-- QiskitResult            : structured result wrapper
+Public API — three tiers
+------------------------
 
-Math delegation (re-exports from rqm-core):
-- Quaternion              : unit quaternion shim with bridge-layer extras
+Tier 1 — Execution  (start here)
+  Functional (primary):
+    run_qiskit(circuit, *, shots, optimize, include_report)
+        → dict  (JSON-compatible: counts, shots, backend, metadata)
 
-Convenience bridges (delegate to rqm-core):
-- spinor_to_circuit       : (α, β) → QuantumCircuit via rqm-core Bloch math
-- bloch_to_circuit        : (θ, φ) → QuantumCircuit via RY(θ) RZ(φ)
+  OO (equivalent):
+    QiskitBackend().run(circuit, *, shots, optimize, include_report)
+        → QiskitResult
+
+Tier 2 — Translation
+  Functional:
+    to_qiskit_circuit(circuit, *, optimize, include_report)
+        → QuantumCircuit  (or (QuantumCircuit, report) when include_report=True)
+
+  OO:
+    QiskitTranslator().to_quantum_circuit(circuit, *, optimize, include_report)
+        → QuantumCircuit  (or tuple)
+    QiskitTranslator().apply_gate(qc, descriptor)
+        → None  (mutates qc in-place)
+
+Tier 3 — Advanced / internal
+  QiskitBackend().compile(...)    : translate-only OO alias
+  QiskitBackend().run_local(...)  : run on local Aer, returns QiskitResult
+  compiled_circuit_to_qiskit(...) : core lowering path (all tiers route here)
+  run_local(...)                  : raw Aer execution, returns dict[str, int]
+  run_backend(...)                : raw real-backend execution
+  spinor_to_circuit(...)          : spinor → QuantumCircuit (delegates to rqm-core)
+  bloch_to_circuit(...)           : Bloch angles → QuantumCircuit
+  QiskitResult                    : structured result wrapper
+  Quaternion                      : re-export from rqm-core
 
 Legacy / transitional (may be removed in a future release):
-- RQMState       : normalized 1-qubit state
-- RQMGate        : dual-mode gate (rotation or named gate)
-- RQMCircuit     : thin façade over rqm_compiler.Circuit
-- compiled_circuit_to_qiskit : primary bridge function
-- state_to_quantum_circuit   : convenience Qiskit state prep
-- gate_to_quantum_circuit    : convenience Qiskit gate circuit
-- summarize_counts, format_counts_summary : result helpers
-- spinor_embed             : spinor-to-quaternion embedding
-- gate_h, gate_s, gate_t   : named gate quaternions
-- gate_rx, gate_ry, gate_rz : parametric rotation quaternion factories
-- match_gate               : identify a named gate from a quaternion
+  RQMState, RQMGate, RQMCircuit
+  compiled_circuit_to_qiskit, state_to_quantum_circuit, gate_to_quantum_circuit
+  summarize_counts, format_counts_summary
+  spinor_embed, gate_h, gate_s, gate_t, gate_rx, gate_ry, gate_rz, match_gate
 """
 
 from rqm_qiskit.quaternion import Quaternion
@@ -64,26 +74,26 @@ from rqm_qiskit.result import QiskitResult
 from rqm_qiskit.bridges import spinor_to_circuit, bloch_to_circuit
 
 __all__ = [
-    # Compiler-first (primary)
-    "QiskitBackend",
-    "QiskitTranslator",
-    "to_qiskit_circuit",
-    "run_qiskit",
+    # Tier 1 — Execution
+    "run_qiskit",        # functional primary
+    "QiskitBackend",     # OO equivalent
+    # Tier 2 — Translation
+    "to_qiskit_circuit", # functional primary
+    "QiskitTranslator",  # OO equivalent
+    # Tier 3 — Advanced / internal
+    "QiskitResult",
+    "compiled_circuit_to_qiskit",
     "compile_to_qiskit_circuit",
     "to_backend_circuit",
     "run_local",
     "run_backend",
-    "QiskitResult",
-    # Math delegation
     "Quaternion",
-    # Convenience bridges
     "spinor_to_circuit",
     "bloch_to_circuit",
     # Legacy / transitional
     "RQMState",
     "RQMGate",
     "RQMCircuit",
-    "compiled_circuit_to_qiskit",
     "state_to_quantum_circuit",
     "gate_to_quantum_circuit",
     "summarize_counts",

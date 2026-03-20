@@ -79,7 +79,7 @@ pip install -e ".[dev,simulator]"
 
 ```python
 from rqm_compiler import Circuit
-from rqm_qiskit import to_qiskit_circuit, run_qiskit
+from rqm_qiskit import run_qiskit, to_qiskit_circuit
 
 c = Circuit(2)
 c.h(0)
@@ -87,85 +87,131 @@ c.cx(0, 1)
 c.measure(0)
 c.measure(1)
 
-# Translate to a Qiskit QuantumCircuit
+# Tier 1 — run and get a JSON-compatible result dict
+result = run_qiskit(c, shots=1024)
+print(result["counts"])   # {"00": ~512, "11": ~512}
+
+# Tier 2 — translate only (no execution)
 qc = to_qiskit_circuit(c)
 print(qc.draw(output="text"))
+```
 
-# Run and get a standardized result dict
+See the [Public API](#public-api) section for the full tier breakdown.
+
+---
+
+## Public API
+
+```python
+from rqm_qiskit import (
+    QiskitBackend,      # OO entry point
+    QiskitTranslator,   # translation class
+    to_qiskit_circuit,  # functional translation API
+    run_qiskit,         # functional execution API
+)
+```
+
+The API is organized into three explicit tiers.  **Start with the highest tier
+that covers your use case.**
+
+---
+
+### Tier 1 — Execution  *(start here)*
+
+Both surfaces do the same thing: compile, translate, and run a circuit,
+returning a structured result.  Choose whichever style fits your code.
+
+| Style | Entry point | Returns |
+|-------|-------------|---------|
+| **Functional** *(primary)* | `run_qiskit(circuit, *, shots, optimize, include_report)` | `dict` (JSON-compatible) |
+| **OO** *(equivalent)* | `QiskitBackend().run(circuit, *, shots, optimize, include_report)` | `QiskitResult` |
+
+**Functional** — returns a plain `dict` ready for APIs / serialization:
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import run_qiskit
+
+c = Circuit(2)
+c.h(0); c.cx(0, 1); c.measure(0); c.measure(1)
+
 result = run_qiskit(c, shots=1024)
-print(result["counts"])    # {"00": ~512, "11": ~512}
-print(result["backend"])   # "aer_simulator"
+# {
+#   "counts":   {"00": 512, "11": 512},
+#   "shots":    1024,
+#   "backend":  "aer_simulator",
+#   "metadata": {"outcomes": 2, "most_likely": "00"},
+# }
+```
 
-# With compiler report (when optimization is available)
-qc, report = to_qiskit_circuit(c, optimize=True, include_report=True)
+With compiler report (when `rqm_compiler.optimize_circuit` is available):
+
+```python
 result = run_qiskit(c, optimize=True, shots=1024, include_report=True)
+# metadata gains: {"optimized": True, "compiler_report": {...}}
+```
+
+**OO** — returns a `QiskitResult` with convenience methods:
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import QiskitBackend
+
+c = Circuit(2)
+c.h(0); c.cx(0, 1); c.measure(0); c.measure(1)
+
+result = QiskitBackend().run(c, shots=1024)
+print(result.counts)                 # {"00": ~512, "11": ~512}
+print(result.most_likely_bitstring())
+print(result.to_dict())              # same JSON-compatible dict as run_qiskit
 ```
 
 ---
 
-## Required Public API
+### Tier 2 — Translation
+
+Use these when you need the `QuantumCircuit` object itself (for inspection,
+custom execution, serialization, or third-party tooling).
+
+| Style | Entry point | Returns |
+|-------|-------------|---------|
+| **Functional** | `to_qiskit_circuit(circuit, *, optimize, include_report)` | `QuantumCircuit` (or tuple) |
+| **OO** | `QiskitTranslator().to_quantum_circuit(circuit, *, optimize, include_report)` | `QuantumCircuit` (or tuple) |
 
 ```python
-from rqm_qiskit import (
-    QiskitBackend,
-    QiskitTranslator,
-    to_qiskit_circuit,
-    run_qiskit,
-)
+from rqm_compiler import Circuit
+from rqm_qiskit import to_qiskit_circuit
+
+c = Circuit(2)
+c.h(0); c.cx(0, 1)
+
+qc = to_qiskit_circuit(c)
+print(qc.draw(output="text"))
+
+# With report tuple
+qc, report = to_qiskit_circuit(c, optimize=True, include_report=True)
 ```
 
-### `to_qiskit_circuit(circuit, *, optimize=False, include_report=False)`
+`QiskitTranslator` also exposes `apply_gate(qc, descriptor)` for applying
+a single canonical gate descriptor to an existing `QuantumCircuit`.
 
-Translate an `rqm_compiler.Circuit` to a Qiskit `QuantumCircuit`.
+---
 
-- `optimize=False` → calls `compile_circuit(circuit)` (faithful compile)
-- `optimize=True` → calls `optimize_circuit(circuit)` (requires rqm-compiler support)
-- `include_report=True` → returns `(QuantumCircuit, report)` tuple
+### Tier 3 — Advanced / Internal
 
-### `run_qiskit(circuit, *, optimize=False, shots=1024, backend=None, include_report=False, **kwargs)`
+Reach for these only when Tiers 1–2 are not enough.
 
-Compile, translate, and run; return a standardized JSON-compatible dict:
-
-```python
-{
-    "counts": {"00": 512, "11": 512},
-    "shots": 1024,
-    "backend": "aer_simulator",
-    "metadata": {"outcomes": 2, "most_likely": "00"},
-}
-```
-
-With `include_report=True`:
-
-```python
-{
-    "counts": {...},
-    "shots": 1024,
-    "backend": "aer_simulator",
-    "metadata": {
-        "optimized": True,
-        "compiler_report": {...},
-    },
-}
-```
-
-### `QiskitTranslator`
-
-```python
-class QiskitTranslator:
-    def to_quantum_circuit(self, circuit, *, optimize=False, include_report=False): ...
-    def apply_gate(self, qc, descriptor): ...
-    def compile_to_circuit(self, source, optimize=False): ...  # legacy alias
-```
-
-### `QiskitBackend`
-
-```python
-class QiskitBackend:
-    def compile(self, circuit, *, optimize=False, include_report=False): ...
-    def run(self, circuit, *, optimize=False, shots=1024, backend=None, include_report=False, **kwargs): ...
-    def run_local(self, circuit_or_program, shots=100, optimize=False): ...
-```
+| Entry point | Purpose |
+|-------------|---------|
+| `QiskitBackend().compile(circuit, *, optimize, include_report)` | Translate only (OO alias for Tier 2) |
+| `QiskitBackend().run_local(circuit, shots, optimize)` | Run on local Aer (returns `QiskitResult`) |
+| `compiled_circuit_to_qiskit(source)` | Core lowering path (all Tier 1–2 routes through this) |
+| `run_local(circuit, shots, optimize)` | Raw Aer execution (returns `dict[str, int]`) |
+| `run_backend(circuit, backend, shots)` | Raw real-backend execution |
+| `spinor_to_circuit(α, β, target)` | Spinor → `QuantumCircuit` (delegates math to `rqm-core`) |
+| `bloch_to_circuit(θ, φ, target)` | Bloch angles → `QuantumCircuit` |
+| `QiskitResult` | Structured result wrapper (`counts`, `probabilities`, `to_dict()`) |
+| `RQMState`, `RQMGate`, `RQMCircuit` | Legacy / transitional helpers |
 
 ---
 
@@ -187,34 +233,6 @@ All canonical gates from `rqm-compiler`:
 as a unit quaternion `(w, x, y, z)`.  This package converts it to a 2×2 SU(2)
 matrix via `rqm_core.Quaternion.to_su2_matrix()` and passes it to Qiskit's
 `UnitaryGate` — no local quaternion math is implemented here.
-
----
-
-## Object-Oriented API
-
-```python
-from rqm_compiler import Circuit
-from rqm_qiskit import QiskitBackend
-
-c = Circuit(2)
-c.h(0)
-c.cx(0, 1)
-c.measure(0)
-c.measure(1)
-
-backend = QiskitBackend()
-
-# Translate only
-qc = backend.compile(c)
-
-# Translate + run
-result = backend.run(c, shots=1024)
-print(result.counts)
-print(result.most_likely_bitstring())
-print(result.to_dict())   # JSON-serialisable API-ready dict
-```
-
----
 
 ## Convenience Bridges
 
