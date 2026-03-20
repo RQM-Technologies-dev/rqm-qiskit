@@ -77,7 +77,13 @@ class QiskitBackend:
         """
         return self._translator.compile_to_circuit(circuit_or_program, optimize=optimize)
 
-    def compile(self, circuit, optimize: bool = False) -> QuantumCircuit:
+    def compile(
+        self,
+        circuit,
+        *,
+        optimize: bool = False,
+        include_report: bool = False,
+    ) -> "Union[QuantumCircuit, tuple]":
         """Compile an rqm-compiler circuit to a Qiskit QuantumCircuit.
 
         Alias for :meth:`compile_to_circuit` following the canonical
@@ -91,12 +97,20 @@ class QiskitBackend:
         optimize:
             If ``True``, apply optimization passes before lowering.
             Defaults to ``False``.
+        include_report:
+            If ``True``, return a ``(QuantumCircuit, report)`` tuple.
+            Defaults to ``False``.
 
         Returns
         -------
         qiskit.QuantumCircuit
+            When ``include_report=False``.
+        (qiskit.QuantumCircuit, report)
+            When ``include_report=True``.
         """
-        return self._translator.compile_to_circuit(circuit, optimize=optimize)
+        return self._translator.to_quantum_circuit(
+            circuit, optimize=optimize, include_report=include_report
+        )
 
     def run(
         self,
@@ -104,9 +118,11 @@ class QiskitBackend:
         *,
         optimize: bool = False,
         shots: int = 1024,
+        backend=None,
+        include_report: bool = False,
         **kwargs,
-    ) -> QiskitResult:
-        """Compile and run a circuit on the local Aer simulator.
+    ) -> "Union[QiskitResult, tuple]":
+        """Compile and run a circuit; return a QiskitResult.
 
         This is the canonical ``Backend.run()`` API entry point for
         API-ready usage (``POST /run``).
@@ -122,12 +138,22 @@ class QiskitBackend:
             Defaults to ``False``.
         shots:
             Number of measurement shots (default 1024).
+        backend:
+            A Qiskit backend object, or ``None`` to use the local Aer
+            simulator.
+        include_report:
+            If ``True``, return a ``(QiskitResult, report)`` tuple where
+            ``report`` is the compiler report (or ``None``).
+            Defaults to ``False``.
         **kwargs:
             Reserved for future backend-specific options.
 
         Returns
         -------
         :class:`~rqm_qiskit.result.QiskitResult`
+            When ``include_report=False``.
+        (:class:`~rqm_qiskit.result.QiskitResult`, report)
+            When ``include_report=True``.
 
         Raises
         ------
@@ -135,6 +161,18 @@ class QiskitBackend:
             If ``qiskit-aer`` is not installed.
         """
         from rqm_qiskit.execution import run_local
+
+        report = None
+        if include_report:
+            qc, report = self._translator.to_quantum_circuit(
+                circuit, optimize=optimize, include_report=True
+            )
+            from rqm_qiskit.execution import _ensure_measurements
+            from rqm_qiskit.ibm import run_on_aer_sampler
+            qc = _ensure_measurements(qc)
+            counts = run_on_aer_sampler(qc, shots=shots)
+            result = QiskitResult(counts, shots=shots)
+            return result, report
 
         counts = run_local(circuit, shots=shots, optimize=optimize)
         return QiskitResult(counts, shots=shots)
