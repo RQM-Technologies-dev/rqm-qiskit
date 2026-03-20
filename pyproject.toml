@@ -14,6 +14,8 @@ classifiers = [
 ]
 dependencies = [
   "qiskit>=1.0",
+  "rqm-core>=0.1",
+  "rqm-compiler>=0.1",
 ]
 
 [project.optional-dependencies]

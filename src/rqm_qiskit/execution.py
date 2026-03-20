@@ -30,16 +30,17 @@ def _ensure_measurements(qc: QuantumCircuit) -> QuantumCircuit:
     return measured
 
 
-def _to_circuit(circuit_or_program) -> QuantumCircuit:
+def _to_circuit(circuit_or_program, optimize: bool = False) -> QuantumCircuit:
     """Convert any supported program representation to a QuantumCircuit."""
     from rqm_qiskit.translator import QiskitTranslator
 
-    return QiskitTranslator().compile_to_circuit(circuit_or_program)
+    return QiskitTranslator().compile_to_circuit(circuit_or_program, optimize=optimize)
 
 
 def run_local(
     circuit_or_program,
     shots: int = 100,
+    optimize: bool = False,
 ) -> "dict[str, int]":
     """Run a circuit or program on the local Aer simulator.
 
@@ -54,6 +55,9 @@ def run_local(
 
     shots:
         Number of measurement shots (default 100).
+    optimize:
+        If ``True``, apply optimization passes before execution.
+        Defaults to ``False``.
 
     Returns
     -------
@@ -65,7 +69,7 @@ def run_local(
     ImportError
         If ``qiskit-aer`` is not installed.
     """
-    qc = _to_circuit(circuit_or_program)
+    qc = _to_circuit(circuit_or_program, optimize=optimize)
     qc = _ensure_measurements(qc)
     from rqm_qiskit.ibm import run_on_aer_sampler
 
@@ -103,7 +107,7 @@ def run_backend(
     NotImplementedError
         If ``backend`` is a string name – use a real backend object.
     """
-    qc = _to_circuit(circuit_or_program)
+    qc = _to_circuit(circuit_or_program, optimize=False)
     qc = _ensure_measurements(qc)
 
     if isinstance(backend, str):

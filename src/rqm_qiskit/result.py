@@ -77,6 +77,42 @@ class QiskitResult:
         """
         return max(self._counts, key=lambda k: self._counts[k])
 
+    def to_dict(self, backend: str = "qiskit") -> "dict":
+        """Return a standardized, API-ready result dictionary.
+
+        The returned dictionary is JSON-serializable and follows the
+        canonical RQM result format required for API compatibility:
+
+        .. code-block:: python
+
+            {
+                "counts": {"00": 512, "11": 512},
+                "shots": 1024,
+                "backend": "qiskit",
+                "metadata": {"outcomes": 2},
+            }
+
+        Parameters
+        ----------
+        backend:
+            Backend identifier string to include in the result
+            (default ``"qiskit"``).
+
+        Returns
+        -------
+        dict
+            JSON-serializable result mapping.
+        """
+        return {
+            "counts": dict(self._counts),
+            "shots": self._shots,
+            "backend": backend,
+            "metadata": {
+                "outcomes": len(self._counts),
+                "most_likely": self.most_likely_bitstring(),
+            },
+        }
+
     # ------------------------------------------------------------------
     # Dunder helpers
     # ------------------------------------------------------------------
