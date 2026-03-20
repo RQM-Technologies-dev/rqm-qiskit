@@ -96,3 +96,8 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
+try:
+    from importlib.metadata import version, PackageNotFoundError
+    __version__ = version("rqm-qiskit")
+except PackageNotFoundError:
+    pass

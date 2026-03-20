@@ -1,9 +1,32 @@
 [project]
-  dynamic = ["version"]
+name = "rqm-qiskit"
+dynamic = ["version"]
+description = "Thin Qiskit bridge layer for the RQM quantum ecosystem"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "qiskit>=1.0",
+]
+
+[project.optional-dependencies]
+simulator = ["qiskit-aer>=0.13"]
+dev = ["pytest", "qiskit-aer>=0.13"]
+
+[project.urls]
+Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
+Repository = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 
 [build-system]
-  requires = ["setuptools>=42","setuptools-scm>=8"]
-  build-backend = "setuptools.build_meta"
+requires = ["setuptools>=42", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-  local_scheme = "no-local-version"
+local_scheme = "no-local-version"
