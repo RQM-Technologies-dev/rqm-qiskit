@@ -19,8 +19,39 @@ from rqm_core.spinor import (
     normalize_spinor,
     spinor_norm,
     spinor_to_quaternion,
-    spinor_embed,
 )
+
+
+def spinor_embed(alpha: complex, beta: complex):
+    """Embed a (possibly unnormalized) spinor into a unit quaternion.
+
+    Normalizes ``(alpha, beta)`` first, then delegates to
+    :func:`rqm_core.spinor.spinor_to_quaternion`.
+
+    Parameters
+    ----------
+    alpha:
+        Amplitude for |0⟩.
+    beta:
+        Amplitude for |1⟩.
+
+    Returns
+    -------
+    :class:`rqm_core.quaternion.Quaternion`
+        A unit quaternion.
+
+    Raises
+    ------
+    ValueError
+        If both amplitudes are zero (or near-zero).
+    """
+    norm = spinor_norm(alpha, beta)
+    if norm < 1e-10:
+        raise ValueError(
+            "Cannot embed zero spinor: at least one amplitude must be non-zero."
+        )
+    a, b = normalize_spinor(alpha, beta)
+    return spinor_to_quaternion(a, b)
 
 if TYPE_CHECKING:
     from qiskit.quantum_info import Statevector

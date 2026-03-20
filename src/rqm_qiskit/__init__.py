@@ -11,23 +11,38 @@ rqm-qiskit      (Qiskit bridge: circuit lowering, IBM execution helpers)
        ↓
 rqm-notebooks   (interactive notebooks and tutorials)
 
+rqm-qiskit does not implement canonical math.  It delegates all math
+operations to rqm-core.
+
 Public API
 ----------
-- Quaternion     : unit quaternion shim (re-exports rqm-core; inherits
-                   from_axis_angle_vec, to_axis_angle, canonicalize,
-                   rotate_vector from rqm-core)
-- RQMState       : normalized 1-qubit state; delegates math to rqm-core
-- RQMGate        : SU(2) rotation gate with to_operation() → rqm_compiler.Operation
-- RQMCircuit     : thin façade over rqm_compiler.Circuit with to_qiskit()
-- compiled_circuit_to_qiskit : primary bridge: rqm-compiler IR → QuantumCircuit
-- state_to_quantum_circuit   : convenience: RQMState → QuantumCircuit
-- gate_to_quantum_circuit    : convenience: RQMGate → QuantumCircuit
-- summarize_counts           : summarize measurement counts dict
-- format_counts_summary      : human-readable summary string
-- spinor_embed               : spinor-to-quaternion embedding (re-exported from rqm-core)
-- gate_h, gate_s, gate_t     : named gate quaternions (re-exported from rqm-core)
-- gate_rx, gate_ry, gate_rz  : parametric rotation quaternion factories (rqm-core)
-- match_gate                 : identify a named gate from a quaternion (rqm-core)
+Compiler-first (primary):
+- QiskitBackend           : unified entry point (compile + run)
+- QiskitTranslator        : compiler IR → QuantumCircuit
+- compile_to_qiskit_circuit : convenience function
+- run_local               : run on Aer simulator
+- run_backend             : run on real backend
+- QiskitResult            : structured result wrapper
+
+Math delegation (re-exports from rqm-core):
+- Quaternion              : unit quaternion shim with bridge-layer extras
+
+Convenience bridges (delegate to rqm-core):
+- spinor_to_circuit       : (α, β) → QuantumCircuit via rqm-core Bloch math
+- bloch_to_circuit        : (θ, φ) → QuantumCircuit via RY(θ) RZ(φ)
+
+Legacy / transitional (may be removed in a future release):
+- RQMState       : normalized 1-qubit state
+- RQMGate        : dual-mode gate (rotation or named gate)
+- RQMCircuit     : thin façade over rqm_compiler.Circuit
+- compiled_circuit_to_qiskit : primary bridge function
+- state_to_quantum_circuit   : convenience Qiskit state prep
+- gate_to_quantum_circuit    : convenience Qiskit gate circuit
+- summarize_counts, format_counts_summary : result helpers
+- spinor_embed             : spinor-to-quaternion embedding
+- gate_h, gate_s, gate_t   : named gate quaternions
+- gate_rx, gate_ry, gate_rz : parametric rotation quaternion factories
+- match_gate               : identify a named gate from a quaternion
 """
 
 from rqm_qiskit.quaternion import Quaternion
@@ -41,8 +56,27 @@ from rqm_qiskit.convert import (
 )
 from rqm_qiskit.results import summarize_counts, format_counts_summary
 
+# New architecture components
+from rqm_qiskit.translator import QiskitTranslator, compile_to_qiskit_circuit
+from rqm_qiskit.execution import run_local, run_backend
+from rqm_qiskit.backend import QiskitBackend
+from rqm_qiskit.result import QiskitResult
+from rqm_qiskit.bridges import spinor_to_circuit, bloch_to_circuit
+
 __all__ = [
+    # Compiler-first (primary)
+    "QiskitBackend",
+    "QiskitTranslator",
+    "compile_to_qiskit_circuit",
+    "run_local",
+    "run_backend",
+    "QiskitResult",
+    # Math delegation
     "Quaternion",
+    # Convenience bridges
+    "spinor_to_circuit",
+    "bloch_to_circuit",
+    # Legacy / transitional
     "RQMState",
     "RQMGate",
     "RQMCircuit",
@@ -51,9 +85,7 @@ __all__ = [
     "gate_to_quantum_circuit",
     "summarize_counts",
     "format_counts_summary",
-    # rqm-core re-exports: spinor
     "spinor_embed",
-    # rqm-core re-exports: named gate quaternions
     "gate_h",
     "gate_s",
     "gate_t",
