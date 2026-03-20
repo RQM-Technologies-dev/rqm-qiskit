@@ -206,6 +206,18 @@ def _apply_operation(
     elif gate == "measure":
         key = params.get("key", f"m{targets[0]}")
         qc.measure(targets[0], key_to_clbit[key])
+    elif gate == "u1q":
+        from rqm_core import Quaternion
+        from qiskit.circuit.library import UnitaryGate
+
+        w = params.get("w", 1.0)
+        x = params.get("x", 0.0)
+        y = params.get("y", 0.0)
+        z = params.get("z", 0.0)
+        # rqm-compiler guarantees the quaternion is already unit-normalised;
+        # delegate the SU(2) matrix conversion entirely to rqm-core.
+        matrix = Quaternion(w, x, y, z).to_su2_matrix()
+        qc.append(UnitaryGate(matrix), [targets[0]])
     elif gate == "barrier":
         if targets:
             qc.barrier(targets)
