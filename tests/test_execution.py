@@ -153,10 +153,11 @@ def test_run_qiskit_backend_none_uses_aer():
 
 
 def test_run_qiskit_string_backend_raises():
-    """run_qiskit with string backend must raise NotImplementedError."""
+    """run_qiskit with string backend must raise BackendNotFoundError or NotImplementedError."""
     from rqm_qiskit import run_qiskit
+    from rqm_qiskit.errors import BackendNotFoundError
 
-    with pytest.raises(NotImplementedError):
+    with pytest.raises((BackendNotFoundError, NotImplementedError)):
         run_qiskit(_single_qubit_circuit(), shots=64, backend="ibm_nairobi")
 
 

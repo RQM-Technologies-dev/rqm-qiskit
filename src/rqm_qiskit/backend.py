@@ -26,7 +26,7 @@ from rqm_qiskit.result import QiskitResult
 from rqm_qiskit.translator import QiskitTranslator
 
 if TYPE_CHECKING:
-    pass
+    import rqm_qiskit.job
 
 
 class QiskitBackend:
@@ -234,6 +234,88 @@ class QiskitBackend:
 
         counts = run_backend(circuit_or_program, backend, shots=shots)
         return QiskitResult(counts, shots=shots)
+
+    def async_run(
+        self,
+        circuit,
+        *,
+        optimize: bool = False,
+        shots: int = 1024,
+        backend=None,
+        include_report: bool = False,
+        poll_interval: float = 2.0,
+        timeout: "Union[float, None]" = None,
+        **kwargs,
+    ) -> "rqm_qiskit.job.QiskitJob":
+        """Submit a circuit asynchronously and return a :class:`~rqm_qiskit.job.QiskitJob`.
+
+        For local Aer simulation the job is already complete when returned.
+        For real IBM Quantum backends the job is submitted and the handle
+        is returned immediately; call :meth:`~rqm_qiskit.job.QiskitJob.result`
+        to block and retrieve results.
+
+        Parameters
+        ----------
+        circuit:
+            An :class:`rqm_compiler.Circuit`,
+            :class:`rqm_compiler.CompiledCircuit`, or
+            :class:`~qiskit.QuantumCircuit`.
+        optimize:
+            If ``True``, apply optimization passes before execution.
+            Defaults to ``False``.
+        shots:
+            Number of measurement shots (default 1024).
+        backend:
+            A Qiskit backend object, a backend name string (e.g.
+            ``"ibm_brisbane"``), or ``None`` to use the local Aer
+            simulator.
+        include_report:
+            If ``True``, the compiler report is embedded in job metadata.
+            Defaults to ``False``.
+        poll_interval:
+            Reserved – seconds between status polls.
+        timeout:
+            Reserved – maximum seconds to wait in :meth:`~rqm_qiskit.job.QiskitJob.result`.
+        **kwargs:
+            Reserved for future backend-specific options.
+
+        Returns
+        -------
+        :class:`~rqm_qiskit.job.QiskitJob`
+
+        Raises
+        ------
+        rqm_qiskit.errors.BackendNotFoundError
+            If the backend string cannot be resolved.
+        rqm_qiskit.errors.CredentialsError
+            If IBM credentials are required but unavailable.
+        rqm_qiskit.errors.TranslationError
+            If the circuit cannot be translated.
+
+        Examples
+        --------
+        >>> from rqm_compiler import Circuit
+        >>> from rqm_qiskit import QiskitBackend
+        >>> c = Circuit(1); c.h(0); c.measure(0)
+        >>> backend = QiskitBackend()
+        >>> job = backend.async_run(c, shots=512)
+        >>> print(job.status())
+        DONE
+        >>> result = job.result()
+        >>> print(result.counts)
+        """
+        from rqm_qiskit.execution import async_run_qiskit
+
+        return async_run_qiskit(
+            circuit,
+            optimize=optimize,
+            shots=shots,
+            backend=backend,
+            include_report=include_report,
+            poll_interval=poll_interval,
+            timeout=timeout,
+            **kwargs,
+        )
 
     def __repr__(self) -> str:
         return "QiskitBackend()"

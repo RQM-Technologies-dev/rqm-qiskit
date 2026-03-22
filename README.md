@@ -27,14 +27,16 @@ rqm-qiskit      (Qiskit translation + execution)
 |---------|----------------|
 | `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
 | `rqm-compiler` | Canonical gate/circuit IR (`Circuit`, `Operation`), normalization, compilation pipeline |
-| `rqm-qiskit` | Descriptor translation to Qiskit; Aer/IBM execution; API-ready result shaping |
+| `rqm-qiskit` | Descriptor translation to Qiskit; Aer/IBM execution; async job handling; API-ready result shaping |
 
 ### What this repo owns
 
 - Descriptor → Qiskit gate mapping
 - Qiskit `QuantumCircuit` generation
 - Qiskit/Aer execution
-- API-ready result shaping
+- Asynchronous job submission and polling
+- IBM Quantum provider configuration
+- API-ready result shaping and caching
 
 ### What this repo does not own
 
@@ -63,6 +65,12 @@ To also run local simulations (recommended):
 
 ```bash
 pip install "rqm-qiskit[simulator]"
+```
+
+To use real IBM Quantum backends:
+
+```bash
+pip install "rqm-qiskit[ibm]"
 ```
 
 For development:
@@ -104,10 +112,15 @@ See the [Public API](#public-api) section for the full tier breakdown.
 
 ```python
 from rqm_qiskit import (
-    QiskitBackend,      # OO entry point
-    QiskitTranslator,   # translation class
-    to_qiskit_circuit,  # functional translation API
-    run_qiskit,         # functional execution API
+    QiskitBackend,          # OO entry point
+    QiskitTranslator,       # translation class
+    to_qiskit_circuit,      # functional translation API
+    run_qiskit,             # functional execution API
+    async_run_qiskit,       # async functional execution API
+    execute_rqm_program,    # high-level rqm-api integration
+    get_ibmq_provider,      # IBM Quantum provider
+    QiskitJob,              # async job handle
+    QiskitResult,           # structured result wrapper
 )
 ```
 
@@ -118,15 +131,17 @@ that covers your use case.**
 
 ### Tier 1 — Execution  *(start here)*
 
-Both surfaces do the same thing: compile, translate, and run a circuit,
-returning a structured result.  Choose whichever style fits your code.
-
 | Style | Entry point | Returns |
 |-------|-------------|---------|
-| **Functional** *(primary)* | `run_qiskit(circuit, *, shots, optimize, include_report)` | `dict` (JSON-compatible) |
-| **OO** *(equivalent)* | `QiskitBackend().run(circuit, *, shots, optimize, include_report)` | `QiskitResult` |
+| **Functional (sync)** | `run_qiskit(circuit, *, shots, backend, optimize, include_report)` | `dict` (JSON-compatible) |
+| **Functional (async)** | `async_run_qiskit(circuit, *, shots, backend, optimize, ...)` | `QiskitJob` |
+| **High-level** | `execute_rqm_program(descriptor, *, backend, shots, optimize)` | `dict` (JSON-compatible) |
+| **OO (sync)** | `QiskitBackend().run(circuit, *, shots, optimize, include_report)` | `QiskitResult` |
+| **OO (async)** | `QiskitBackend().async_run(circuit, *, shots, backend, optimize, ...)` | `QiskitJob` |
 
-**Functional** — returns a plain `dict` ready for APIs / serialization:
+#### Synchronous execution (`run_qiskit`)
+
+Returns a plain `dict` ready for APIs and serialization:
 
 ```python
 from rqm_compiler import Circuit
@@ -144,14 +159,80 @@ result = run_qiskit(c, shots=1024)
 # }
 ```
 
-With compiler report (when `rqm_compiler.optimize_circuit` is available):
+With compiler report:
 
 ```python
 result = run_qiskit(c, optimize=True, shots=1024, include_report=True)
 # metadata gains: {"optimized": True, "compiler_report": {...}}
 ```
 
-**OO** — returns a `QiskitResult` with convenience methods:
+#### Asynchronous execution (`async_run_qiskit`)
+
+Submits a circuit and returns a `QiskitJob` handle immediately.
+For local Aer runs the job is already complete; for IBM backends it runs
+asynchronously.
+
+```python
+from rqm_compiler import Circuit
+from rqm_qiskit import async_run_qiskit
+
+c = Circuit(1)
+c.h(0); c.measure(0)
+
+# Submit (returns immediately)
+job = async_run_qiskit(c, shots=1024)
+print(job.job_id())   # e.g. "local-a3f9c12b4d67"
+print(job.status())   # "DONE" for local Aer, "RUNNING" for IBM
+
+# Retrieve result (blocks until done for IBM backends)
+result = job.result()
+print(result.counts)
+
+# JSON-serializable job summary
+print(job.to_dict())
+```
+
+For real IBM Quantum backends (requires credentials – see below):
+
+```python
+import os
+os.environ["QISKIT_IBM_TOKEN"] = "my-api-token"
+
+job = async_run_qiskit(c, shots=1024, backend="ibm_brisbane")
+print(job.job_id())             # IBM job ID (returned immediately)
+result = job.result(timeout=300)  # blocks until done or timeout
+```
+
+#### High-level rqm-api integration (`execute_rqm_program`)
+
+Accepts the canonical program descriptor dict used by `rqm-api`:
+
+```python
+from rqm_qiskit import execute_rqm_program
+
+descriptor = {
+    "num_qubits": 2,
+    "operations": [
+        {"gate": "h",       "targets": [0], "controls": [],  "params": {}},
+        {"gate": "cx",      "targets": [1], "controls": [0], "params": {}},
+        {"gate": "measure", "targets": [0], "controls": [],  "params": {"key": "m0"}},
+        {"gate": "measure", "targets": [1], "controls": [],  "params": {"key": "m1"}},
+    ],
+}
+
+result = execute_rqm_program(descriptor, shots=1024)
+print(result["counts"])  # {"00": ~512, "11": ~512}
+```
+
+From `cURL` via the RQM API (example):
+
+```bash
+curl -X POST https://api.rqm.example/run \
+  -H "Content-Type: application/json" \
+  -d '{"num_qubits": 1, "operations": [{"gate": "h", "targets": [0], "controls": [], "params": {}}, {"gate": "measure", "targets": [0], "controls": [], "params": {"key": "m0"}}], "shots": 1024}'
+```
+
+#### OO interface (`QiskitBackend`)
 
 ```python
 from rqm_compiler import Circuit
@@ -160,10 +241,18 @@ from rqm_qiskit import QiskitBackend
 c = Circuit(2)
 c.h(0); c.cx(0, 1); c.measure(0); c.measure(1)
 
-result = QiskitBackend().run(c, shots=1024)
-print(result.counts)                 # {"00": ~512, "11": ~512}
+backend = QiskitBackend()
+
+# Synchronous
+result = backend.run(c, shots=1024)
+print(result.counts)
 print(result.most_likely_bitstring())
-print(result.to_dict())              # same JSON-compatible dict as run_qiskit
+print(result.to_dict())  # JSON-compatible dict
+
+# Asynchronous
+job = backend.async_run(c, shots=1024)
+print(job.status())
+result = job.result()
 ```
 
 ---
@@ -208,10 +297,99 @@ Reach for these only when Tiers 1–2 are not enough.
 | `compiled_circuit_to_qiskit(source)` | Core lowering path (all Tier 1–2 routes through this) |
 | `run_local(circuit, shots, optimize)` | Raw Aer execution (returns `dict[str, int]`) |
 | `run_backend(circuit, backend, shots)` | Raw real-backend execution |
+| `get_ibmq_provider(token, instance, channel)` | Obtain authenticated IBM Quantum provider |
 | `spinor_to_circuit(α, β, target)` | Spinor → `QuantumCircuit` (delegates math to `rqm-core`) |
 | `bloch_to_circuit(θ, φ, target)` | Bloch angles → `QuantumCircuit` |
-| `QiskitResult` | Structured result wrapper (`counts`, `probabilities`, `to_dict()`) |
-| `RQMState`, `RQMGate`, `RQMCircuit` | Legacy / transitional helpers |
+| `QiskitResult` | Structured result wrapper (`counts`, `probabilities`, `to_dict()`, `from_dict()`) |
+| `QiskitJob` | Async job handle (`job_id()`, `status()`, `result()`, `to_dict()`) |
+| `RQMState`, `RQMGate`, `RQMCircuit` | Legacy / transitional helpers *(subject to removal)* |
+
+#### Custom errors (all subclass `RuntimeError`)
+
+| Exception | When raised |
+|-----------|-------------|
+| `RQMQiskitError` | Base class for all rqm-qiskit errors |
+| `BackendNotFoundError` | Backend name cannot be found or resolved |
+| `CredentialsError` | IBM Quantum credentials missing or invalid |
+| `JobFailedError` | Quantum job failed during or after execution |
+| `TranslationError` | Circuit cannot be translated to Qiskit IR |
+
+---
+
+## IBM Quantum Configuration
+
+`rqm-qiskit` can target real IBM Quantum backends via `qiskit-ibm-runtime`.
+
+### Credentials
+
+Set the following environment variables **before** calling any IBM-backed function:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `QISKIT_IBM_TOKEN` | Your IBM Quantum API token (**required**) | — |
+| `QISKIT_IBM_INSTANCE` | Service instance, e.g. `"ibm-q/open/main"` | provider default |
+| `QISKIT_IBM_CHANNEL` | Channel: `"ibm_quantum"` or `"ibm_cloud"` | `"ibm_quantum"` |
+
+Alternatively, pass credentials directly:
+
+```python
+from rqm_qiskit import get_ibmq_provider
+
+provider = get_ibmq_provider(token="my-api-token", instance="ibm-q/open/main")
+backend = provider.backend("ibm_brisbane")
+result = run_qiskit(c, shots=1024, backend=backend)
+```
+
+### String backend resolution
+
+Pass a backend name string directly to `run_qiskit` or `async_run_qiskit`;
+credentials must be set via environment variables:
+
+```python
+import os
+os.environ["QISKIT_IBM_TOKEN"] = "my-api-token"
+
+result = run_qiskit(c, shots=1024, backend="ibm_brisbane")
+# or
+job = async_run_qiskit(c, shots=1024, backend="ibm_brisbane")
+```
+
+The string `"aer_simulator"`, `"local"`, or `"aer"` always maps to the local
+Aer simulator (no credentials needed).
+
+---
+
+## Result Caching
+
+`QiskitResult` supports JSON serialization for caching in databases or the
+RQM API:
+
+```python
+from rqm_qiskit import QiskitResult
+
+# Serialize to dict / JSON
+result = QiskitResult({"00": 512, "11": 512}, shots=1024, job_id="local-abc123")
+d = result.to_dict(backend="aer_simulator")
+# {
+#   "counts": {"00": 512, "11": 512},
+#   "shots": 1024,
+#   "backend": "aer_simulator",
+#   "metadata": {
+#       "outcomes": 2,
+#       "most_likely": "00",
+#       "job_id": "local-abc123",
+#       "timestamp": "2026-03-22T18:00:00+00:00",
+#   },
+# }
+json_str = result.to_json()
+
+# Deserialize from dict / JSON
+restored = QiskitResult.from_dict(d)
+restored = QiskitResult.from_json(json_str)
+```
+
+The `metadata` dict always includes `timestamp` (ISO 8601 UTC) and `job_id`
+(when available), enabling full audit trails for RQM Studio job history.
 
 ---
 
@@ -286,16 +464,23 @@ rqm-qiskit/
 │   └── rqm_qiskit/
 │       ├── __init__.py       – public API exports
 │       ├── translator.py     – QiskitTranslator, to_qiskit_circuit
-│       ├── backend.py        – QiskitBackend
-│       ├── execution.py      – run_qiskit, run_local, run_backend
-│       ├── result.py         – QiskitResult
+│       ├── backend.py        – QiskitBackend (sync + async)
+│       ├── execution.py      – run_qiskit, async_run_qiskit, execute_rqm_program
+│       ├── job.py            – QiskitJob (async job handle)
+│       ├── result.py         – QiskitResult (with to_dict/from_dict caching)
+│       ├── ibm.py            – get_ibmq_provider, resolve_backend, IBM execution
+│       ├── errors.py         – RQMQiskitError hierarchy
 │       ├── convert.py        – compiled_circuit_to_qiskit (core lowering)
 │       ├── bridges.py        – spinor_to_circuit, bloch_to_circuit
-│       ├── utils.py          – internal utilities
 │       └── ...               – legacy/transitional helpers
 └── tests/
     ├── test_translation.py
     ├── test_execution.py
+    ├── test_async_execution.py
+    ├── test_execute_rqm_program.py
+    ├── test_ibm_config.py
+    ├── test_error_handling.py
+    ├── test_result_caching.py
     ├── test_optimize_toggle.py
     ├── test_u1q.py
     └── test_api_shape.py
