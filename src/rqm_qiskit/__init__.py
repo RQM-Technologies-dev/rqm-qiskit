@@ -1,18 +1,26 @@
 """
-rqm_qiskit – Qiskit translation and execution layer for the RQM compiler ecosystem.
+rqm_qiskit – IBM Quantum / Qiskit execution bridge for the RQM ecosystem.
 
 Architecture
 ------------
-rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor, named gates)
+rqm-core        (math foundation: Quaternion, SU(2), Bloch, spinor, named gates)
        ↓
-rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compilation)
+rqm-circuits    (canonical external/public circuit IR — ecosystem wire format)
        ↓
-rqm-qiskit      (Qiskit translation + execution)
+rqm-compiler    (internal optimization / rewriting engine)
+       ↓
+rqm-qiskit      (Qiskit / IBM lowering and execution bridge)   ← this package
        ↓
  Qiskit QuantumCircuit / transpilation / execution
 
-rqm-qiskit does not implement canonical math or compiler logic.  It delegates
-all math operations to rqm-core and all compilation to rqm-compiler.
+rqm-qiskit is downstream of both rqm-circuits and rqm-compiler.  It does not
+implement canonical math, define the public circuit schema, or own compiler
+logic.  All math is delegated to rqm-core; all compilation to rqm-compiler.
+
+Typical flow: external callers (Studio, API) produce rqm-circuits payloads →
+parsed/validated upstream → optimized by rqm-compiler → rqm-qiskit lowers to
+Qiskit and executes.  Helper functions in this package accept compiler Circuit
+objects directly for in-process / server-side usage.
 
 Public API — three tiers
 ------------------------

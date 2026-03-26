@@ -416,9 +416,10 @@ def execute_rqm_program(
     """Compile and run a canonical RQM program descriptor; return a result dict.
 
     This is the high-level entry point designed for use by ``rqm-api`` and
-    RQM Studio.  It accepts the canonical dictionary representation used by
-    ``rqm-api`` (as produced by the RQM compiler IR), compiles it, and runs
-    it through :func:`run_qiskit`.
+    RQM Studio.  In the full RQM stack, API and Studio traffic originates as
+    ``rqm-circuits`` payloads; those are parsed and validated upstream before
+    reaching this function as a descriptor dict.  ``rqm-qiskit`` is the
+    execution bridge — it does not own the public circuit schema.
 
     All math and IR logic is delegated to ``rqm-compiler``; this function
     only orchestrates compilation and execution.
