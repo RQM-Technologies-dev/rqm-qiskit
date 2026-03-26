@@ -1,9 +1,11 @@
 # rqm-qiskit
 
-**Qiskit translation and execution layer for the RQM compiler ecosystem.**
+**IBM Quantum / Qiskit execution bridge for the RQM ecosystem.**
 
-Translates canonical RQM circuits (defined by `rqm-compiler`) into Qiskit
-`QuantumCircuit` objects and runs them on Aer simulators or IBM Quantum hardware.
+Receives compiler-optimized circuit representations and lowers them into Qiskit
+`QuantumCircuit` objects for execution on Aer simulators or IBM Quantum hardware.
+`rqm-qiskit` is downstream of both `rqm-circuits` (the public circuit IR) and
+`rqm-compiler` (the optimization engine).
 
 ---
 
@@ -12,39 +14,66 @@ Translates canonical RQM circuits (defined by `rqm-compiler`) into Qiskit
 `rqm-qiskit` occupies a single, well-defined layer in the RQM dependency spine:
 
 ```
-rqm-core        (canonical math: Quaternion, SU(2), Bloch, spinor)
+rqm-core        (math foundation: Quaternion, SU(2), Bloch, spinor)
        ↓
-rqm-compiler    (canonical gate/circuit IR: Circuit, Operation, compile_circuit)
+rqm-circuits    (canonical external/public circuit IR: the ecosystem wire format)
        ↓
-rqm-qiskit      (Qiskit translation + execution)
+rqm-compiler    (internal optimization / rewriting engine)
+       ↓
+rqm-qiskit      (Qiskit / IBM lowering and execution bridge)   ← this package
        ↓
  Qiskit QuantumCircuit / transpilation / execution
 ```
+
+`rqm-braket` sits alongside `rqm-qiskit` as the AWS / Braket equivalent.
+`rqm-optimize` is an optional backend-adjacent optimization / compression layer
+that can be applied before handing circuits to either bridge.
 
 ### Layer responsibilities
 
 | Package | Responsibility |
 |---------|----------------|
 | `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
-| `rqm-compiler` | Canonical gate/circuit IR (`Circuit`, `Operation`), normalization, compilation pipeline |
-| `rqm-qiskit` | Descriptor translation to Qiskit; Aer/IBM execution; async job handling; API-ready result shaping |
+| `rqm-circuits` | Canonical **external** circuit IR — the public schema used by Studio, API, and callers |
+| `rqm-compiler` | Internal optimization and rewriting engine; produces compiler circuits consumed by bridge layers |
+| `rqm-qiskit` | Compiler circuit → Qiskit lowering; Aer/IBM execution; async job handling; result shaping |
+
+### Typical data flow
+
+External callers (Studio, API, SDK users) build or receive circuits in
+`rqm-circuits` format.  Those circuits are validated and parsed upstream, then
+fed into `rqm-compiler` for optimization.  `rqm-qiskit` receives the
+compiler-optimized output and translates it to Qiskit for execution:
+
+```
+Studio / API / SDK
+      │  rqm-circuits payload
+      ▼
+rqm-compiler  (parse + optimize)
+      │  compiler Circuit / CompiledCircuit
+      ▼
+rqm-qiskit  (lower + execute)
+      │  QiskitResult / dict
+      ▼
+IBM Quantum / Aer
+```
 
 ### What this repo owns
 
-- Descriptor → Qiskit gate mapping
+- Compiler circuit → Qiskit gate mapping
 - Qiskit `QuantumCircuit` generation
 - Qiskit/Aer execution
 - Asynchronous job submission and polling
 - IBM Quantum provider configuration
-- API-ready result shaping and caching
+- Qiskit result normalization and caching
 
 ### What this repo does not own
 
-- Physics math
-- Quaternion algebra
-- Compiler passes
-- Optimization logic
-- IR schema
+- Physics math (quaternion / SU(2) — lives in `rqm-core`)
+- Canonical **external** circuit schema (lives in `rqm-circuits`)
+- Optimization pass design (lives in `rqm-compiler` or `rqm-optimize`)
+- API wire format
+- Studio payload format
 
 ---
 
@@ -57,9 +86,12 @@ pip install rqm-qiskit
 ```
 
 Dependencies:
-- `rqm-core` — canonical quantum math
-- `rqm-compiler` — canonical IR and compilation
+- `rqm-core` — quantum math foundation
+- `rqm-compiler` — optimization engine (produces the circuit representation consumed here)
 - `qiskit` — quantum circuit execution
+
+> **Note:** `rqm-circuits` (the public circuit IR) is an upstream concern.
+> `rqm-qiskit` works with compiler-lowered circuits, not raw `rqm-circuits` payloads directly.
 
 To also run local simulations (recommended):
 
@@ -103,6 +135,12 @@ print(result["counts"])   # {"00": ~512, "11": ~512}
 qc = to_qiskit_circuit(c)
 print(qc.draw(output="text"))
 ```
+
+> **API / Studio users:** external callers typically begin with an `rqm-circuits`
+> payload.  That payload is parsed and validated upstream (by `rqm-circuits`) and
+> then optimized (by `rqm-compiler`) before a `Circuit` object reaches `rqm-qiskit`.
+> The examples above show direct compiler circuit usage, which is correct for
+> in-process or server-side code that has already gone through that upstream path.
 
 See the [Public API](#public-api) section for the full tier breakdown.
 
@@ -205,7 +243,11 @@ result = job.result(timeout=300)  # blocks until done or timeout
 
 #### High-level rqm-api integration (`execute_rqm_program`)
 
-Accepts the canonical program descriptor dict used by `rqm-api`:
+Accepts a compiler-compatible program descriptor dict.  In the full RQM stack,
+API and Studio traffic originates as `rqm-circuits` payloads; those are parsed
+and validated upstream before reaching this layer as descriptor dicts.  If you
+are integrating directly with `rqm-api`, the API layer handles the
+`rqm-circuits` → descriptor conversion for you.
 
 ```python
 from rqm_qiskit import execute_rqm_program
@@ -395,7 +437,9 @@ The `metadata` dict always includes `timestamp` (ISO 8601 UTC) and `job_id`
 
 ## Supported Gates
 
-All canonical gates from `rqm-compiler`:
+All gates supported by the rqm-compiler internal circuit model that `rqm-qiskit`
+can lower to Qiskit.  Gate semantics are owned by `rqm-compiler`; this package
+only maps them to Qiskit primitives.
 
 | Category | Gates |
 |----------|-------|
