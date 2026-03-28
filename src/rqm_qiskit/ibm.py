@@ -25,7 +25,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 
 
 def run_on_aer_sampler(
@@ -315,8 +315,9 @@ def run_on_ibm_runtime(
         ) from exc
 
     try:
+        transpiled = transpile(circuit, backend=backend)
         sampler = IBMSampler(backend)
-        job = sampler.run([circuit], shots=shots)
+        job = sampler.run([transpiled], shots=shots)
         job_id = job.job_id() if callable(getattr(job, "job_id", None)) else str(id(job))
         ibm_result = job.result()
     except Exception as exc:
