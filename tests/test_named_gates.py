@@ -8,7 +8,7 @@ correct:
 - gate_h, gate_s, gate_t return canonical (w ≥ 0) unit quaternions
 - gate_rx, gate_ry, gate_rz return unit quaternions for parametric rotations
 - match_gate identifies named gates and returns None for unknown quaternions
-- gate matching checks both q and -q (same SU(2) element)
+- gate matching checks both q and -q (distinct SU(2) elements with the same SO(3) projection)
 - named gate SU(2) matrices match the Qiskit gate matrices up to global phase
 """
 
@@ -205,10 +205,11 @@ def test_match_gate_identifies_t():
 
 
 def test_match_gate_identifies_negative_h():
-    """match_gate must also recognize -q as the same gate (SU(2) double-cover of SO(3)).
+    """match_gate recognizes -q as the same SO(3)/Bloch gate representative.
 
-    SU(2) is a double cover of SO(3): both q and -q encode the same physical
-    rotation.  Gate matching must therefore check both representatives.
+    SU(2) is a double cover of SO(3): q and -q are distinct SU(2) elements
+    whose matrices differ by global phase -1, but they encode the same physical
+    SO(3)/Bloch rotation in this phase-insensitive matching context.
     """
     q = gate_h()
     neg_q = Quaternion(-q.w, -q.x, -q.y, -q.z)

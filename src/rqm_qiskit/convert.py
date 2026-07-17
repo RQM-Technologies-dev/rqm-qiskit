@@ -207,6 +207,11 @@ def _apply_operation(
         key = params.get("key", f"m{targets[0]}")
         qc.measure(targets[0], key_to_clbit[key])
     elif gate == "u1q":
+        if controls:
+            raise ValueError(
+                "controlled 'u1q' lowering is unsupported; refusing to drop a "
+                "phase that may be observable under coherent control"
+            )
         from rqm_core import Quaternion
         from qiskit.circuit.library import UnitaryGate
 

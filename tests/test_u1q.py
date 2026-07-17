@@ -14,6 +14,8 @@ import math
 import pytest
 import numpy as np
 from qiskit import QuantumCircuit
+from qiskit.circuit.library import UnitaryGate
+from qiskit.quantum_info import Statevector
 
 
 def _u1q_circuit(w, x, y, z):
@@ -62,6 +64,21 @@ def test_u1q_identity_quaternion_num_qubits():
 
     qc = compiled_circuit_to_qiskit(_u1q_circuit(w=1.0, x=0.0, y=0.0, z=0.0))
     assert qc.num_qubits == 1
+
+
+def test_controlled_minus_identity_is_distinct_from_controlled_plus_identity():
+    """EXP-001 regression: a phase that is global in isolation is relative when controlled."""
+    def interferometer(matrix):
+        circuit = QuantumCircuit(2)
+        circuit.h(0)
+        circuit.append(UnitaryGate(matrix).control(1), [0, 1])
+        circuit.h(0)
+        return circuit
+
+    minus = Statevector.from_instruction(interferometer(-np.eye(2))).probabilities([0])
+    plus = Statevector.from_instruction(interferometer(np.eye(2))).probabilities([0])
+    assert minus[1] == pytest.approx(1.0)
+    assert plus[0] == pytest.approx(1.0)
 
 
 # ---------------------------------------------------------------------------

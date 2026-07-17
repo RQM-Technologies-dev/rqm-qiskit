@@ -5,6 +5,7 @@ Tests for conversion helpers (src/rqm_qiskit/convert.py).
 import math
 
 import numpy as np
+import pytest
 from qiskit import QuantumCircuit
 
 from rqm_qiskit import RQMState, RQMGate
@@ -45,6 +46,21 @@ def test_all_axes_convert():
     for axis in ("x", "y", "z"):
         qc = gate_to_quantum_circuit(RQMGate(axis, 1.0))
         assert qc.num_qubits == 1
+
+
+def test_bridge_rejects_controlled_u1q_instead_of_dropping_the_control():
+    """The bridge must defend against invalid IR supplied without validation."""
+    from rqm_compiler import Operation
+    from rqm_qiskit.convert import _build_qiskit_from_ops
+
+    controlled_minus_identity = Operation(
+        gate="u1q",
+        targets=[1],
+        controls=[0],
+        params={"w": -1.0, "x": 0.0, "y": 0.0, "z": 0.0},
+    )
+    with pytest.raises(ValueError, match="controlled 'u1q' lowering is unsupported"):
+        _build_qiskit_from_ops(2, [controlled_minus_identity])
 
 
 # ---------------------------------------------------------------------------
