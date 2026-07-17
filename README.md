@@ -9,11 +9,12 @@ Receives compiler-optimized circuit representations and lowers them into Qiskit
 
 ---
 
-## Better Coordinates for Better Measurement
+## RQM Technical Canon v2
 
-This project uses quaternions because they preserve more of what physical systems are doing: phase, rotation, orientation, polarization, and coherence. Standard complex-number methods are powerful, but they can flatten these relationships too early. Quaternionic coordinates keep them together as one structured object, giving software a richer view of the measured system.
-
-For RQM Technologies, better coordinates mean better measurement: more informative diagnostics, cleaner transformations, and more precise control across quantum, wave, sensing, imaging, and communications workflows.
+This bridge lowers standard-compatible compiler semantics into Qiskit. It
+preserves tested phase-sensitive `SU(2)` behavior and ordered composition; it
+does not implement alternative mechanics or establish a quantum-hardware
+advantage. See [RQM_TECHNICAL_CANON_V2.md](RQM_TECHNICAL_CANON_V2.md).
 
 ---
 
@@ -552,4 +553,3 @@ pytest
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
