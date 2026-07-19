@@ -4,7 +4,7 @@ dynamic = ["version"]
 description = "Thin Qiskit bridge layer for the RQM quantum ecosystem"
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
@@ -13,15 +13,17 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-  "qiskit>=1.0",
-  "rqm-core>=0.1",
-  "rqm-compiler>=0.1",
+  "qiskit==2.3.0",
+  "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@1be6a4fd3b8701251c756a4bfd69371d73486e9e",
+  "rqm-entanglement @ git+https://github.com/RQM-Technologies-dev/rqm-entanglement.git@f2105bb694764d8d73798d3f482a598db39226e0",
+  "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@fcc1a0bc67c62a26ab3fffdbf2c51b96100b39f1",
 ]
 
 [project.optional-dependencies]
-simulator = ["qiskit-aer>=0.13"]
-ibm = ["qiskit-ibm-runtime>=0.20"]
-dev = ["pytest", "qiskit-aer>=0.13"]
+simulator = ["qiskit-aer==0.17.2"]
+qasm3 = ["qiskit-qasm3-import==0.6.0"]
+ibm = ["qiskit-ibm-runtime==0.45.0"]
+dev = ["pytest", "qiskit-aer==0.17.2"]
 
 [project.urls]
 Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"

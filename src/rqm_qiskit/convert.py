@@ -35,6 +35,7 @@ from typing import TYPE_CHECKING, Any, Union
 
 from qiskit import QuantumCircuit
 from qiskit.circuit import ClassicalRegister
+from qiskit.transpiler import Target
 
 from rqm_qiskit.state import RQMState
 from rqm_qiskit.gates import RQMGate
@@ -51,7 +52,10 @@ if TYPE_CHECKING:
 
 def compiled_circuit_to_qiskit(
     source: "Union[Circuit, CompiledCircuit]",
-) -> QuantumCircuit:
+    *,
+    target: Target | None = None,
+    include_synthesis_report: bool = False,
+) -> QuantumCircuit | tuple[QuantumCircuit, list[dict[str, Any]]]:
     """Lower an rqm-compiler :class:`~rqm_compiler.Circuit` or
     :class:`~rqm_compiler.CompiledCircuit` into a Qiskit
     :class:`~qiskit.QuantumCircuit`.
@@ -90,7 +94,7 @@ def compiled_circuit_to_qiskit(
     >>> qc = compiled_circuit_to_qiskit(c)
     >>> print(qc.draw(output="text"))
     """
-    from rqm_compiler import Circuit, CompiledCircuit
+    from rqm_compiler import CompiledCircuit
     from rqm_compiler.ops import Operation
 
     if isinstance(source, CompiledCircuit):
@@ -102,7 +106,17 @@ def compiled_circuit_to_qiskit(
         num_qubits = source.num_qubits
         operations = list(source.operations)
 
-    return _build_qiskit_from_ops(num_qubits, operations)
+    synthesis_reports: list[dict[str, Any]] = []
+    circuit = _build_qiskit_from_ops(
+        num_qubits,
+        operations,
+        target=target,
+        synthesis_reports=synthesis_reports,
+    )
+    if synthesis_reports:
+        circuit.metadata = dict(circuit.metadata or {})
+        circuit.metadata["rqm_su4_synthesis"] = synthesis_reports
+    return (circuit, synthesis_reports) if include_synthesis_report else circuit
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +127,9 @@ def compiled_circuit_to_qiskit(
 def _build_qiskit_from_ops(
     num_qubits: int,
     operations: "list[Operation]",
+    *,
+    target: Target | None = None,
+    synthesis_reports: list[dict[str, Any]] | None = None,
 ) -> QuantumCircuit:
     """Build a Qiskit QuantumCircuit from a list of rqm-compiler Operations.
 
@@ -145,7 +162,13 @@ def _build_qiskit_from_ops(
     key_to_clbit: dict[str, int] = {k: i for i, k in enumerate(measure_keys)}
 
     for op in operations:
-        _apply_operation(qc, op, key_to_clbit)
+        _apply_operation(
+            qc,
+            op,
+            key_to_clbit,
+            target=target,
+            synthesis_reports=synthesis_reports,
+        )
 
     return qc
 
@@ -154,6 +177,9 @@ def _apply_operation(
     qc: QuantumCircuit,
     op: "Operation",
     key_to_clbit: dict[str, int],
+    *,
+    target: Target | None = None,
+    synthesis_reports: list[dict[str, Any]] | None = None,
 ) -> None:
     """Apply a single rqm-compiler Operation to a Qiskit QuantumCircuit in-place.
 
@@ -203,6 +229,26 @@ def _apply_operation(
         qc.swap(targets[0], targets[1])
     elif gate == "iswap":
         qc.iswap(targets[0], targets[1])
+    elif gate == "rxx":
+        qc.rxx(params["angle"], targets[0], targets[1])
+    elif gate == "ryy":
+        qc.ryy(params["angle"], targets[0], targets[1])
+    elif gate == "rzz":
+        qc.rzz(params["angle"], targets[0], targets[1])
+    elif gate == "su4q":
+        from rqm_entanglement import QuaternionCartanBlock
+        from rqm_qiskit.synthesis import synthesize_su4_block
+
+        block = QuaternionCartanBlock.from_dict(params["block"])
+        selected, report = synthesize_su4_block(
+            block,
+            target=target,
+            strategy="best_native",
+            include_report=True,
+        )
+        qc.compose(selected, qubits=targets, inplace=True)
+        if synthesis_reports is not None:
+            synthesis_reports.append(report)
     elif gate == "measure":
         key = params.get("key", f"m{targets[0]}")
         qc.measure(targets[0], key_to_clbit[key])

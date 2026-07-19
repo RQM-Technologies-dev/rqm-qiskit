@@ -10,7 +10,6 @@ These tests cover the augmented API introduced for rqm-API readiness:
 """
 
 import math
-import pytest
 import numpy as np
 from qiskit import QuantumCircuit
 
@@ -66,18 +65,11 @@ def test_to_backend_circuit_optimize_false_runs():
     assert isinstance(qc, QuantumCircuit)
 
 
-def test_to_backend_circuit_optimize_true_raises_when_unavailable():
-    """to_backend_circuit(optimize=True) must raise ImportError when no optimizer is available.
-
-    rqm-qiskit only attempts rqm_compiler.optimize_circuit (not rqm_optimize,
-    which is an external package that must stay outside the dependency boundary).
-    """
+def test_to_backend_circuit_optimize_true_uses_rqm_compiler():
+    """to_backend_circuit(optimize=True) delegates to the promoted compiler API."""
     from rqm_qiskit import to_backend_circuit
 
-    # rqm_compiler.optimize_circuit is not available in the current release;
-    # optimize=True must therefore raise ImportError with a helpful message.
-    with pytest.raises(ImportError, match="optimize"):
-        to_backend_circuit(_bell_circuit(), optimize=True)
+    assert isinstance(to_backend_circuit(_bell_circuit(), optimize=True), QuantumCircuit)
 
 
 # ---------------------------------------------------------------------------

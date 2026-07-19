@@ -4,6 +4,22 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.3.0] — EXP-012 Quaternion-Cartan SU(4) Promotion
+
+- Added target-local `Q3`, `QF`, `QC`, `QX`, and direct `RQ` synthesis
+  candidates for compiler-owned internal `su4q` blocks.
+- Added phase-aligned semantic verification, target compatibility checks, and
+  an auditable selection hierarchy. Generic two-qubit `UnitaryGate` fallbacks
+  cannot qualify as native candidates.
+- Added standard `rxx`, `ryy`, and `rzz` lowering through the canonical
+  `compiled_circuit_to_qiskit()` path.
+- Added optional JSON-compatible synthesis reports to the functional and OO
+  translation APIs without changing their default return types.
+- Pinned the reproducible Qiskit 2.3.0 / Aer 0.17.2 / QASM 3 Import 0.6.0 /
+  IBM Runtime 0.45.0 compatibility baseline and exact upstream RQM commits.
+- Added offline generic-block, target-selection, direct-RQ, standard-gate,
+  descriptor, and Weyl-landmark tests. No IBM hardware was used.
+
 ## [0.1.0] — Architecture Spine Validated
 
 ### Milestone summary

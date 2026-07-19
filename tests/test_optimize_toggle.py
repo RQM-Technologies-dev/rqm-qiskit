@@ -10,7 +10,6 @@ Covers:
 - run_qiskit with optimize flag
 """
 
-import pytest
 from qiskit import QuantumCircuit
 
 
@@ -106,14 +105,11 @@ def test_to_qiskit_circuit_include_report_true_report_is_none_when_not_optimized
 # ---------------------------------------------------------------------------
 
 
-def test_to_qiskit_circuit_optimize_true_raises_when_unavailable():
-    """to_qiskit_circuit(optimize=True) must raise ImportError when optimize_circuit
-    is not available in the installed rqm-compiler."""
+def test_to_qiskit_circuit_optimize_true_uses_rqm_compiler():
+    """to_qiskit_circuit(optimize=True) uses the promoted compiler optimizer."""
     from rqm_qiskit import to_qiskit_circuit
 
-    # rqm_compiler.optimize_circuit is not in the current release
-    with pytest.raises(ImportError, match="optimize"):
-        to_qiskit_circuit(_bell_circuit(), optimize=True)
+    assert isinstance(to_qiskit_circuit(_bell_circuit(), optimize=True), QuantumCircuit)
 
 
 # ---------------------------------------------------------------------------
@@ -151,13 +147,12 @@ def test_backend_compile_include_report_true_returns_tuple():
     assert isinstance(qc, QuantumCircuit)
 
 
-def test_backend_compile_optimize_true_raises_when_unavailable():
-    """QiskitBackend.compile(optimize=True) must raise ImportError when unavailable."""
+def test_backend_compile_optimize_true_uses_rqm_compiler():
+    """QiskitBackend.compile(optimize=True) delegates to rqm-compiler."""
     from rqm_qiskit import QiskitBackend
 
     backend = QiskitBackend()
-    with pytest.raises(ImportError, match="optimize"):
-        backend.compile(_bell_circuit(), optimize=True)
+    assert isinstance(backend.compile(_bell_circuit(), optimize=True), QuantumCircuit)
 
 
 # ---------------------------------------------------------------------------
@@ -195,13 +190,12 @@ def test_backend_run_include_report_true_returns_tuple():
     assert isinstance(qr, QiskitResult)
 
 
-def test_backend_run_optimize_true_raises_when_unavailable():
-    """QiskitBackend.run(optimize=True) must raise ImportError when unavailable."""
-    from rqm_qiskit import QiskitBackend
+def test_backend_run_optimize_true_uses_rqm_compiler():
+    """QiskitBackend.run(optimize=True) returns a verified local result."""
+    from rqm_qiskit import QiskitBackend, QiskitResult
 
     backend = QiskitBackend()
-    with pytest.raises(ImportError, match="optimize"):
-        backend.run(_bell_circuit(), shots=64, optimize=True)
+    assert isinstance(backend.run(_bell_circuit(), shots=64, optimize=True), QiskitResult)
 
 
 # ---------------------------------------------------------------------------
@@ -218,9 +212,10 @@ def test_run_qiskit_optimize_false():
     assert "counts" in result
 
 
-def test_run_qiskit_optimize_true_raises_when_unavailable():
-    """run_qiskit with optimize=True must raise ImportError when unavailable."""
+def test_run_qiskit_optimize_true_uses_rqm_compiler():
+    """run_qiskit with optimize=True returns a valid result dictionary."""
     from rqm_qiskit import run_qiskit
 
-    with pytest.raises(ImportError, match="optimize"):
-        run_qiskit(_bell_circuit(), shots=64, optimize=True)
+    result = run_qiskit(_bell_circuit(), shots=64, optimize=True)
+    assert isinstance(result, dict)
+    assert "counts" in result

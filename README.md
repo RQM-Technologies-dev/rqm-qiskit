@@ -332,6 +332,41 @@ print(qc.draw(output="text"))
 qc, report = to_qiskit_circuit(c, optimize=True, include_report=True)
 ```
 
+Internal compiler `su4q` blocks are lowered through the same
+`compiled_circuit_to_qiskit()` path. Pass a two-qubit Qiskit `Target` to make
+selection target-local, and request the JSON-safe synthesis audit separately:
+
+```python
+qc, synthesis_reports = to_qiskit_circuit(
+    compiled,
+    target=target,
+    include_synthesis_report=True,
+)
+```
+
+For each `su4q` block the bridge generates five candidates:
+
+| Path | Candidate |
+|------|-----------|
+| `Q3` | Qiskit level-3 transpilation |
+| `QF` | Fractional-target level-3 transpilation; requires parameterized `rx` and `rzz` |
+| `QC` | Controlled-U decomposition using `RZZGate` |
+| `QX` | Exact CX-basis two-qubit decomposition |
+| `RQ` | Direct quaternion-local / Cartan-interaction construction |
+
+Every candidate is rejected unless it is phase-equivalent to the source block
+within `1e-10`, target-compatible, and free of generic two-qubit `unitary`
+instructions. `best_native` then minimizes, in order: two-qubit count,
+scheduled duration, total native gates, two-qubit depth, full depth,
+compilation latency, and QPY size. The report records every candidate metric,
+failure reason, Weyl class, nonlocal fingerprint, selected path, and selection
+reason.
+
+`RQ` is deliberately a candidate, not a preferred default. It uses exact
+single-qubit Euler synthesis plus basis-changed, positive-angle `rzz`
+interactions; it wins only when the same target-local hierarchy selects it.
+Targets outside the current two-qubit scope fail closed.
+
 `QiskitTranslator` also exposes `apply_gate(qc, descriptor)` for applying
 a single canonical gate descriptor to an existing `QuantumCircuit`.
 
@@ -346,6 +381,8 @@ Reach for these only when Tiers 1–2 are not enough.
 | `QiskitBackend().compile(circuit, *, optimize, include_report)` | Translate only (OO alias for Tier 2) |
 | `QiskitBackend().run_local(circuit, shots, optimize)` | Run on local Aer (returns `QiskitResult`) |
 | `compiled_circuit_to_qiskit(source)` | Core lowering path (all Tier 1–2 routes through this) |
+| `synthesize_su4_block(block, *, target, strategy, include_report)` | Generate, verify, and select local SU(4) candidates |
+| `direct_rq_circuit(block)` | Build the exact direct quaternion-Cartan candidate |
 | `run_local(circuit, shots, optimize)` | Raw Aer execution (returns `dict[str, int]`) |
 | `run_backend(circuit, backend, shots)` | Raw real-backend execution |
 | `get_ibmq_provider(token, instance, channel)` | Obtain authenticated IBM Quantum provider |
@@ -455,7 +492,8 @@ only maps them to Qiskit primitives.
 | Single-qubit named | `i`, `x`, `y`, `z`, `h`, `s`, `t` |
 | Single-qubit parametric | `rx`, `ry`, `rz`, `phaseshift` |
 | Canonical SU(2) | `u1q` (quaternion → `UnitaryGate`) |
-| Two-qubit | `cx`, `cy`, `cz`, `swap`, `iswap` |
+| Two-qubit | `cx`, `cy`, `cz`, `swap`, `iswap`, `rxx`, `ryy`, `rzz` |
+| Internal compiler block | `su4q` (target-local verified candidate synthesis) |
 | Other | `measure`, `barrier` |
 
 ### `u1q` Translation

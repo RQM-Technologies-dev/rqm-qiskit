@@ -27,12 +27,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Union
 
 from qiskit import QuantumCircuit
+from qiskit.transpiler import Target
 
 from rqm_qiskit.convert import compiled_circuit_to_qiskit
 
 if TYPE_CHECKING:
     from rqm_compiler import Circuit, CompiledCircuit
-    from rqm_qiskit.gates import RQMGate
 
 
 class QiskitTranslator:
@@ -59,6 +59,8 @@ class QiskitTranslator:
         *,
         optimize: bool = False,
         include_report: bool = False,
+        target: Target | None = None,
+        include_synthesis_report: bool = False,
     ) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
         """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
 
@@ -94,7 +96,7 @@ class QiskitTranslator:
             If ``optimize=True`` but ``rqm_compiler.optimize_circuit`` is
             not available.
         """
-        from rqm_compiler import Circuit, CompiledCircuit, compile_circuit
+        from rqm_compiler import CompiledCircuit, compile_circuit
 
         report = None
 
@@ -108,10 +110,26 @@ class QiskitTranslator:
                 compiled = compile_circuit(circuit)
                 working = compiled
 
-        qc = compiled_circuit_to_qiskit(working)
+        lowered = compiled_circuit_to_qiskit(
+            working,
+            target=target,
+            include_synthesis_report=include_synthesis_report,
+        )
+        if include_synthesis_report:
+            qc, synthesis_reports = lowered
+        else:
+            qc = lowered
+            synthesis_reports = []
 
+        if include_report and include_synthesis_report:
+            return qc, {
+                "compiler_report": report,
+                "synthesis_reports": synthesis_reports,
+            }
         if include_report:
             return qc, report
+        if include_synthesis_report:
+            return qc, synthesis_reports
         return qc
 
     def apply_gate(
@@ -136,7 +154,6 @@ class QiskitTranslator:
         # Build a temporary key mapping for measure operations
         key_to_clbit: dict[str, int] = {}
         if op.gate == "measure":
-            key = op.params.get("key", f"m{op.targets[0]}")
             if qc.num_clbits > 0:
                 # Find the classical bit index by iterating existing registers
                 clbit_idx = 0
@@ -327,6 +344,8 @@ def to_qiskit_circuit(
     *,
     optimize: bool = False,
     include_report: bool = False,
+    target: Target | None = None,
+    include_synthesis_report: bool = False,
 ) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
     """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
 
@@ -372,6 +391,8 @@ def to_qiskit_circuit(
         circuit,
         optimize=optimize,
         include_report=include_report,
+        target=target,
+        include_synthesis_report=include_synthesis_report,
     )
 
 

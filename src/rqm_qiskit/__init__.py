@@ -114,6 +114,7 @@ from rqm_qiskit.errors import (
     JobFailedError,
     TranslationError,
 )
+from rqm_qiskit.synthesis import direct_rq_circuit, synthesize_su4_block
 
 __all__ = [
     # Tier 1 — Execution
@@ -136,6 +137,8 @@ __all__ = [
     "Quaternion",
     "spinor_to_circuit",
     "bloch_to_circuit",
+    "synthesize_su4_block",
+    "direct_rq_circuit",
     # Errors
     "RQMQiskitError",
     "BackendNotFoundError",
@@ -160,7 +163,7 @@ __all__ = [
     "match_gate",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 try:
     from importlib.metadata import version, PackageNotFoundError
     __version__ = version("rqm-qiskit")
