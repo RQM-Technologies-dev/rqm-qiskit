@@ -367,6 +367,9 @@ single-qubit Euler synthesis plus basis-changed, positive-angle `rzz`
 interactions; it wins only when the same target-local hierarchy selects it.
 Targets outside the current two-qubit scope fail closed.
 
+The editable-local eight-workload integration gate and exact source commits are
+recorded in [CROSS_STACK_SU4_CONFORMANCE.md](CROSS_STACK_SU4_CONFORMANCE.md).
+
 `QiskitTranslator` also exposes `apply_gate(qc, descriptor)` for applying
 a single canonical gate descriptor to an existing `QuantumCircuit`.
 
