@@ -14,9 +14,9 @@ classifiers = [
 ]
 dependencies = [
   "qiskit==2.3.0",
-  "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@1be6a4fd3b8701251c756a4bfd69371d73486e9e",
-  "rqm-entanglement @ git+https://github.com/RQM-Technologies-dev/rqm-entanglement.git@f2105bb694764d8d73798d3f482a598db39226e0",
-  "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@fcc1a0bc67c62a26ab3fffdbf2c51b96100b39f1",
+  "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@f3a9988871e4f9f44c85a2b0ac726014ada3b58b",
+  "rqm-entanglement @ git+https://github.com/RQM-Technologies-dev/rqm-entanglement.git@ca121885cdc75058483646ebcb342c202a5a8013",
+  "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@ae89a3e91b0f3a85a06a44f4401180bcb79b69dc",
 ]
 
 [project.optional-dependencies]

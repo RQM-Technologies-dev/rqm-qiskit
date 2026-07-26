@@ -246,7 +246,74 @@ def _apply_operation(
             strategy="best_native",
             include_report=True,
         )
+        fallback_payload = params.get("fallback_operations")
+        selected_strategy = "su4q"
+        selected_two_qubit_count = sum(
+            item.operation.num_qubits == 2 for item in selected.data
+        )
+        selected_two_qubit_depth = int(
+            selected.depth(
+                filter_function=lambda item: item.operation.num_qubits == 2
+            )
+            or 0
+        )
+        source_two_qubit_count: int | None = None
+        source_two_qubit_depth: int | None = None
+        source_circuit = None
+        if isinstance(fallback_payload, list):
+            from rqm_compiler.ops import Operation
+
+            pair_map = {physical: local for local, physical in enumerate(targets)}
+            fallback_operations = []
+            for descriptor in fallback_payload:
+                if not isinstance(descriptor, dict):
+                    continue
+                fallback = Operation.from_descriptor(descriptor)
+                fallback.targets = [pair_map[index] for index in fallback.targets]
+                fallback.controls = [pair_map[index] for index in fallback.controls]
+                fallback_operations.append(fallback)
+            source_circuit = _build_qiskit_from_ops(
+                2,
+                fallback_operations,
+                target=target,
+                synthesis_reports=None,
+            )
+            source_two_qubit_count = sum(
+                item.operation.num_qubits == 2 for item in source_circuit.data
+            )
+            source_two_qubit_depth = int(
+                source_circuit.depth(
+                    filter_function=lambda item: item.operation.num_qubits == 2
+                )
+                or 0
+            )
+            improves = (
+                selected_two_qubit_count < source_two_qubit_count
+                or selected_two_qubit_depth < source_two_qubit_depth
+            )
+            if not improves:
+                selected_strategy = "source_window"
+                selected = source_circuit
+                selected_two_qubit_count = source_two_qubit_count
+                selected_two_qubit_depth = source_two_qubit_depth
         qc.compose(selected, qubits=targets, inplace=True)
+        routing = params.get("routing")
+        report["source_hash"] = (
+            routing.get("source_hash") if isinstance(routing, dict) else block.source_hash
+        )
+        report["window_id"] = (
+            routing.get("window_id") if isinstance(routing, dict) else None
+        )
+        report["selected_strategy"] = selected_strategy
+        report["source_two_qubit_count"] = source_two_qubit_count
+        report["source_two_qubit_depth"] = source_two_qubit_depth
+        report["selected_two_qubit_count"] = selected_two_qubit_count
+        report["selected_two_qubit_depth"] = selected_two_qubit_depth
+        report["actual_two_qubit_count_reduction"] = (
+            None
+            if source_two_qubit_count is None
+            else max(0, source_two_qubit_count - selected_two_qubit_count)
+        )
         if synthesis_reports is not None:
             synthesis_reports.append(report)
     elif gate == "measure":

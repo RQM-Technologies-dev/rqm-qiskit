@@ -115,6 +115,7 @@ from rqm_qiskit.errors import (
     TranslationError,
 )
 from rqm_qiskit.synthesis import direct_rq_circuit, synthesize_su4_block
+from rqm_qiskit.capabilities import qiskit_two_qubit_cost_model
 
 __all__ = [
     # Tier 1 — Execution
@@ -139,6 +140,7 @@ __all__ = [
     "bloch_to_circuit",
     "synthesize_su4_block",
     "direct_rq_circuit",
+    "qiskit_two_qubit_cost_model",
     # Errors
     "RQMQiskitError",
     "BackendNotFoundError",

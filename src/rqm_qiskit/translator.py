@@ -61,6 +61,7 @@ class QiskitTranslator:
         include_report: bool = False,
         target: Target | None = None,
         include_synthesis_report: bool = False,
+        adaptive_policy: Any = None,
     ) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
         """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
 
@@ -101,7 +102,9 @@ class QiskitTranslator:
         report = None
 
         if optimize:
-            optimized_circuit, report = _apply_optimization_with_report(circuit)
+            optimized_circuit, report = _apply_optimization_with_report(
+                circuit, adaptive_policy=adaptive_policy
+            )
             working = optimized_circuit
         else:
             if isinstance(circuit, CompiledCircuit):
@@ -346,6 +349,7 @@ def to_qiskit_circuit(
     include_report: bool = False,
     target: Target | None = None,
     include_synthesis_report: bool = False,
+    adaptive_policy: Any = None,
 ) -> "Union[QuantumCircuit, tuple[QuantumCircuit, Any]]":
     """Translate an rqm-compiler circuit to a Qiskit QuantumCircuit.
 
@@ -393,6 +397,7 @@ def to_qiskit_circuit(
         include_report=include_report,
         target=target,
         include_synthesis_report=include_synthesis_report,
+        adaptive_policy=adaptive_policy,
     )
 
 
@@ -428,6 +433,8 @@ def _apply_optimization(
 
 def _apply_optimization_with_report(
     source: "Union[Circuit, CompiledCircuit]",
+    *,
+    adaptive_policy: Any = None,
 ) -> "tuple[Union[Circuit, CompiledCircuit], Any]":
     """Apply optimization passes and return ``(optimized_circuit, report)``.
 
@@ -456,7 +463,7 @@ def _apply_optimization_with_report(
     # rqm-qiskit must not import rqm-optimize (architecture boundary).
     try:
         from rqm_compiler import optimize_circuit  # type: ignore[attr-defined]
-        result = optimize_circuit(source)
+        result = optimize_circuit(source, adaptive_policy=adaptive_policy)
         # Some versions return (circuit, report); accept both forms
         if isinstance(result, tuple):
             return result[0], result[1]
