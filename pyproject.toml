@@ -14,9 +14,9 @@ classifiers = [
 ]
 dependencies = [
   "qiskit==2.3.0",
-  "rqm-core @ git+https://github.com/RQM-Technologies-dev/rqm-core.git@f3a9988871e4f9f44c85a2b0ac726014ada3b58b",
-  "rqm-entanglement @ git+https://github.com/RQM-Technologies-dev/rqm-entanglement.git@ca121885cdc75058483646ebcb342c202a5a8013",
-  "rqm-compiler @ git+https://github.com/RQM-Technologies-dev/rqm-compiler.git@ae89a3e91b0f3a85a06a44f4401180bcb79b69dc",
+  "rqm-core>=0.2,<0.3",
+  "rqm-entanglement>=0.2,<0.3",
+  "rqm-compiler>=0.2,<0.3",
 ]
 
 [project.optional-dependencies]
@@ -34,4 +34,5 @@ requires = ["setuptools>=42", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
+tag_regex = "^v(?P<version>\\d+\\.\\d+\\.\\d+)$"
 local_scheme = "no-local-version"
