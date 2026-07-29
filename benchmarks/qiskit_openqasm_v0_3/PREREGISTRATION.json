@@ -1,0 +1,64 @@
+{
+  "schema_version": "rqm.qiskit-openqasm-latency-preregistration.v0.3",
+  "title": "Qiskit/OpenQASM assurance bridge latency hardening",
+  "frozen_before_results": true,
+  "evidence_boundary": "local_sdk_and_numerical_operator_checks_only",
+  "baseline_result": {
+    "path": "../qiskit_openqasm_v0_2/raw_results.json",
+    "sha256": "32bb9837a156ee5416a2ec8d1ea96360a8ef24f8572df3809f1b861bc59b1d7f",
+    "verification_coverage": 1.0,
+    "median_adapter_overhead_ratio": 8.1776,
+    "release_ready": false
+  },
+  "frozen_corpus": {
+    "path": "../qiskit_openqasm_v0_1/corpus_manifest.json",
+    "sha256": "fe2f7c34fb931d122738405bc9c845db7e3abe6c5c26a3b0b24da9cf26656b35",
+    "seed": 4430,
+    "eligible_cases": 160,
+    "counterexample_cases": 20,
+    "unsupported_or_malformed_cases": 20
+  },
+  "changes_under_test": [
+    "Cache immutable installed-toolchain version metadata instead of reparsing package metadata for every request.",
+    "Export the already canonical-lowered Qiskit circuit directly through qiskit.qasm3.dumps instead of running a redundant optimization-level-0 transpilation.",
+    "Copy the input QuantumCircuit only on a fail-closed return instead of on every verified request.",
+    "Measure import, normalization serialization, compiler optimization, semantic verification, Qiskit lowering, OpenQASM export, OpenQASM reparse, report serialization, and complete assurance separately."
+  ],
+  "forbidden_changes": [
+    "No tolerance change",
+    "No supported-gate expansion",
+    "No corpus change",
+    "No compiler algorithm change",
+    "No verification bypass",
+    "No candidate disclosure",
+    "No relaxed unsupported-input behavior",
+    "No replacement of Qiskit's official OpenQASM parser or exporter"
+  ],
+  "timing_protocol": {
+    "clock": "time.perf_counter_ns",
+    "warmup": "One complete supported request before recorded cases.",
+    "per_stage_repetitions": 5,
+    "case_statistic": "median of repetitions",
+    "aggregate_statistic": "median of per-case ratios",
+    "adapter_overhead_definition": "(Qiskit import time + canonical Qiskit lowering and official OpenQASM export time) / compiler-only optimize_circuit time"
+  },
+  "gates": {
+    "eligible_verified_release_coverage_minimum": 0.95,
+    "false_equivalence_decisions_maximum": 0,
+    "withheld_candidate_disclosures_maximum": 0,
+    "unsupported_fail_closed_required": 20,
+    "deterministic_evidence_identity_required": true,
+    "median_adapter_overhead_to_compiler_only_maximum": 0.25
+  },
+  "verdicts": {
+    "release_ready": "Pass only when every safety, coverage, determinism, and latency gate passes.",
+    "held": "If the latency gate still fails, keep rqm-qiskit 0.3.0 unreleased and publish the exact unfavorable result."
+  },
+  "limitations": [
+    "Wall-clock timing is descriptive of the recorded local environment and is sensitive to host load.",
+    "The CI regression ceiling is intentionally broader than the frozen release gate and cannot establish release readiness.",
+    "This run contains no simulator, emulator, provider, or QPU execution evidence.",
+    "Qiskit level-3 measurements remain descriptive and do not establish superiority.",
+    "Operator equivalence up to global phase does not authorize controlled-subcircuit promotion."
+  ]
+}

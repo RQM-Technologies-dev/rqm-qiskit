@@ -21,10 +21,11 @@ import re
 import subprocess
 import sys
 from dataclasses import asdict, dataclass, replace
+from functools import cache
 from importlib.metadata import PackageNotFoundError, version
 from typing import Any, Literal
 
-from qiskit import QuantumCircuit, qasm3, transpile
+from qiskit import QuantumCircuit, qasm3
 
 from rqm_qiskit.convert import compiled_circuit_to_qiskit
 
@@ -60,11 +61,21 @@ _ANGLE_GATES = frozenset({"rx", "ry", "rz", "p", "rxx", "ryy", "rzz"})
 _CONTROLLED_GATES = frozenset({"cx", "cy", "cz"})
 _TWO_TARGET_GATES = frozenset({"swap", "iswap", "rxx", "ryy", "rzz"})
 _PARSE_LOCATION_PATTERNS = (
-    re.compile(r"(?:line\s+)?(?P<line>\d+)\s*[,;:]\s*(?:column\s+)?(?P<column>\d+)", re.IGNORECASE),
+    re.compile(
+        r"(?:line\s+)?(?P<line>\d+)\s*[,;:]\s*(?:column\s+)?(?P<column>\d+)",
+        re.IGNORECASE,
+    ),
     re.compile(r"line\s+(?P<line>\d+).*column\s+(?P<column>\d+)", re.IGNORECASE),
+)
+_LIMITATIONS = (
+    "Supports only bound standalone unitary circuits on one to three qubits.",
+    "Semantic equivalence is bounded numerical or canonical verification up to global phase.",
+    "The result is not formal verification and contains no simulator, emulator, or QPU evidence.",
+    "Do not promote the returned circuit directly to a coherently controlled subcircuit.",
 )
 
 
+@cache
 def _package_version(name: str, fallback: str) -> str:
     try:
         return version(name)
@@ -149,12 +160,7 @@ class QiskitExportResult:
 
 
 def _limitations() -> tuple[str, ...]:
-    return (
-        "Supports only bound standalone unitary circuits on one to three qubits.",
-        "Semantic equivalence is bounded numerical or canonical verification up to global phase.",
-        "The result is not formal verification and contains no simulator, emulator, or QPU evidence.",
-        "Do not promote the returned circuit directly to a coherently controlled subcircuit.",
-    )
+    return _LIMITATIONS
 
 
 def _base_report(
@@ -381,7 +387,9 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
                     )
                 )
                 continue
-            descriptors.append(Operation(gate=canonical_gate, targets=qubits, params=params))
+            descriptors.append(
+                Operation(gate=canonical_gate, targets=qubits, params=params)
+            )
         else:
             if len(qubits) != 1:
                 reasons.append(
@@ -544,7 +552,6 @@ def import_openqasm3_isolated(source: str) -> QiskitImportResult:
 def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
     """Optimize a Qiskit circuit through the compiler's fail-closed workflow."""
 
-    original = circuit.copy()
     imported = import_qiskit_circuit(circuit)
     if imported.circuit is None:
         fallback = (
@@ -553,7 +560,7 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
             else "import_error"
         )
         return QiskitAssuranceResult(
-            returned_circuit=original,
+            returned_circuit=circuit.copy(),
             assurance_status="FALLBACK_ORIGINAL",
             optimization_applied=False,
             fallback_reason=fallback,
@@ -573,7 +580,7 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
         )
         if not proof_verified:
             return QiskitAssuranceResult(
-                returned_circuit=original,
+                returned_circuit=circuit.copy(),
                 assurance_status="FALLBACK_ORIGINAL",
                 optimization_applied=False,
                 fallback_reason=getattr(report, "fallback_reason", None)
@@ -596,7 +603,7 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
         )
     except Exception:  # noqa: BLE001 - public assurance must fail closed
         return QiskitAssuranceResult(
-            returned_circuit=original,
+            returned_circuit=circuit.copy(),
             assurance_status="FALLBACK_ORIGINAL",
             optimization_applied=False,
             fallback_reason="internal_assurance_error",
@@ -611,12 +618,10 @@ def export_openqasm3(source: Any) -> QiskitExportResult:
 
     try:
         circuit = compiled_circuit_to_qiskit(source)
-        portable = transpile(
-            circuit,
-            basis_gates=list(SUPPORTED_QISKIT_GATES),
-            optimization_level=0,
-        )
-        exported = qasm3.dumps(portable)
+        # Canonical lowering has already resolved every compiler operation to
+        # a Qiskit instruction or failed closed. Re-transpiling here repeats
+        # instruction analysis without adding a semantic or portability gate.
+        exported = qasm3.dumps(circuit)
     except Exception as exc:  # noqa: BLE001 - public export must return structured failure
         return QiskitExportResult(
             status="ERROR",

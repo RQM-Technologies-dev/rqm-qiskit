@@ -10,6 +10,7 @@ from qiskit.quantum_info import Operator
 from rqm_compiler import Circuit
 from rqm_compiler.ops import Operation
 
+import rqm_qiskit.assurance as assurance_module
 from rqm_qiskit import (
     assure_qiskit_circuit,
     compiled_circuit_to_qiskit,
@@ -182,6 +183,7 @@ def test_assurance_returns_original_for_unsupported_input() -> None:
     assert result.assurance_status == "FALLBACK_ORIGINAL"
     assert result.fallback_reason == "unsupported_input"
     assert result.returned_circuit == circuit
+    assert result.returned_circuit is not circuit
     assert result.normalized_input is None
 
 
@@ -202,6 +204,48 @@ def test_openqasm_roundtrip_remains_in_supported_subset() -> None:
     assert reparsed.circuit is not None
     returned = compiled_circuit_to_qiskit(reparsed.circuit)
     assert _equivalent_up_to_phase(circuit, returned)
+
+
+def test_export_uses_canonical_lowering_without_retranspilation(monkeypatch) -> None:
+    circuit = Circuit(1)
+    circuit.add(Operation(gate="rx", targets=[0], params={"angle": 0.25}))
+    real_dumps = assurance_module.qasm3.dumps
+    calls = 0
+
+    def counted_dumps(value):
+        nonlocal calls
+        calls += 1
+        return real_dumps(value)
+
+    monkeypatch.setattr(assurance_module.qasm3, "dumps", counted_dumps)
+
+    result = export_openqasm3(circuit)
+
+    assert result.status == "EXPORTED"
+    assert calls == 1
+    assert result.source is not None
+    assert import_openqasm3(result.source).report.status == "SUPPORTED"
+
+
+def test_toolchain_versions_are_cached_across_hot_path_requests(monkeypatch) -> None:
+    calls: list[str] = []
+
+    def counted_version(name: str) -> str:
+        calls.append(name)
+        return f"{name}-test"
+
+    assurance_module._package_version.cache_clear()
+    monkeypatch.setattr(assurance_module, "version", counted_version)
+    circuit = QuantumCircuit(1)
+    circuit.x(0)
+
+    first = import_qiskit_circuit(circuit)
+    second = import_qiskit_circuit(circuit)
+
+    assert first.report.adapter_version == "rqm-qiskit-test"
+    assert second.report.qiskit_version == "qiskit-test"
+    assert calls == ["rqm-qiskit", "qiskit"]
+    assurance_module._package_version.cache_clear()
 
 
 def test_malformed_openqasm_returns_structured_error() -> None:
