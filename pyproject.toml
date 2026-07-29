@@ -16,7 +16,7 @@ dependencies = [
   "qiskit==2.3.0",
   "rqm-core>=0.2,<0.3",
   "rqm-entanglement>=0.2,<0.3",
-  "rqm-compiler>=0.2,<0.3",
+  "rqm-compiler>=0.2.1,<0.3",
 ]
 
 [project.optional-dependencies]
