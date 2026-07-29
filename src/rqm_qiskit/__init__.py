@@ -34,7 +34,7 @@ Tier 1 — Execution  (start here)
         → QiskitJob  (handle with .job_id(), .status(), .result())
 
     execute_rqm_program(program_descriptor, *, backend, shots, optimize)
-        → dict  (accepts canonical RQM descriptor dicts from rqm-api)
+        → dict  (accepts canonical RQM descriptors from quantum-compiler-api)
 
   OO (equivalent):
     QiskitBackend().run(circuit, *, shots, optimize, include_report)
@@ -134,7 +134,7 @@ __all__ = [
     # Tier 1 — Execution
     "run_qiskit",            # functional primary
     "async_run_qiskit",      # functional async
-    "execute_rqm_program",   # high-level rqm-api integration
+    "execute_rqm_program",   # high-level canonical API integration
     "QiskitBackend",         # OO equivalent
     # Tier 2 — Translation
     "to_qiskit_circuit",     # functional primary

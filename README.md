@@ -220,7 +220,7 @@ from rqm_qiskit import (
     to_qiskit_circuit,      # functional translation API
     run_qiskit,             # functional execution API
     async_run_qiskit,       # async functional execution API
-    execute_rqm_program,    # high-level rqm-api integration
+    execute_rqm_program,    # high-level canonical API integration
     get_ibmq_provider,      # IBM Quantum provider
     QiskitJob,              # async job handle
     QiskitResult,           # structured result wrapper
@@ -306,12 +306,12 @@ print(job.job_id())             # IBM job ID (returned immediately)
 result = job.result(timeout=300)  # blocks until done or timeout
 ```
 
-#### High-level rqm-api integration (`execute_rqm_program`)
+#### High-level canonical API integration (`execute_rqm_program`)
 
 Accepts a compiler-compatible program descriptor dict.  In the full RQM stack,
 API and Studio traffic originates as `rqm-circuits` payloads; those are parsed
 and validated upstream before reaching this layer as descriptor dicts.  If you
-are integrating directly with `rqm-api`, the API layer handles the
+are integrating directly with `quantum-compiler-api`, the API layer handles the
 `rqm-circuits` → descriptor conversion for you.
 
 ```python

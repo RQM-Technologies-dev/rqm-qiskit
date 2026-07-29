@@ -1,5 +1,5 @@
 """
-Tests for execute_rqm_program – high-level rqm-api integration function.
+Tests for execute_rqm_program – high-level canonical API integration function.
 
 Covers:
 - execute_rqm_program is importable from rqm_qiskit
