@@ -199,8 +199,15 @@ verification, execution evidence, or permission to embed a returned circuit as
 a coherently controlled subcircuit where exact global phase can become
 observable.
 
-The frozen local v0.1 corpus and its bounded result are in
+The frozen local v0.1 corpus and bounded baseline are in
 [`benchmarks/qiskit_openqasm_v0_1`](benchmarks/qiskit_openqasm_v0_1/).
+Coverage hardening is recorded in
+[`benchmarks/qiskit_openqasm_v0_2`](benchmarks/qiskit_openqasm_v0_2/), and the
+final preregistered latency result is in
+[`benchmarks/qiskit_openqasm_v0_3`](benchmarks/qiskit_openqasm_v0_3/).
+The v0.3 run retained 100% eligible verification coverage and every fail-closed
+gate, but its `191.19%` median adapter overhead still exceeds the frozen `25%`
+release gate. Version 0.3.0 therefore remains unreleased.
 
 ---
 
