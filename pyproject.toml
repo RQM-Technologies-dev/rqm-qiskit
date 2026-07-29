@@ -13,7 +13,7 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-  "qiskit==2.3.0",
+  "qiskit==2.5.1",
   "rqm-core>=0.2,<0.3",
   "rqm-entanglement>=0.2,<0.3",
   "rqm-compiler>=0.2.1,<0.3",
@@ -22,7 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 simulator = ["qiskit-aer==0.17.2"]
 qasm3 = ["qiskit-qasm3-import==0.6.0"]
-ibm = ["qiskit-ibm-runtime==0.45.0"]
+ibm = ["qiskit-ibm-runtime==0.48.0"]
 dev = ["pytest", "qiskit-aer==0.17.2", "qiskit-qasm3-import==0.6.0"]
 
 [project.urls]
