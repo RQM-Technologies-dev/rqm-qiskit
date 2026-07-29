@@ -157,6 +157,21 @@ def test_assurance_returns_verified_compiler_result() -> None:
     assert _equivalent_up_to_phase(circuit, result.returned_circuit)
 
 
+def test_assurance_verifies_rewrites_around_iswap() -> None:
+    circuit = QuantumCircuit(2, name="iswap-regression")
+    circuit.h(0)
+    circuit.iswap(0, 1)
+    circuit.h(0)
+
+    result = assure_qiskit_circuit(circuit)
+
+    assert result.assurance_status == "VERIFIED"
+    assert result.optimization_applied is True
+    assert result.fallback_reason is None
+    assert result.compiler_report.equivalence_status == "VERIFIED"
+    assert _equivalent_up_to_phase(circuit, result.returned_circuit)
+
+
 def test_assurance_returns_original_for_unsupported_input() -> None:
     circuit = QuantumCircuit(1, 1)
     circuit.h(0)
