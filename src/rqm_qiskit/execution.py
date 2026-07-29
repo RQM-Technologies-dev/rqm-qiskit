@@ -401,7 +401,7 @@ def async_run_qiskit(
 
 
 # ---------------------------------------------------------------------------
-# High-level API for rqm-api integration
+# High-level API for quantum-compiler-api integration
 # ---------------------------------------------------------------------------
 
 
@@ -415,7 +415,7 @@ def execute_rqm_program(
 ) -> "dict[str, Any]":
     """Compile and run a canonical RQM program descriptor; return a result dict.
 
-    This is the high-level entry point designed for use by ``rqm-api`` and
+    This is the high-level entry point designed for use by ``quantum-compiler-api`` and
     RQM Studio.  In the full RQM stack, API and Studio traffic originates as
     ``rqm-circuits`` payloads; those are parsed and validated upstream before
     reaching this function as a descriptor dict.  ``rqm-qiskit`` is the
