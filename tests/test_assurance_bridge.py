@@ -270,6 +270,23 @@ def test_isolated_openqasm_bridge_roundtrips_for_server_use() -> None:
     assert import_openqasm3(exported.source).report.status == "SUPPORTED"
 
 
+def test_isolated_worker_preserves_runtime_injected_import_paths(monkeypatch) -> None:
+    monkeypatch.setattr(
+        assurance_module.sys,
+        "path",
+        ["/var/task", "/var/task/_vendor", ""],
+    )
+    monkeypatch.setenv("PYTHONPATH", "/configured")
+
+    environment = assurance_module._isolated_worker_environment()
+
+    assert environment["PYTHONPATH"].split(assurance_module.os.pathsep) == [
+        "/var/task",
+        "/var/task/_vendor",
+        "/configured",
+    ]
+
+
 def test_unknown_compiler_gate_is_never_silently_ignored() -> None:
     circuit = Circuit(1)
     circuit.add(Operation(gate="unknown", targets=[0]))

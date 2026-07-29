@@ -17,6 +17,7 @@ import hashlib
 import io
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -493,6 +494,22 @@ def _report_from_dict(payload: dict[str, Any]) -> QiskitImportReport:
     )
 
 
+def _isolated_worker_environment() -> dict[str, str]:
+    """Preserve runtime-injected package paths for the child interpreter."""
+
+    environment = os.environ.copy()
+    import_paths = [entry for entry in sys.path if entry]
+    configured_paths = [
+        entry
+        for entry in environment.get("PYTHONPATH", "").split(os.pathsep)
+        if entry
+    ]
+    environment["PYTHONPATH"] = os.pathsep.join(
+        dict.fromkeys([*import_paths, *configured_paths])
+    )
+    return environment
+
+
 def import_openqasm3_isolated(source: str) -> QiskitImportResult:
     """Run native Qiskit parsing in an isolated process for server safety."""
 
@@ -506,6 +523,7 @@ def import_openqasm3_isolated(source: str) -> QiskitImportResult:
         input=request,
         capture_output=True,
         check=False,
+        env=_isolated_worker_environment(),
         text=True,
         timeout=30,
     )
@@ -667,6 +685,7 @@ def export_openqasm3_isolated(source: Any) -> QiskitExportResult:
         input=request,
         capture_output=True,
         check=False,
+        env=_isolated_worker_environment(),
         text=True,
         timeout=30,
     )
