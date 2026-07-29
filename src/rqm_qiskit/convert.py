@@ -341,7 +341,12 @@ def _apply_operation(
             qc.barrier(targets)
         else:
             qc.barrier()
-    # Unknown gates are silently ignored; validation is rqm-compiler's responsibility.
+    else:
+        from rqm_qiskit.errors import TranslationError
+
+        raise TranslationError(
+            f"Unsupported compiler operation {gate!r}; refusing to omit it."
+        )
 
 
 # ---------------------------------------------------------------------------

@@ -1,0 +1,41 @@
+{
+  "schema_version": "rqm.qiskit-openqasm-preregistration.v0.1",
+  "title": "Qiskit/OpenQASM Assurance Bridge v0.1 local corpus",
+  "evidence_boundary": "local_sdk_and_numerical_operator_checks_only",
+  "frozen_before_results": true,
+  "seed": 4430,
+  "corpus": {
+    "manifest_sha256": "fe2f7c34fb931d122738405bc9c845db7e3abe6c5c26a3b0b24da9cf26656b35",
+    "runner_sha256": "45d0af58b82b9f1aaac287620dfedeba135be49e56af02bcca4c0056b8e2db79",
+    "eligible_cases": 160,
+    "counterexample_cases": 20,
+    "unsupported_or_malformed_cases": 20
+  },
+  "release_gates": {
+    "eligible_verified_release_coverage_minimum": 0.95,
+    "false_equivalence_decisions_maximum": 0,
+    "withheld_candidate_disclosures_maximum": 0,
+    "unsupported_fail_closed_required": 20,
+    "deterministic_evidence_identity_required": true,
+    "median_adapter_overhead_to_compiler_only_maximum": 0.25
+  },
+  "measurement_definitions": {
+    "equivalence": "Maximum absolute operator-component error no greater than 1e-9 after optimal global-phase alignment.",
+    "adapter_overhead": "Import plus export elapsed time divided by compiler-only optimization elapsed time, less one; evaluated over all eligible corpus cases.",
+    "deterministic_evidence_identity": "Repeated identical API requests must preserve source, returned artifact, transformation evidence ID, and adapter evidence ID byte-for-field, as exercised by the focused API regression test.",
+    "qiskit_comparator": "Qiskit transpile optimization_level=3 gate count, depth, and elapsed time are descriptive neutral comparators only."
+  },
+  "pinned_toolchain": {
+    "qiskit": "2.3.0",
+    "qiskit_qasm3_import": "0.6.0",
+    "rqm_qiskit": "0.1.5.dev14",
+    "rqm_compiler": "0.1.5.post1.dev26",
+    "rqm_circuits": "0.1.1.dev3+g2042a3cd1"
+  },
+  "limitations": [
+    "This corpus does not contain simulator, emulator, provider, or QPU execution evidence.",
+    "Operator comparison up to global phase does not authorize embedding the returned artifact as a controlled subcircuit.",
+    "The comparison does not establish formal verification or general compiler superiority.",
+    "Qiskit level-3 measurements are descriptive; TKET remains a separate future benchmark."
+  ]
+}

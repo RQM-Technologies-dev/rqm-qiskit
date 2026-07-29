@@ -108,6 +108,12 @@ To also run local simulations (recommended):
 pip install "rqm-qiskit[simulator]"
 ```
 
+To import and export OpenQASM 3:
+
+```bash
+pip install "rqm-qiskit[qasm3]"
+```
+
 To use real IBM Quantum backends:
 
 ```bash
@@ -152,6 +158,49 @@ print(qc.draw(output="text"))
 > in-process or server-side code that has already gone through that upstream path.
 
 See the [Public API](#public-api) section for the full tier breakdown.
+
+---
+
+## Fail-closed Qiskit and OpenQASM assurance
+
+The v0.1 assurance bridge accepts bound, standalone unitary Qiskit circuits on
+one to three qubits. It imports the supported gate subset into the compiler,
+delegates optimization and semantic verification to `rqm-compiler`, and lowers
+released output through the canonical Qiskit translator. A changed circuit is
+returned only when the compiler verifies it; every unsupported, unresolved,
+counterexample, or internal-error outcome returns the original circuit.
+
+```python
+from qiskit import QuantumCircuit, qasm3
+from rqm_qiskit import assure_qiskit_circuit, import_openqasm3
+
+source = QuantumCircuit(2)
+source.h(0)
+source.cx(0, 1)
+
+result = assure_qiskit_circuit(source)
+assert result.assurance_status in {"VERIFIED", "FALLBACK_ORIGINAL"}
+
+# Use Qiskit's official OpenQASM 3 serializer for API/Studio transport.
+openqasm_source = qasm3.dumps(source)
+import_result = import_openqasm3(openqasm_source)
+```
+
+Supported gates are `id`, `x`, `y`, `z`, `h`, `s`, `t`, `rx`, `ry`, `rz`,
+`p`, `cx`, `cy`, `cz`, `swap`, `iswap`, `rxx`, `ryy`, and `rzz`. The bridge
+rejects symbolic parameters, non-finite values, nonzero or symbolic global
+phase, measurement and classical data, reset, delay, barriers, control flow,
+initialization, custom/unitary instructions, unsupported gates, and circuits
+larger than three qubits. It never performs partial translation.
+
+Verification is bounded canonical or numerical verification of standalone
+unitary semantics up to global phase. It is not theorem-prover formal
+verification, execution evidence, or permission to embed a returned circuit as
+a coherently controlled subcircuit where exact global phase can become
+observable.
+
+The frozen local v0.1 corpus and its bounded result are in
+[`benchmarks/qiskit_openqasm_v0_1`](benchmarks/qiskit_openqasm_v0_1/).
 
 ---
 
