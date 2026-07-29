@@ -1,6 +1,6 @@
 [project]
 name = "rqm-qiskit"
-dynamic = ["version"]
+version = "0.2.0"
 description = "Thin Qiskit bridge layer for the RQM quantum ecosystem"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -30,9 +30,5 @@ Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 Repository = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 
 [build-system]
-requires = ["setuptools>=42", "setuptools-scm>=8"]
+requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools_scm]
-tag_regex = "^v(?P<version>\\d+\\.\\d+\\.\\d+)$"
-local_scheme = "no-local-version"

@@ -73,7 +73,7 @@ def _package_version(name: str, fallback: str) -> str:
 
 
 def _adapter_version() -> str:
-    return _package_version("rqm-qiskit", "0.3.0+local")
+    return _package_version("rqm-qiskit", "0.0.0+unknown")
 
 
 @dataclass(frozen=True)
