@@ -9,6 +9,7 @@ import json
 import statistics
 import time
 from collections.abc import Callable
+from dataclasses import asdict
 from pathlib import Path
 from types import ModuleType
 from typing import Any, TypeVar
@@ -112,7 +113,7 @@ def _run_eligible(runner: ModuleType, index: int) -> dict[str, Any]:
         lambda: json.dumps(
             {
                 "import": imported.report.to_dict(),
-                "compiler": compiler_report.to_dict(),
+                "compiler": asdict(compiler_report),
                 "normalized_sha256": hashlib.sha256(
                     normalized_payload.encode("utf-8")
                 ).hexdigest(),
@@ -248,9 +249,7 @@ def main() -> int:
     if export_openqasm3(warm_returned).source is None:
         raise RuntimeError("Warmup export failed.")
 
-    eligible = [runner.build_eligible(index) for index in range(160)]
     timed_eligible = [_run_eligible(runner, index) for index in range(160)]
-    del eligible
     counterexamples = [runner._run_counterexample(index) for index in range(20)]
     unsupported = [runner._run_unsupported(index) for index in range(20)]
 
@@ -321,6 +320,7 @@ def main() -> int:
     _write_report(results)
     paths = [
         ROOT / "PREREGISTRATION.json",
+        ROOT / "RUN_NOTES.md",
         BASE_ROOT / "corpus_manifest.json",
         V02_ROOT / "raw_results.json",
         RESULTS_PATH,
