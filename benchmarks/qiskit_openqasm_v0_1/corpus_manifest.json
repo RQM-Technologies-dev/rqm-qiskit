@@ -1,0 +1,1351 @@
+{
+  "case_count": 200,
+  "cases": [
+    {
+      "case_id": "eligible-000",
+      "category": "eligible",
+      "descriptor_sha256": "40c7daedac67fcb359080db501baacb19af66b91e93d41f96c813bf01f870645",
+      "num_qubits": 1,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-001",
+      "category": "eligible",
+      "descriptor_sha256": "1ff95446aa30e8f6f438c8b7a6fcd67bf1656c82d07ffc8e11213136e618b02e",
+      "num_qubits": 1,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-002",
+      "category": "eligible",
+      "descriptor_sha256": "eadc2aef1a74968424ce079e8ea6afd6831049a68cd867a5a1c0a31e154fe3b7",
+      "num_qubits": 1,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-003",
+      "category": "eligible",
+      "descriptor_sha256": "334eb56facc842c3dbfd05bf98e899c0b472a3e80577b846742e4cfdd221a1a2",
+      "num_qubits": 1,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-004",
+      "category": "eligible",
+      "descriptor_sha256": "60a657b3ddfc50f1bfe85ed2b63db191200b2636b9a3919c7b084d9596baa58e",
+      "num_qubits": 1,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-005",
+      "category": "eligible",
+      "descriptor_sha256": "8b3e28c85e6d987f1941bc419ecd9612bc3e8f704646ab409a68c3ef1d091acb",
+      "num_qubits": 1,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-006",
+      "category": "eligible",
+      "descriptor_sha256": "4d0cdf429c7b7774ce885f25f333e668df2266d07325d9db64d131aef0148c9c",
+      "num_qubits": 1,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-007",
+      "category": "eligible",
+      "descriptor_sha256": "a524f2eb7823fa5ffb25c7389d58f27f545bb331842da194f3989c86312ec64a",
+      "num_qubits": 1,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-008",
+      "category": "eligible",
+      "descriptor_sha256": "5ce4053dcc2ab88501c12df5ce48b47623f20fa54e8307073f685253bd3a9684",
+      "num_qubits": 1,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-009",
+      "category": "eligible",
+      "descriptor_sha256": "532d111bd47dc8b3a2ee05be64107d3891e6bd2bf3797c6e68261d60ef62031d",
+      "num_qubits": 1,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-010",
+      "category": "eligible",
+      "descriptor_sha256": "865f3edfe4a69a5b2b3cf9d9f849f56f0a7694f3a85f36a29c71f728d9badd41",
+      "num_qubits": 1,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-011",
+      "category": "eligible",
+      "descriptor_sha256": "a738e1ebbabb18c068bf82410b867662c970583f283cb0d1ed00c27c3a372540",
+      "num_qubits": 1,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-012",
+      "category": "eligible",
+      "descriptor_sha256": "754414cd21adca3091d3df40e440f081bdeae968b69ee799222d1439d27d91f6",
+      "num_qubits": 1,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-013",
+      "category": "eligible",
+      "descriptor_sha256": "36173364b1a8eb043ac7d7ffeead1b5b96ed87f9a25a46fabc64aa1b824d53c9",
+      "num_qubits": 1,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-014",
+      "category": "eligible",
+      "descriptor_sha256": "836eb1920c67c560f302c82cf4f4eb10114d07ed525cf09742cd185fa01277e0",
+      "num_qubits": 1,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-015",
+      "category": "eligible",
+      "descriptor_sha256": "a7224367fd1437fcdf999bf81a65ba4af09451c2127364fde65895b4e5c51783",
+      "num_qubits": 1,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-016",
+      "category": "eligible",
+      "descriptor_sha256": "b942ace3ea29e1cd79a283f8927c3686b9404b28df7546926e7e1a83e8bdc04d",
+      "num_qubits": 1,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-017",
+      "category": "eligible",
+      "descriptor_sha256": "b36c6a148309b405fd26126c0cea4f1a3c0ef86cf083c606b022132f76d507b8",
+      "num_qubits": 1,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-018",
+      "category": "eligible",
+      "descriptor_sha256": "cd3d77b62e49cba3638b5b16ebf2889da3e8b3738ab49aae66cacd438835bd21",
+      "num_qubits": 1,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-019",
+      "category": "eligible",
+      "descriptor_sha256": "57ebee41afced866dd8a1d959dae8ea4d13382b8308c9a4632838449fdcaed1d",
+      "num_qubits": 1,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-020",
+      "category": "eligible",
+      "descriptor_sha256": "98d81c01707ebf1e055b256b1e7804bcfdbe7dd73934804edc63fd0de41338f7",
+      "num_qubits": 1,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-021",
+      "category": "eligible",
+      "descriptor_sha256": "f865ceaa042e4c9af18b7a39d33e66c1a5531584b0ae64a2ad3557d5a4c0ccd5",
+      "num_qubits": 1,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-022",
+      "category": "eligible",
+      "descriptor_sha256": "714ccac8bda1223a5cd7819dcafbea735c1d0069acccfd95b57bdfa3cb29fa95",
+      "num_qubits": 1,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-023",
+      "category": "eligible",
+      "descriptor_sha256": "af91286ce160a72a1ea7285caf9a5e2e42346ca970e3a52408de19900a5faa46",
+      "num_qubits": 1,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-024",
+      "category": "eligible",
+      "descriptor_sha256": "5c51232b52395048db911d45a26295d521705971ec8d80aafeda5d556bd88c7d",
+      "num_qubits": 1,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-025",
+      "category": "eligible",
+      "descriptor_sha256": "3525a54dedfe98af86a382727c917a21a4eead0c6508138e17ac59cce7da4ac4",
+      "num_qubits": 1,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-026",
+      "category": "eligible",
+      "descriptor_sha256": "7764b4fbdc6c865f5988740979d8af258a17cf4f94e47723c03a0a9565ac27ba",
+      "num_qubits": 1,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-027",
+      "category": "eligible",
+      "descriptor_sha256": "b6a3919a1e9960667e3a0e2709e02f4db657384e2702554320ec902c4612827f",
+      "num_qubits": 1,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-028",
+      "category": "eligible",
+      "descriptor_sha256": "6280a7429938805fbb29d50edeaf40ce249c67de09f8c5151cab829894a7fcf7",
+      "num_qubits": 1,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-029",
+      "category": "eligible",
+      "descriptor_sha256": "6f6232850bccdb026199a1c581d149d5a8641385035059b732c1ba12ac0056f8",
+      "num_qubits": 1,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-030",
+      "category": "eligible",
+      "descriptor_sha256": "754a8a74bc97318fd598578f2224fa2df87c3f311dba97f26c246a72f5974ec7",
+      "num_qubits": 1,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-031",
+      "category": "eligible",
+      "descriptor_sha256": "8f3be84c4bb3d0e249eda2eb42b9cd9655a7ea2e77a8337476b75b0edb4157a3",
+      "num_qubits": 1,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-032",
+      "category": "eligible",
+      "descriptor_sha256": "886a28562918a6b675cb8636d0ea62cca91371ba82ba000fbbcd40858ff567cc",
+      "num_qubits": 1,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-033",
+      "category": "eligible",
+      "descriptor_sha256": "2d32ed1c1aa776ee8ad2e409bb07d08fe9b4611342bdf582bd0f5a133cce16bc",
+      "num_qubits": 1,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-034",
+      "category": "eligible",
+      "descriptor_sha256": "8b1276844d253a9ecf81a9f1c666c92d6a6b8a640cba70403611faa6561bbcc9",
+      "num_qubits": 1,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-035",
+      "category": "eligible",
+      "descriptor_sha256": "c83c4d2fae713d3d8723e9611263e4d88c9a1307b41ca95ea76032348d2c2f95",
+      "num_qubits": 1,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-036",
+      "category": "eligible",
+      "descriptor_sha256": "2a173562ff2e0670f39b463c2d41bb91bb08046aef4b8a2a6456388fcde51f00",
+      "num_qubits": 1,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-037",
+      "category": "eligible",
+      "descriptor_sha256": "938b0f14b278b7318543ec3a0fbdc77716303a168c327b8e30d12cb3dc3fa905",
+      "num_qubits": 1,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-038",
+      "category": "eligible",
+      "descriptor_sha256": "0ccfd7e3d7920eaacf0bf5dacf297e9ac05944c2e284a84eb20625a2606e02da",
+      "num_qubits": 1,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-039",
+      "category": "eligible",
+      "descriptor_sha256": "1879875f5377b7879921af9706b693afb40bfef54b421cb312a6034273738468",
+      "num_qubits": 1,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-040",
+      "category": "eligible",
+      "descriptor_sha256": "d996b052825e557d308928f2c1150b1d471b3f6a4d477f79a419e2777c5d71dc",
+      "num_qubits": 2,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-041",
+      "category": "eligible",
+      "descriptor_sha256": "6bd7626bcef52e968561f8171f4ad049b0683000baf82d62b15acd1c4fd1f413",
+      "num_qubits": 2,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-042",
+      "category": "eligible",
+      "descriptor_sha256": "5ac77ccbb4d6edc68e65c1634e57553c2a37195a865458974b0477f8837705bc",
+      "num_qubits": 2,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-043",
+      "category": "eligible",
+      "descriptor_sha256": "e85afacd1fb26dffb22f8bdb392165bd2aefac7c3801dd47125688ce091c5e74",
+      "num_qubits": 2,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-044",
+      "category": "eligible",
+      "descriptor_sha256": "9c69953a2b31e97a9582427df5656b78784e07399245cc01c36ed756457dafd9",
+      "num_qubits": 2,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-045",
+      "category": "eligible",
+      "descriptor_sha256": "8af8dfdacf6463a3799e105884e1fb2a319a9f608d60e2b03e8a35c4c4d19d81",
+      "num_qubits": 2,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-046",
+      "category": "eligible",
+      "descriptor_sha256": "fb62cf3ac9c66aa598ec055d3ab6060917f7a05cce335126ddf387f683114321",
+      "num_qubits": 2,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-047",
+      "category": "eligible",
+      "descriptor_sha256": "6a9260a38340c278dc37ba362cbe952c0c44dff21d2340cab15d41018ba15e12",
+      "num_qubits": 2,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-048",
+      "category": "eligible",
+      "descriptor_sha256": "ee87cef32966f88c75e0435e6b239fa11742026e02048cef240b3b21b804d6ab",
+      "num_qubits": 2,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-049",
+      "category": "eligible",
+      "descriptor_sha256": "ce2fc32324182ebfd7731411d2389ef688e4746b9517bc0b71d3b04bed527675",
+      "num_qubits": 2,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-050",
+      "category": "eligible",
+      "descriptor_sha256": "24a3427009d0fa0122ce80de9fa2f8f10a2de7e7e2b67a1af22590bb6d8199e3",
+      "num_qubits": 2,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-051",
+      "category": "eligible",
+      "descriptor_sha256": "194a603a764a4361fb2f279631afab0ff15fe4b59704db6e8f165517e827f4e3",
+      "num_qubits": 2,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-052",
+      "category": "eligible",
+      "descriptor_sha256": "14aef0e61ef478b6826a13719d1e4070be38ce1c22b9b224a28d10360f78cf78",
+      "num_qubits": 2,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-053",
+      "category": "eligible",
+      "descriptor_sha256": "c03f4abd7e90149139ad73c941caed0b74363b1b90d9a92857088f0fb6efb37e",
+      "num_qubits": 2,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-054",
+      "category": "eligible",
+      "descriptor_sha256": "6e7f864f0df3bacb39005979edbc30a016e4544c7593d66a773061b368118541",
+      "num_qubits": 2,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-055",
+      "category": "eligible",
+      "descriptor_sha256": "c8e9d04cccd4d21a1d7a467775ac6f9eaa4b6c230f6956843c0966270a6e4b73",
+      "num_qubits": 2,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-056",
+      "category": "eligible",
+      "descriptor_sha256": "1754addbaee2b0e6c81c8129e84e33f043c0dd00056ebd153fb145f20ca8062a",
+      "num_qubits": 2,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-057",
+      "category": "eligible",
+      "descriptor_sha256": "2ff7503eabcc0d6bbc6361205efa4c02cca8a53ed655b07ed76b4ba7e5823ba8",
+      "num_qubits": 2,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-058",
+      "category": "eligible",
+      "descriptor_sha256": "0a0fb72b0733bc181d66713843ddba1be3049e9203da0ad93529cbe4cd9c417e",
+      "num_qubits": 2,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-059",
+      "category": "eligible",
+      "descriptor_sha256": "c92f483113063a9cc4a46a5438d7d5ec974c9807ccfd40ad6f0a508f82f0c6c5",
+      "num_qubits": 2,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-060",
+      "category": "eligible",
+      "descriptor_sha256": "1133e69a521db93da1f1fc1897a81e3c9bf193ecdec59be9dc59a2e1171f2018",
+      "num_qubits": 2,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-061",
+      "category": "eligible",
+      "descriptor_sha256": "18384ef1d1253b6096813765492a00add5902ad81ef625814e714cce3b5d9048",
+      "num_qubits": 2,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-062",
+      "category": "eligible",
+      "descriptor_sha256": "1be69654a68623bf59c9b70d3b1939affb9fa19d8d4bfc1af62691f06bf8570d",
+      "num_qubits": 2,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-063",
+      "category": "eligible",
+      "descriptor_sha256": "46b238fef7ed058fc742bc586d03c64693e5e7ad86d6d51b47de72cfbc8ec207",
+      "num_qubits": 2,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-064",
+      "category": "eligible",
+      "descriptor_sha256": "ea3c610ec2ce643c016ddf8a4264b943f6e7196137bc5882ffcceaf744c6ab6d",
+      "num_qubits": 2,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-065",
+      "category": "eligible",
+      "descriptor_sha256": "286e2fc30d47781335e2ca231793f1bb0bd871b18ce84316d7edf2d03f2b4d15",
+      "num_qubits": 2,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-066",
+      "category": "eligible",
+      "descriptor_sha256": "98ff4a13672c99c0fa07bd6fd6ea7d86998310cd53418085a077037abde8fd59",
+      "num_qubits": 2,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-067",
+      "category": "eligible",
+      "descriptor_sha256": "0cbac578b4c9c4075cb27d10bdd399dc2228e0f24c0ff76a31ccde7b9ed92f27",
+      "num_qubits": 2,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-068",
+      "category": "eligible",
+      "descriptor_sha256": "f64868e4c61e9723e5365d2f1e1b24892df823d0c58ffe6f2ee8a5b0138df3b9",
+      "num_qubits": 2,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-069",
+      "category": "eligible",
+      "descriptor_sha256": "4514acd581083fc3b5739989ed75a2497fc8bf7bbff752c3d78614b7bdba69c6",
+      "num_qubits": 2,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-070",
+      "category": "eligible",
+      "descriptor_sha256": "6593b6ef6b7d2482377a75857cad6831277bf966f6f404bb9c5226a6d5d14b47",
+      "num_qubits": 2,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-071",
+      "category": "eligible",
+      "descriptor_sha256": "d0147936f81faebe1f303fce80d7a80f3c3149b3c50d0639e98eb4972d59a021",
+      "num_qubits": 2,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-072",
+      "category": "eligible",
+      "descriptor_sha256": "1c1fa41f69cfe2293b78ea13acdc739f065eddb4efaa944d28df12085f6a7771",
+      "num_qubits": 2,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-073",
+      "category": "eligible",
+      "descriptor_sha256": "7382690dad6b6360b758e3edb64390931e8684857f1c87cfe96432a3c5db20c8",
+      "num_qubits": 2,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-074",
+      "category": "eligible",
+      "descriptor_sha256": "0ad9039213ed3e9829869a22ae5983729c7d956e0575b529cee6f2448228b8b4",
+      "num_qubits": 2,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-075",
+      "category": "eligible",
+      "descriptor_sha256": "f5a456786ae4657c16ec065272f58aaf644583f02a9b04255bef33e7dc0b6450",
+      "num_qubits": 2,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-076",
+      "category": "eligible",
+      "descriptor_sha256": "ad691587a7a3e27361889d91c056901e35bf48f43fb3453957b2522d0fbd2499",
+      "num_qubits": 2,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-077",
+      "category": "eligible",
+      "descriptor_sha256": "b6d5f57deff6f3ee889fd25703daaced47d44e8df4439bea040c1ddf3ca5b7d5",
+      "num_qubits": 2,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-078",
+      "category": "eligible",
+      "descriptor_sha256": "676fc9b8c46072aab34acaac8e5966a61df5452f87f719638bff202c1c7c88dd",
+      "num_qubits": 2,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-079",
+      "category": "eligible",
+      "descriptor_sha256": "0d18241e90192edf9f43210743c578167ee5a77ff5b705c307782c7118d20d42",
+      "num_qubits": 2,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-080",
+      "category": "eligible",
+      "descriptor_sha256": "7467734145e4b9bdf66d1cb1afca66a0151c53d91b2f31cb327bebec79113564",
+      "num_qubits": 2,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-081",
+      "category": "eligible",
+      "descriptor_sha256": "7d4a89477082227234a5550b307375d92cbcbc42365bb08fed3aafe7c6f22db2",
+      "num_qubits": 2,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-082",
+      "category": "eligible",
+      "descriptor_sha256": "8cdda461695b988dab665041799339f5c186627f24126b47bee94f004060e6ab",
+      "num_qubits": 2,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-083",
+      "category": "eligible",
+      "descriptor_sha256": "0d4dc434a15f05a18b089c44e587549e9446585a22a75a2e3e5217d497746cc2",
+      "num_qubits": 2,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-084",
+      "category": "eligible",
+      "descriptor_sha256": "ae9d1493fcb3c12c8620eb76191a3d3083e7448a52e54967ee4befa633e81729",
+      "num_qubits": 2,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-085",
+      "category": "eligible",
+      "descriptor_sha256": "07998ce77e657fadf283a675e77b4a520918adcfce8dbe1d1f0522693bca5279",
+      "num_qubits": 2,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-086",
+      "category": "eligible",
+      "descriptor_sha256": "6fa77c5d5f5e9289f9d43a7820a6ef78fc19516be824de5120036118e6cdc2f3",
+      "num_qubits": 2,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-087",
+      "category": "eligible",
+      "descriptor_sha256": "3dc3e4a4b6f740ab009116b6c0ec6ef8762a53c062144d349787b4b1abfc539f",
+      "num_qubits": 2,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-088",
+      "category": "eligible",
+      "descriptor_sha256": "231f361efd64792b6ad776f378309950917581564de3198a506e4c774975d982",
+      "num_qubits": 2,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-089",
+      "category": "eligible",
+      "descriptor_sha256": "dbf7f526408c321b083054112a1950f555b290d537de74a1830e7943cc8d2313",
+      "num_qubits": 2,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-090",
+      "category": "eligible",
+      "descriptor_sha256": "cb90698702a074d562cd8def8a528a61c144d630b84402ab19fc539becaede77",
+      "num_qubits": 2,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-091",
+      "category": "eligible",
+      "descriptor_sha256": "eab6e9fec1b3d905b5b33337b7675a1089ea8182c8254b81603c72a65d2c93d1",
+      "num_qubits": 2,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-092",
+      "category": "eligible",
+      "descriptor_sha256": "7ffc9a4ff3d6fcee2ae278d70cee671dcc870b1f6229b666412837bd35338121",
+      "num_qubits": 2,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-093",
+      "category": "eligible",
+      "descriptor_sha256": "a1580cb9e82856c35a63f045fdf5aa0d22cc8254579cbada4f148954772de50c",
+      "num_qubits": 2,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-094",
+      "category": "eligible",
+      "descriptor_sha256": "8b8b4c7a3d2a4095ec063c0942093eb63feea309475be428cce2f528e129dff0",
+      "num_qubits": 2,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-095",
+      "category": "eligible",
+      "descriptor_sha256": "6dcd80d1fe91b3b62ea705790a95a52b17c40bc1ed805800ce75cf2e4ae445a3",
+      "num_qubits": 2,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-096",
+      "category": "eligible",
+      "descriptor_sha256": "670aff6fa40f4c85a90026e6dcc1abd53a767b2b03c0d11a949be8b2b16d0ce1",
+      "num_qubits": 2,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-097",
+      "category": "eligible",
+      "descriptor_sha256": "6b67818994548a37eebe4416cd46b932e070b7a80b6bb455ae8aaec52e039e3b",
+      "num_qubits": 2,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-098",
+      "category": "eligible",
+      "descriptor_sha256": "3210d2bb1b617230a0bde08c04d9e4247c9fed350793fdf8b80c08ab012441b9",
+      "num_qubits": 2,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-099",
+      "category": "eligible",
+      "descriptor_sha256": "65e0dcf50ae849ce97c1ede4993362d6f898359511f292f956884153149f3433",
+      "num_qubits": 2,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-100",
+      "category": "eligible",
+      "descriptor_sha256": "4a2aca857aad907a5d72e8ef2676cbf28d34d7654170a5c06ff1fc936fbee928",
+      "num_qubits": 3,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-101",
+      "category": "eligible",
+      "descriptor_sha256": "1b882ce3b80aaebe1a0a1342505115c3c22edcec1bbdb017f4bd6ffebd9b2692",
+      "num_qubits": 3,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-102",
+      "category": "eligible",
+      "descriptor_sha256": "1c8794612de175b9e32713df40c7cfd86434b5d0e69c2f635f328534efc49a8f",
+      "num_qubits": 3,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-103",
+      "category": "eligible",
+      "descriptor_sha256": "fa2608ddbedb253557fcafe379936114ae0c0dade5e3e2590886671189ee1cd7",
+      "num_qubits": 3,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-104",
+      "category": "eligible",
+      "descriptor_sha256": "edb45c2cc2b20fc94625e8a12398722e5d359fda0196c4d461ae29f48fb6bf97",
+      "num_qubits": 3,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-105",
+      "category": "eligible",
+      "descriptor_sha256": "411fa2896e70ae30895516cf294ef8b5a65664bc663a814227bb19a242fc6c71",
+      "num_qubits": 3,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-106",
+      "category": "eligible",
+      "descriptor_sha256": "1215bcd358c8e11dda5f6fcfebfed6698540ecfa7d8f1009e3eebbf2fc456090",
+      "num_qubits": 3,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-107",
+      "category": "eligible",
+      "descriptor_sha256": "5355bbbd778d8d5d39beda462636ef96933895f41c305f114479406c4e39821d",
+      "num_qubits": 3,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-108",
+      "category": "eligible",
+      "descriptor_sha256": "2a9464c3dd0438ce07bb070bee387b1959fbf2ad80407a5ff9e21a36222018fc",
+      "num_qubits": 3,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-109",
+      "category": "eligible",
+      "descriptor_sha256": "182aadf4260626b97609c2b400d2786e64d531fb009ce87d480b5a23fd3dc61e",
+      "num_qubits": 3,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-110",
+      "category": "eligible",
+      "descriptor_sha256": "3c0a34c0aba75342d64a986307fe5edf905209daf322ae04e931f0ae494c70d4",
+      "num_qubits": 3,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-111",
+      "category": "eligible",
+      "descriptor_sha256": "257e028465959ab0966e5e87f2616ebe9ff748b2d7c54034b63c143e54cebd79",
+      "num_qubits": 3,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-112",
+      "category": "eligible",
+      "descriptor_sha256": "22113f23300bc3d3235ab056f84f72d45ea39d5cd49fed4a54ac3c7197732449",
+      "num_qubits": 3,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-113",
+      "category": "eligible",
+      "descriptor_sha256": "685d0d40f0cd5d0d6b030c9d9c74d56131dcd064b50bdfaa446ec30fbb2dd27e",
+      "num_qubits": 3,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-114",
+      "category": "eligible",
+      "descriptor_sha256": "cc0427d27805c43504d615d2e4a7a3e8d624cbe8de4dd0e1843e89356c2dca7f",
+      "num_qubits": 3,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-115",
+      "category": "eligible",
+      "descriptor_sha256": "78526b9d82bf072335bb0f234fb15eddee0ec6615c1c079e8ed04aff09e6b7a0",
+      "num_qubits": 3,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-116",
+      "category": "eligible",
+      "descriptor_sha256": "8811695f91b4ce874b35a517aa564217aad0bd67e549f2bb170916a638029a49",
+      "num_qubits": 3,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-117",
+      "category": "eligible",
+      "descriptor_sha256": "ae300ecd0179cd227b0d8dafb46a3f518c8a513ba2f28ba426b4852655138f90",
+      "num_qubits": 3,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-118",
+      "category": "eligible",
+      "descriptor_sha256": "df2aeb95d05f36544c0d5a9c277ec7cc00b2eea2c879b695484b57d237524954",
+      "num_qubits": 3,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-119",
+      "category": "eligible",
+      "descriptor_sha256": "b97038f939f98503a8352ab91f5f583c8ddf0b825df7a2a7f438054582341c9b",
+      "num_qubits": 3,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-120",
+      "category": "eligible",
+      "descriptor_sha256": "4409e087c9bb99feb22d023e213a5fe9dc9d8927541874c5be5d73480fac604f",
+      "num_qubits": 3,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-121",
+      "category": "eligible",
+      "descriptor_sha256": "f2bb52379049463325e3ed6c304c7189a4cb4023eefe5d79442a145bdf888357",
+      "num_qubits": 3,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-122",
+      "category": "eligible",
+      "descriptor_sha256": "f09ea59220cd86b0cf2a1047d9d99033b4392335bb6b29116c2632759ac18817",
+      "num_qubits": 3,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-123",
+      "category": "eligible",
+      "descriptor_sha256": "00ffbc099f61cf6578b35fcc87adeb5406b60635455f2ef96bafcdcaa2d0a7ac",
+      "num_qubits": 3,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-124",
+      "category": "eligible",
+      "descriptor_sha256": "ed82939ee1d45b3e4d828de74b22e227cd09100a6e400b68d73e61d5bae2bfec",
+      "num_qubits": 3,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-125",
+      "category": "eligible",
+      "descriptor_sha256": "74a44d1ed15861a61854dc4f08dc7fd66eee774146008abbf401654db11456a9",
+      "num_qubits": 3,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-126",
+      "category": "eligible",
+      "descriptor_sha256": "39b65cdfa417d583fc0c7ac37650582c15251237d167b035088e7305810b55ac",
+      "num_qubits": 3,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-127",
+      "category": "eligible",
+      "descriptor_sha256": "b75e8a23d814cd55250344a2194cdc468a2de8d23a52e865e0b1d6458bbc616a",
+      "num_qubits": 3,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-128",
+      "category": "eligible",
+      "descriptor_sha256": "1edbe4152b31747e28e42ea4aea5dce459d3c816330adef5fce3acdcdd1ce77a",
+      "num_qubits": 3,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-129",
+      "category": "eligible",
+      "descriptor_sha256": "0ea29faeb7e43be6c6ef795bf2043cbc952d6a0e008d1fa6732e8fb4cdc4df93",
+      "num_qubits": 3,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-130",
+      "category": "eligible",
+      "descriptor_sha256": "fad2cb3572f470e0bb90d8804bcb69318574354ced19799fe19b495b024ea1d6",
+      "num_qubits": 3,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-131",
+      "category": "eligible",
+      "descriptor_sha256": "1243dd15c7c6d0711c4416dc16eaff94b74dfa09e34d32aee0572d52da562a87",
+      "num_qubits": 3,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-132",
+      "category": "eligible",
+      "descriptor_sha256": "8f714ae2a3c394c315213bc24bd92a8ef591f83bc6f40b97086e41e97de54e39",
+      "num_qubits": 3,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-133",
+      "category": "eligible",
+      "descriptor_sha256": "f3e45058beacc6d953820ac87dfae4c04639e6af4d3e0b88feed95e75c32210a",
+      "num_qubits": 3,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-134",
+      "category": "eligible",
+      "descriptor_sha256": "32e3d7790e4ec5e1d28b9965fe097e4f492ff7e08eb479678c67a0163bb54b30",
+      "num_qubits": 3,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-135",
+      "category": "eligible",
+      "descriptor_sha256": "e1476286da8adc9188d44d86fc1f083916d2375d47b7aff8bad8ed9d0588631d",
+      "num_qubits": 3,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-136",
+      "category": "eligible",
+      "descriptor_sha256": "3017fe2f6a30c0d280ace8cd06f597bbb1d0742bcad0fd13cd2406d0f93f7ac4",
+      "num_qubits": 3,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-137",
+      "category": "eligible",
+      "descriptor_sha256": "9847d77525f315c75bc9a23e456a4fc64e573d243f5d0a19840ff30f2b6df5ff",
+      "num_qubits": 3,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-138",
+      "category": "eligible",
+      "descriptor_sha256": "9aac55920b474ab3eb188bcd9efcc5fda2d6eb9439bde26c7e5377729f60f1b3",
+      "num_qubits": 3,
+      "operation_count": 16
+    },
+    {
+      "case_id": "eligible-139",
+      "category": "eligible",
+      "descriptor_sha256": "ad96f4c9f356ac18d28b4231220f88cffcea4eedb68bfdd2fd9aba4e224efc56",
+      "num_qubits": 3,
+      "operation_count": 17
+    },
+    {
+      "case_id": "eligible-140",
+      "category": "eligible",
+      "descriptor_sha256": "cd9491bbf64f383a7d78ef6c7a55bbd9e52fe5dcb53a3a4a745e1e905dd7f37b",
+      "num_qubits": 3,
+      "operation_count": 18
+    },
+    {
+      "case_id": "eligible-141",
+      "category": "eligible",
+      "descriptor_sha256": "e06cf49c6673b53530166ad092e963f567eafceea3c580210aef05c4b3fb4353",
+      "num_qubits": 3,
+      "operation_count": 19
+    },
+    {
+      "case_id": "eligible-142",
+      "category": "eligible",
+      "descriptor_sha256": "c02b53b15be88f64fc8f6160f3bf0eee95a1042763b9aea6b6e635eb9b2915d5",
+      "num_qubits": 3,
+      "operation_count": 20
+    },
+    {
+      "case_id": "eligible-143",
+      "category": "eligible",
+      "descriptor_sha256": "f1f365ba509cbf62fe79e6bfbb84835372cf0a2c1e28b3a910d597f88bb2614c",
+      "num_qubits": 3,
+      "operation_count": 21
+    },
+    {
+      "case_id": "eligible-144",
+      "category": "eligible",
+      "descriptor_sha256": "2d7920164a93a04e431eb8bb6d6f5f24c18fc2bddfee83a801d1e4efabbb6f27",
+      "num_qubits": 3,
+      "operation_count": 22
+    },
+    {
+      "case_id": "eligible-145",
+      "category": "eligible",
+      "descriptor_sha256": "28d2a38b1167e318c45ff20246ef909ed832d99d0bd61fca465a7c512b808272",
+      "num_qubits": 3,
+      "operation_count": 23
+    },
+    {
+      "case_id": "eligible-146",
+      "category": "eligible",
+      "descriptor_sha256": "baad32cf209552f415e02d9ce12df4bb169f7c2f065adbcd65964a3750a5b70f",
+      "num_qubits": 3,
+      "operation_count": 24
+    },
+    {
+      "case_id": "eligible-147",
+      "category": "eligible",
+      "descriptor_sha256": "d072b71e1e42ba3d38741e77f7af883a900043d8972ad748c86c200e188d6177",
+      "num_qubits": 3,
+      "operation_count": 4
+    },
+    {
+      "case_id": "eligible-148",
+      "category": "eligible",
+      "descriptor_sha256": "04da20f7d15760c98e200ddcf0cbacb08b6b7780af6bd98f21baad04d987f61a",
+      "num_qubits": 3,
+      "operation_count": 5
+    },
+    {
+      "case_id": "eligible-149",
+      "category": "eligible",
+      "descriptor_sha256": "2d606f5653e4e9663c055fe8cb4d4ec0e46de9fa92c88cf41d6cded049c7359d",
+      "num_qubits": 3,
+      "operation_count": 6
+    },
+    {
+      "case_id": "eligible-150",
+      "category": "eligible",
+      "descriptor_sha256": "5b52c3fec6542fd9a7847a08b41abc8fdfa5378cc0a5e7d3789a04852ad971de",
+      "num_qubits": 3,
+      "operation_count": 7
+    },
+    {
+      "case_id": "eligible-151",
+      "category": "eligible",
+      "descriptor_sha256": "946d9a1db2f0ec461101a7469e0b4eafcf30efd3a5036d1d9fc12110eca77649",
+      "num_qubits": 3,
+      "operation_count": 8
+    },
+    {
+      "case_id": "eligible-152",
+      "category": "eligible",
+      "descriptor_sha256": "a41c6b2eff98b8d33320baf2aeab51eba2da055da1b75f1c45fbd93d4c261028",
+      "num_qubits": 3,
+      "operation_count": 9
+    },
+    {
+      "case_id": "eligible-153",
+      "category": "eligible",
+      "descriptor_sha256": "80af735c62ba9f9570678794a94a561c196007e045d4fedca4ddbcc68d166722",
+      "num_qubits": 3,
+      "operation_count": 10
+    },
+    {
+      "case_id": "eligible-154",
+      "category": "eligible",
+      "descriptor_sha256": "bf966e4654eb0f5b81144334fb16b0b02d55c557065cdf38e655e4d2b3b86107",
+      "num_qubits": 3,
+      "operation_count": 11
+    },
+    {
+      "case_id": "eligible-155",
+      "category": "eligible",
+      "descriptor_sha256": "cfe1bf9029c6d2c3598b50e50066950ed6bccfdc6439e783938822ef0a930772",
+      "num_qubits": 3,
+      "operation_count": 12
+    },
+    {
+      "case_id": "eligible-156",
+      "category": "eligible",
+      "descriptor_sha256": "cd85ef28c230217f5d941d354d6f0920104eb121d8bdafdb720176fa5e0f569f",
+      "num_qubits": 3,
+      "operation_count": 13
+    },
+    {
+      "case_id": "eligible-157",
+      "category": "eligible",
+      "descriptor_sha256": "31ed77c8299c654cf608c874efcddf7d4a4d3b01dd45b48d1e7bce81ef278569",
+      "num_qubits": 3,
+      "operation_count": 14
+    },
+    {
+      "case_id": "eligible-158",
+      "category": "eligible",
+      "descriptor_sha256": "992b0d76796ef157782710e70fd42de201e676cf896bbbb5cdfb184765283663",
+      "num_qubits": 3,
+      "operation_count": 15
+    },
+    {
+      "case_id": "eligible-159",
+      "category": "eligible",
+      "descriptor_sha256": "9eb990035ffb0d7d2bc7ffde49997dfb9ab3ea165ac854229817dc0db3e587b1",
+      "num_qubits": 3,
+      "operation_count": 16
+    },
+    {
+      "case_id": "counterexample-000",
+      "category": "counterexample",
+      "mutation": "dropped_gate"
+    },
+    {
+      "case_id": "counterexample-001",
+      "category": "counterexample",
+      "mutation": "changed_angle"
+    },
+    {
+      "case_id": "counterexample-002",
+      "category": "counterexample",
+      "mutation": "reversed_noncommuting_order"
+    },
+    {
+      "case_id": "counterexample-003",
+      "category": "counterexample",
+      "mutation": "changed_control"
+    },
+    {
+      "case_id": "counterexample-004",
+      "category": "counterexample",
+      "mutation": "dropped_gate"
+    },
+    {
+      "case_id": "counterexample-005",
+      "category": "counterexample",
+      "mutation": "changed_angle"
+    },
+    {
+      "case_id": "counterexample-006",
+      "category": "counterexample",
+      "mutation": "reversed_noncommuting_order"
+    },
+    {
+      "case_id": "counterexample-007",
+      "category": "counterexample",
+      "mutation": "changed_control"
+    },
+    {
+      "case_id": "counterexample-008",
+      "category": "counterexample",
+      "mutation": "dropped_gate"
+    },
+    {
+      "case_id": "counterexample-009",
+      "category": "counterexample",
+      "mutation": "changed_angle"
+    },
+    {
+      "case_id": "counterexample-010",
+      "category": "counterexample",
+      "mutation": "reversed_noncommuting_order"
+    },
+    {
+      "case_id": "counterexample-011",
+      "category": "counterexample",
+      "mutation": "changed_control"
+    },
+    {
+      "case_id": "counterexample-012",
+      "category": "counterexample",
+      "mutation": "dropped_gate"
+    },
+    {
+      "case_id": "counterexample-013",
+      "category": "counterexample",
+      "mutation": "changed_angle"
+    },
+    {
+      "case_id": "counterexample-014",
+      "category": "counterexample",
+      "mutation": "reversed_noncommuting_order"
+    },
+    {
+      "case_id": "counterexample-015",
+      "category": "counterexample",
+      "mutation": "changed_control"
+    },
+    {
+      "case_id": "counterexample-016",
+      "category": "counterexample",
+      "mutation": "dropped_gate"
+    },
+    {
+      "case_id": "counterexample-017",
+      "category": "counterexample",
+      "mutation": "changed_angle"
+    },
+    {
+      "case_id": "counterexample-018",
+      "category": "counterexample",
+      "mutation": "reversed_noncommuting_order"
+    },
+    {
+      "case_id": "counterexample-019",
+      "category": "counterexample",
+      "mutation": "changed_control"
+    },
+    {
+      "boundary": "four_qubits",
+      "case_id": "unsupported-000",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "zero_qubits",
+      "case_id": "unsupported-001",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "classical_register",
+      "case_id": "unsupported-002",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "measurement",
+      "case_id": "unsupported-003",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "symbolic_parameter",
+      "case_id": "unsupported-004",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "nonzero_global_phase",
+      "case_id": "unsupported-005",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "reset",
+      "case_id": "unsupported-006",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "barrier",
+      "case_id": "unsupported-007",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "delay",
+      "case_id": "unsupported-008",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "initialize",
+      "case_id": "unsupported-009",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "unitary",
+      "case_id": "unsupported-010",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "ccx",
+      "case_id": "unsupported-011",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "u",
+      "case_id": "unsupported-012",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "sx",
+      "case_id": "unsupported-013",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "cp",
+      "case_id": "unsupported-014",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "ch",
+      "case_id": "unsupported-015",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "nonfinite_parameter",
+      "case_id": "unsupported-016",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "custom_gate",
+      "case_id": "unsupported-017",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "malformed_missing_angle",
+      "case_id": "unsupported-018",
+      "category": "unsupported"
+    },
+    {
+      "boundary": "malformed_unknown_token",
+      "case_id": "unsupported-019",
+      "category": "unsupported"
+    }
+  ],
+  "counterexample_count": 20,
+  "eligible_count": 160,
+  "schema_version": "rqm.qiskit-openqasm-corpus.v0.1",
+  "seed": 4430,
+  "supported_gates": [
+    "id",
+    "x",
+    "y",
+    "z",
+    "h",
+    "s",
+    "t",
+    "rx",
+    "ry",
+    "rz",
+    "p",
+    "cx",
+    "cy",
+    "cz",
+    "swap",
+    "iswap",
+    "rxx",
+    "ryy",
+    "rzz"
+  ],
+  "unsupported_count": 20
+}

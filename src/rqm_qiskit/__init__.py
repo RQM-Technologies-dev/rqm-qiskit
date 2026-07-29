@@ -116,6 +116,19 @@ from rqm_qiskit.errors import (
 )
 from rqm_qiskit.synthesis import direct_rq_circuit, synthesize_su4_block
 from rqm_qiskit.capabilities import qiskit_two_qubit_cost_model
+from rqm_qiskit.assurance import (
+    MAX_ASSURANCE_QUBITS,
+    SUPPORTED_QISKIT_GATES,
+    QiskitAssuranceResult,
+    QiskitExportResult,
+    QiskitImportReport,
+    QiskitImportResult,
+    QiskitUnsupportedReason,
+    assure_qiskit_circuit,
+    export_openqasm3,
+    import_openqasm3,
+    import_qiskit_circuit,
+)
 
 __all__ = [
     # Tier 1 — Execution
@@ -141,6 +154,17 @@ __all__ = [
     "synthesize_su4_block",
     "direct_rq_circuit",
     "qiskit_two_qubit_cost_model",
+    "import_qiskit_circuit",
+    "import_openqasm3",
+    "assure_qiskit_circuit",
+    "export_openqasm3",
+    "QiskitUnsupportedReason",
+    "QiskitImportReport",
+    "QiskitImportResult",
+    "QiskitAssuranceResult",
+    "QiskitExportResult",
+    "SUPPORTED_QISKIT_GATES",
+    "MAX_ASSURANCE_QUBITS",
     # Errors
     "RQMQiskitError",
     "BackendNotFoundError",
