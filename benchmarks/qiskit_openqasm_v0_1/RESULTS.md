@@ -6,16 +6,18 @@ This is local SDK and numerical-operator evidence. It is not simulator, emulator
 
 ## Primary results
 
-- Verified eligible circuits: 91/160 (56.9%).
+- Verified eligible circuits: 160/160 (100.0%).
 - False equivalence decisions: 0.
 - Unsupported inputs failing closed: 20/20.
 - Withheld-candidate disclosures: 0.
-- Median adapter overhead versus compiler-only optimization: 1454.3%.
-- Mean source/RQM/Qiskit-level-3 gate counts: 13.68 / 9.45 / 7.19.
+- Median adapter overhead versus compiler-only optimization: 813.1%.
+- Mean source/RQM/Qiskit-level-3 gate counts: 13.68 / 8.07 / 7.24.
+
+The coverage change comes from recognizing `iSWAP` in the compiler verifier's existing supported-unitary path. No tolerance or verification boundary was relaxed.
 
 ## Release gates
 
-- FAIL — verification coverage at least 95 percent.
+- PASS — verification coverage at least 95 percent.
 - PASS — zero false equivalence.
 - PASS — zero withheld candidate disclosures.
 - PASS — all unsupported fail closed.
