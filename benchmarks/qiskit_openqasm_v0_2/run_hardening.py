@@ -125,7 +125,10 @@ def main() -> int:
         REPORT_PATH,
     ]
     HASHES_PATH.write_text(
-        "".join(f"{_sha256(path)}  {path.relative_to(ROOT.parent)}\n" for path in paths),
+        "".join(
+            f"{_sha256(path)}  {path.relative_to(ROOT.parent.parent)}\n"
+            for path in paths
+        ),
         encoding="utf-8",
     )
     return 0
