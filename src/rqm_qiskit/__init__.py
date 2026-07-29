@@ -189,9 +189,9 @@ __all__ = [
     "match_gate",
 ]
 
-__version__ = "0.3.0"
 try:
-    from importlib.metadata import version, PackageNotFoundError
+    from importlib.metadata import PackageNotFoundError, version
+
     __version__ = version("rqm-qiskit")
 except PackageNotFoundError:
-    pass
+    __version__ = "0.0.0+unknown"
