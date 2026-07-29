@@ -4,6 +4,32 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.3.0](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.2.0...v0.3.0) (2026-07-29)
+
+
+### Features
+
+* add fail-closed Qiskit assurance bridge ([#17](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/17)) ([73c987e](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/73c987e6811da99ee0f6cc1e3bf0c83f9f3c4070))
+
+
+### Bug Fixes
+
+* dispatch release pull request CI reliably ([#23](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/23)) ([5f7fbdf](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/5f7fbdf1648de28b040c73703f30c1994048e11f))
+* keep generated releases verifiable ([#24](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/24)) ([cb3c058](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/cb3c058e0656b7f66dcb4152b8d38c4288c1e74d))
+* preserve serverless QASM worker imports ([#30](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/30)) ([3984c3c](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/3984c3cd868b6237b380c44f3e641ad8ba2d4510))
+* repair latency evidence serialization ([#27](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/27)) ([ca9937c](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca9937c12a6c2d8de264826999244fc6758d1005))
+
+
+### Performance Improvements
+
+* preregister Qiskit assurance latency hardening ([#26](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/26)) ([13da830](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/13da830d703b033e8d20150e1041453587ed76b0))
+
+
+### Documentation
+
+* name quantum-compiler-api as the canonical service ([#29](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/29)) ([ca03735](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca03735b6ba8a2d5857052c82bc52f76e683f7ed))
+* publish Qiskit latency gate result ([#28](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/28)) ([a5a6f9f](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/a5a6f9f2eba6d1f01a2e7f9d715175307265d7c6))
+
 ## [0.3.0] — EXP-012 Quaternion-Cartan SU(4) Promotion
 
 - Added target-local `Q3`, `QF`, `QC`, `QX`, and direct `RQ` synthesis
