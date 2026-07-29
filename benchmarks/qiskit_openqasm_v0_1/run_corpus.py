@@ -461,11 +461,6 @@ def run_corpus() -> dict[str, Any]:
         "unsupported_cases": unsupported,
         "notes": [
             "Deterministic evidence identity is established by API repeat-request tests.",
-            (
-                "The coverage rerun includes the compiler verifier's existing iSWAP "
-                "unitary support in its supported-gate allowlist; no tolerance or "
-                "verification boundary was relaxed."
-            ),
             "Qiskit level-3 metrics are a neutral comparator, not a superiority claim.",
             "No simulator, emulator, provider, or QPU execution was performed.",
         ],
@@ -491,8 +486,6 @@ def write_report(results: dict[str, Any]) -> None:
         f"- Withheld-candidate disclosures: {summary['candidate_disclosure_count']}.",
         f"- Median adapter overhead versus compiler-only optimization: {summary['median_adapter_overhead_ratio']:.1%}.",
         f"- Mean source/RQM/Qiskit-level-3 gate counts: {summary['mean_source_gate_count']:.2f} / {summary['mean_rqm_returned_gate_count']:.2f} / {summary['mean_qiskit_level3_gate_count']:.2f}.",
-        "",
-        "The coverage change comes from recognizing `iSWAP` in the compiler verifier's existing supported-unitary path. No tolerance or verification boundary was relaxed.",
         "",
         "## Release gates",
         "",
