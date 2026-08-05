@@ -1,6 +1,6 @@
 # rqm-qiskit
 
-**IBM Quantum / Qiskit execution bridge for the RQM ecosystem.**
+**Quaternionic geometric lens and IBM Quantum / Qiskit execution bridge for the RQM ecosystem.**
 
 Receives compiler-optimized circuit representations and lowers them into Qiskit
 `QuantumCircuit` objects for execution on Aer simulators or IBM Quantum hardware.
@@ -15,6 +15,19 @@ This bridge lowers standard-compatible compiler semantics into Qiskit. It
 preserves tested phase-sensitive `SU(2)` behavior and ordered composition; it
 does not implement alternative mechanics or establish a quantum-hardware
 advantage. See [RQM_TECHNICAL_CANON_V2.md](RQM_TECHNICAL_CANON_V2.md).
+
+## Version 0.4 candidate status
+
+The unreleased 0.4 candidate adds a standard-compatible quaternion/SU(2)/SU(4)
+view of ordinary Qiskit circuits. EXP-014 supports one narrow benefit: equivalent
+one-qubit gate spellings converge to a deterministic phase-aware SU(2)
+fingerprint. Native one-qubit and bounded SU(4) circuit cost were parity.
+
+The candidate is **not release-ready**. Direct and OpenQASM p95 latency gates
+pass, but median adapter overhead remains about `98.6%` of compiler
+optimize-and-verify time versus the frozen `25%` requirement. See the
+[public evidence packet](benchmarks/rqm_geometric_lens_v0_4/) and
+[performance result](benchmarks/rqm_geometric_lens_v0_4/PERFORMANCE_RESULTS.md).
 
 ---
 
@@ -114,6 +127,16 @@ To import and export OpenQASM 3:
 pip install "rqm-qiskit[qasm3]"
 ```
 
+After 0.4 is published, the five-minute circuit-lens installation will be:
+
+```bash
+pip install "rqm-qiskit[cli]"
+rqm-qiskit analyze circuit.qasm --report report.json
+```
+
+For the unreleased candidate, install this checkout with
+`pip install -e ".[cli]"` instead.
+
 To use real IBM Quantum backends:
 
 ```bash
@@ -131,6 +154,30 @@ pip install -e ".[dev,simulator]"
 ---
 
 ## Quickstart
+
+### Geometric circuit lens
+
+```python
+from qiskit import QuantumCircuit
+from rqm_qiskit import analyze_qiskit_circuit, canonical_su2_fingerprint
+
+circuit = QuantumCircuit(1, 1)
+circuit.rz(0.37, 0)
+circuit.ry(-0.81, 0)
+circuit.rz(1.13, 0)
+circuit.measure(0, 0)
+
+report = analyze_qiskit_circuit(circuit, optimize=True)
+print(report.local_geometry[0]["canonical_quaternion"])
+print(canonical_su2_fingerprint(circuit))
+print(report.measurement_predictions)
+```
+
+The report is JSON-safe through `report.to_dict()`. The quaternionic
+wavefunction is a geometric regrouping of the standard complex spinor; the
+report does not claim additional quantum information or a new observable.
+
+### Existing execution bridge
 
 ```python
 from rqm_compiler import Circuit
@@ -163,16 +210,16 @@ See the [Public API](#public-api) section for the full tier breakdown.
 
 ## Fail-closed Qiskit and OpenQASM assurance
 
-The v0.1 assurance bridge accepts bound, standalone unitary Qiskit circuits on
-one to three qubits. It imports the supported gate subset into the compiler,
-delegates optimization and semantic verification to `rqm-compiler`, and lowers
-released output through the canonical Qiskit translator. A changed circuit is
-returned only when the compiler verifies it; every unsupported, unresolved,
-counterexample, or internal-error outcome returns the original circuit.
+Whole-circuit dense verification accepts bound standalone unitary Qiskit
+circuits on one to three qubits. Larger circuits are split into deterministic
+contiguous regions of at most three qubits; all changes are withheld unless
+every changed region verifies. Terminal measurements and their original
+quantum/classical register mapping are preserved exactly. A changed circuit is
+returned only after proof-gated compiler verification.
 
 ```python
 from qiskit import QuantumCircuit, qasm3
-from rqm_qiskit import assure_qiskit_circuit, import_openqasm3
+from rqm_qiskit import assure_openqasm3, assure_qiskit_circuit
 
 source = QuantumCircuit(2)
 source.h(0)
@@ -181,17 +228,17 @@ source.cx(0, 1)
 result = assure_qiskit_circuit(source)
 assert result.assurance_status in {"VERIFIED", "FALLBACK_ORIGINAL"}
 
-# Use Qiskit's official OpenQASM 3 serializer for API/Studio transport.
+# One-step OpenQASM assurance returns the exact source on fallback.
 openqasm_source = qasm3.dumps(source)
-import_result = import_openqasm3(openqasm_source)
+qasm_result = assure_openqasm3(openqasm_source)
 ```
 
 Supported gates are `id`, `x`, `y`, `z`, `h`, `s`, `t`, `rx`, `ry`, `rz`,
-`p`, `cx`, `cy`, `cz`, `swap`, `iswap`, `rxx`, `ryy`, and `rzz`. The bridge
-rejects symbolic parameters, non-finite values, nonzero or symbolic global
-phase, measurement and classical data, reset, delay, barriers, control flow,
-initialization, custom/unitary instructions, unsupported gates, and circuits
-larger than three qubits. It never performs partial translation.
+`p`, `cx`, `cy`, `cz`, `swap`, `iswap`, `rxx`, `ryy`, `rzz`, and barriers.
+The bridge rejects symbolic parameters, non-finite values, nonzero or symbolic
+global phase, reset, delay, mid-circuit measurement, classical control flow,
+initialization, custom/unitary instructions, and unsupported gates. It never
+silently drops an instruction.
 
 Verification is bounded canonical or numerical verification of standalone
 unitary semantics up to global phase. It is not theorem-prover formal
@@ -209,6 +256,10 @@ The v0.3 run retained 100% eligible verification coverage and every fail-closed
 gate, but its `191.19%` median adapter overhead still exceeds the frozen `25%`
 release gate. Version 0.3.0 therefore remains unreleased.
 
+The 0.4 candidate separates direct Qiskit and OpenQASM timing. Its absolute
+latency gates pass, while the relative adapter-overhead gate remains open; 0.4
+therefore also remains unreleased.
+
 ---
 
 ## Public API
@@ -224,6 +275,11 @@ from rqm_qiskit import (
     get_ibmq_provider,      # IBM Quantum provider
     QiskitJob,              # async job handle
     QiskitResult,           # structured result wrapper
+    analyze_qiskit_circuit, # versioned quaternion/SU(2)/SU(4) report
+    analyze_qiskit_state,   # bounded one- and two-qubit state report
+    canonical_su2_fingerprint,
+    assure_openqasm3,
+    async_assure_openqasm3,
 )
 ```
 

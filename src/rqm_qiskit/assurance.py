@@ -4,14 +4,17 @@ This module owns format adaptation only.  Circuit optimization and semantic
 verification remain delegated to :mod:`rqm_compiler`, while lowering back to
 Qiskit always routes through :func:`compiled_circuit_to_qiskit`.
 
-The v0.1 boundary intentionally accepts only bound, standalone unitary
-circuits on one to three qubits.  Equivalence is established up to global
+The v0.4 boundary accepts bound unitary regions of at most three qubits and an
+optional terminal-measurement suffix. Larger circuits are partitioned at
+measurement and barrier boundaries and are changed only when every affected
+region is independently verified. Equivalence is established up to global
 phase; callers must not treat a returned circuit as safe to promote directly
 to a coherently controlled subcircuit.
 """
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 import hashlib
 import io
@@ -54,10 +57,11 @@ SUPPORTED_QISKIT_GATES: tuple[str, ...] = (
     "rxx",
     "ryy",
     "rzz",
+    "barrier",
 )
 MAX_ASSURANCE_QUBITS = 3
 
-_NO_PARAM_GATES = frozenset({"id", "x", "y", "z", "h", "s", "t"})
+_NO_PARAM_GATES = frozenset({"id", "x", "y", "z", "h", "s", "t", "barrier"})
 _ANGLE_GATES = frozenset({"rx", "ry", "rz", "p", "rxx", "ryy", "rzz"})
 _CONTROLLED_GATES = frozenset({"cx", "cy", "cz"})
 _TWO_TARGET_GATES = frozenset({"swap", "iswap", "rxx", "ryy", "rzz"})
@@ -69,7 +73,8 @@ _PARSE_LOCATION_PATTERNS = (
     re.compile(r"line\s+(?P<line>\d+).*column\s+(?P<column>\d+)", re.IGNORECASE),
 )
 _LIMITATIONS = (
-    "Supports only bound standalone unitary circuits on one to three qubits.",
+    "Dense whole-circuit assurance is limited to one to three qubits; larger circuits use verified regions of at most three qubits.",
+    "Only terminal measurement suffixes are preserved; mid-circuit measurement and control flow fail closed.",
     "Semantic equivalence is bounded numerical or canonical verification up to global phase.",
     "The result is not formal verification and contains no simulator, emulator, or QPU evidence.",
     "Do not promote the returned circuit directly to a coherently controlled subcircuit.",
@@ -90,7 +95,7 @@ def _adapter_version() -> str:
 
 @dataclass(frozen=True)
 class QiskitUnsupportedReason:
-    """One stable, actionable reason why a circuit is outside the v0.1 boundary."""
+    """One stable, actionable reason why a circuit is outside the v0.4 boundary."""
 
     code: str
     message: str
@@ -143,6 +148,57 @@ class QiskitAssuranceResult:
     compiler_report: Any | None
     normalized_input: Any | None
 
+    def to_dict(self) -> dict[str, Any]:
+        """Return a JSON-safe report without embedding live Qiskit objects."""
+
+        normalized = (
+            {
+                "num_qubits": int(self.normalized_input.num_qubits),
+                "descriptors": self.normalized_input.to_descriptors(),
+            }
+            if self.normalized_input is not None
+            else None
+        )
+        compiler_report = None
+        if self.compiler_report is not None:
+            to_dict = getattr(self.compiler_report, "to_dict", None)
+            compiler_report = (
+                to_dict()
+                if callable(to_dict)
+                else _json_safe(dict(vars(self.compiler_report)))
+            )
+        return {
+            "returned_circuit": {
+                "name": self.returned_circuit.name,
+                "num_qubits": self.returned_circuit.num_qubits,
+                "num_clbits": self.returned_circuit.num_clbits,
+                "operation_count": len(self.returned_circuit.data),
+            },
+            "assurance_status": self.assurance_status,
+            "optimization_applied": self.optimization_applied,
+            "fallback_reason": self.fallback_reason,
+            "import_report": self.import_report.to_dict(),
+            "compiler_report": compiler_report,
+            "normalized_input": normalized,
+        }
+
+
+@dataclass(frozen=True)
+class OpenQASMAssuranceResult:
+    """Fail-closed assurance result for an OpenQASM 3 source string."""
+
+    returned_source: str
+    assurance_status: AssuranceStatus
+    optimization_applied: bool
+    fallback_reason: str | None
+    source_sha256: str
+    returned_source_sha256: str
+    assurance_report: dict[str, Any] | None
+    error: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
 
 @dataclass(frozen=True)
 class QiskitExportResult:
@@ -162,6 +218,20 @@ class QiskitExportResult:
 
 def _limitations() -> tuple[str, ...]:
     return _LIMITATIONS
+
+
+def _json_safe(value: Any) -> Any:
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    if hasattr(value, "value"):
+        return _json_safe(value.value)
+    if hasattr(value, "to_dict") and callable(value.to_dict):
+        return _json_safe(value.to_dict())
+    return repr(value)
 
 
 def _base_report(
@@ -225,7 +295,11 @@ def _parse_error_location(message: str) -> tuple[int | None, int | None]:
     return None, None
 
 
-def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
+def import_qiskit_circuit(
+    circuit: QuantumCircuit,
+    *,
+    max_qubits: int | None = MAX_ASSURANCE_QUBITS,
+) -> QiskitImportResult:
     """Adapt a supported Qiskit circuit into the canonical compiler IR.
 
     Unsupported inputs return a structured result instead of a partial circuit.
@@ -247,11 +321,14 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
         return QiskitImportResult(circuit=None, report=report)
 
     reasons: list[QiskitUnsupportedReason] = []
-    if circuit.num_qubits < 1 or circuit.num_qubits > MAX_ASSURANCE_QUBITS:
+    if circuit.num_qubits < 1 or (
+        max_qubits is not None and circuit.num_qubits > max_qubits
+    ):
+        expected = f"1-{max_qubits}" if max_qubits is not None else "at least 1"
         reasons.append(
             _reason(
                 "qubit_count_out_of_range",
-                f"Expected 1-{MAX_ASSURANCE_QUBITS} qubits; received {circuit.num_qubits}.",
+                f"Expected {expected} qubits; received {circuit.num_qubits}.",
             )
         )
     if circuit.num_clbits:
@@ -281,7 +358,7 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
         reasons.append(
             _reason(
                 "nonzero_global_phase_unsupported",
-                "OpenQASM assurance v0.1 accepts only circuits with zero declared global phase.",
+                "OpenQASM assurance v0.4 accepts only circuits with zero declared global phase.",
             )
         )
 
@@ -313,7 +390,7 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
             reasons.append(
                 _reason(
                     "unsupported_operation",
-                    f"Operation {gate!r} is not supported by the v0.1 assurance bridge.",
+                    f"Operation {gate!r} is not supported by the v0.4 assurance bridge.",
                     operation_index=index,
                     operation_name=gate,
                 )
@@ -391,6 +468,8 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
             descriptors.append(
                 Operation(gate=canonical_gate, targets=qubits, params=params)
             )
+        elif gate == "barrier":
+            descriptors.append(Operation(gate="barrier", targets=qubits))
         else:
             if len(qubits) != 1:
                 reasons.append(
@@ -431,6 +510,97 @@ def import_qiskit_circuit(circuit: QuantumCircuit) -> QiskitImportResult:
         operation_count=len(circuit.data),
     )
     return QiskitImportResult(circuit=normalized, report=report)
+
+
+def _terminal_measurement_split(
+    circuit: QuantumCircuit,
+) -> tuple[QuantumCircuit | None, list[tuple[Any, list[int], list[int]]], QiskitImportReport | None]:
+    """Return a unitary/barrier prefix and an exact terminal measurement suffix."""
+
+    prefix = QuantumCircuit(circuit.num_qubits, name=circuit.name, global_phase=circuit.global_phase)
+    prefix.metadata = dict(circuit.metadata or {})
+    suffix: list[tuple[Any, list[int], list[int]]] = []
+    measurement_started = False
+    reasons: list[QiskitUnsupportedReason] = []
+
+    for index, instruction in enumerate(circuit.data):
+        operation = instruction.operation
+        name = operation.name.lower()
+        qubits = [circuit.find_bit(qubit).index for qubit in instruction.qubits]
+        clbits = [circuit.find_bit(clbit).index for clbit in instruction.clbits]
+        if name == "measure":
+            measurement_started = True
+            if len(qubits) != 1 or len(clbits) != 1:
+                reasons.append(
+                    _reason(
+                        "invalid_measurement_arity",
+                        "Terminal measurements require exactly one qubit and one classical bit.",
+                        operation_index=index,
+                        operation_name=name,
+                    )
+                )
+            suffix.append((operation, qubits, clbits))
+            continue
+        if measurement_started:
+            reasons.append(
+                _reason(
+                    "mid_circuit_measurement_unsupported",
+                    f"Operation {name!r} appears after measurement; only a terminal measurement suffix is supported.",
+                    operation_index=index,
+                    operation_name=name,
+                )
+            )
+            continue
+        if instruction.clbits or getattr(operation, "num_clbits", 0):
+            reasons.append(
+                _reason(
+                    "classical_operation_unsupported",
+                    f"Operation {name!r} reads or writes classical data.",
+                    operation_index=index,
+                    operation_name=name,
+                )
+            )
+            continue
+        prefix.append(operation, [prefix.qubits[q] for q in qubits], [])
+
+    if circuit.num_clbits and not suffix:
+        reasons.append(
+            _reason(
+                "unused_classical_data_unsupported",
+                "Classical registers are supported only when used by terminal measurements.",
+            )
+        )
+    if reasons:
+        report = _base_report(
+            status="UNSUPPORTED",
+            source_format="qiskit",
+            supported=False,
+            num_qubits=circuit.num_qubits,
+            operation_count=len(circuit.data),
+            reasons=tuple(reasons),
+        )
+        return None, suffix, report
+    return prefix, suffix, None
+
+
+def _rebuild_with_terminal_measurements(
+    original: QuantumCircuit,
+    lowered_prefix: QuantumCircuit,
+    suffix: list[tuple[Any, list[int], list[int]]],
+) -> QuantumCircuit:
+    output = original.copy_empty_like()
+    output.name = original.name
+    output.metadata = dict(original.metadata or {})
+    for instruction in lowered_prefix.data:
+        qubits = [lowered_prefix.find_bit(qubit).index for qubit in instruction.qubits]
+        output.append(instruction.operation, [output.qubits[index] for index in qubits], [])
+    for operation, qubits, clbits in suffix:
+        output.append(
+            operation,
+            [output.qubits[index] for index in qubits],
+            [output.clbits[index] for index in clbits],
+        )
+    return output
 
 
 def import_openqasm3(source: str) -> QiskitImportResult:
@@ -567,10 +737,47 @@ def import_openqasm3_isolated(source: str) -> QiskitImportResult:
         return QiskitImportResult(circuit=None, report=report)
 
 
-def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
+def assure_qiskit_circuit(
+    circuit: QuantumCircuit,
+    *,
+    target: Any | None = None,
+) -> QiskitAssuranceResult:
     """Optimize a Qiskit circuit through the compiler's fail-closed workflow."""
 
-    imported = import_qiskit_circuit(circuit)
+    if not isinstance(circuit, QuantumCircuit):
+        imported = import_qiskit_circuit(circuit)
+        return QiskitAssuranceResult(
+            returned_circuit=QuantumCircuit(1),
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="import_error",
+            import_report=imported.report,
+            compiler_report=None,
+            normalized_input=None,
+        )
+
+    prefix, measurement_suffix, split_report = _terminal_measurement_split(circuit)
+    if prefix is None:
+        assert split_report is not None
+        return QiskitAssuranceResult(
+            returned_circuit=circuit.copy(),
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="unsupported_input",
+            import_report=split_report,
+            compiler_report=None,
+            normalized_input=None,
+        )
+
+    imported = import_qiskit_circuit(prefix, max_qubits=None)
+    imported = QiskitImportResult(
+        circuit=imported.circuit,
+        report=replace(
+            imported.report,
+            num_qubits=circuit.num_qubits,
+            operation_count=len(circuit.data),
+        ),
+    )
     if imported.circuit is None:
         fallback = (
             "unsupported_input"
@@ -588,14 +795,26 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
         )
 
     try:
-        from rqm_compiler import optimize_circuit
+        from rqm_compiler import optimize_circuit, optimize_circuit_regions
 
-        returned, report = optimize_circuit(imported.circuit)
-        proof_verified = (
-            getattr(report, "equivalence_status", None) == "VERIFIED"
-            and getattr(report, "equivalence_guaranteed", False) is True
-            and getattr(report, "fallback_reason", None) is None
+        use_regions = circuit.num_qubits > MAX_ASSURANCE_QUBITS or any(
+            operation.gate == "barrier" for operation in imported.circuit.operations
         )
+        if use_regions:
+            returned, report = optimize_circuit_regions(imported.circuit)
+            proof_verified = (
+                getattr(report, "equivalence_status", None) == "VERIFIED"
+                and getattr(report, "fallback_reason", None) is None
+            )
+            optimization_applied = bool(getattr(report, "committed", False))
+        else:
+            returned, report = optimize_circuit(imported.circuit)
+            proof_verified = (
+                getattr(report, "equivalence_status", None) == "VERIFIED"
+                and getattr(report, "equivalence_guaranteed", False) is True
+                and getattr(report, "fallback_reason", None) is None
+            )
+            optimization_applied = bool(getattr(report, "optimization_applied", False))
         if not proof_verified:
             return QiskitAssuranceResult(
                 returned_circuit=circuit.copy(),
@@ -607,13 +826,12 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
                 compiler_report=report,
                 normalized_input=imported.circuit,
             )
-        lowered = compiled_circuit_to_qiskit(returned)
-        lowered.name = circuit.name
-        lowered.metadata = dict(circuit.metadata or {})
+        lowered = compiled_circuit_to_qiskit(returned, target=target)
+        lowered = _rebuild_with_terminal_measurements(circuit, lowered, measurement_suffix)
         return QiskitAssuranceResult(
             returned_circuit=lowered,
             assurance_status="VERIFIED",
-            optimization_applied=bool(getattr(report, "optimization_applied", False)),
+            optimization_applied=optimization_applied,
             fallback_reason=None,
             import_report=imported.report,
             compiler_report=report,
@@ -629,6 +847,123 @@ def assure_qiskit_circuit(circuit: QuantumCircuit) -> QiskitAssuranceResult:
             compiler_report=None,
             normalized_input=imported.circuit,
         )
+
+
+def assure_openqasm3(source: str) -> OpenQASMAssuranceResult:
+    """Assure an OpenQASM 3 document and return the exact source on fallback."""
+
+    if not isinstance(source, str):
+        source = str(source)
+    source_sha256 = hashlib.sha256(source.encode("utf-8")).hexdigest()
+    parser_stderr = io.StringIO()
+    try:
+        with contextlib.redirect_stderr(parser_stderr):
+            circuit = qasm3.loads(source)
+    except Exception as exc:  # noqa: BLE001 - normalized at the public boundary
+        diagnostic = parser_stderr.getvalue().strip()
+        message = str(exc).strip() or diagnostic or "OpenQASM 3 parsing failed."
+        return OpenQASMAssuranceResult(
+            returned_source=source,
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="import_error",
+            source_sha256=source_sha256,
+            returned_source_sha256=source_sha256,
+            assurance_report=None,
+            error=message,
+        )
+
+    assurance = assure_qiskit_circuit(circuit)
+    if assurance.assurance_status != "VERIFIED":
+        return OpenQASMAssuranceResult(
+            returned_source=source,
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason=assurance.fallback_reason,
+            source_sha256=source_sha256,
+            returned_source_sha256=source_sha256,
+            assurance_report=assurance.to_dict(),
+        )
+    try:
+        returned_source = qasm3.dumps(assurance.returned_circuit)
+    except Exception as exc:  # noqa: BLE001 - export failure must preserve source
+        return OpenQASMAssuranceResult(
+            returned_source=source,
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="export_error",
+            source_sha256=source_sha256,
+            returned_source_sha256=source_sha256,
+            assurance_report=assurance.to_dict(),
+            error=str(exc),
+        )
+    return OpenQASMAssuranceResult(
+        returned_source=returned_source,
+        assurance_status="VERIFIED",
+        optimization_applied=assurance.optimization_applied,
+        fallback_reason=None,
+        source_sha256=source_sha256,
+        returned_source_sha256=hashlib.sha256(returned_source.encode("utf-8")).hexdigest(),
+        assurance_report=assurance.to_dict(),
+    )
+
+
+def _openqasm_assurance_from_dict(payload: dict[str, Any]) -> OpenQASMAssuranceResult:
+    return OpenQASMAssuranceResult(
+        returned_source=str(payload["returned_source"]),
+        assurance_status=payload["assurance_status"],
+        optimization_applied=bool(payload["optimization_applied"]),
+        fallback_reason=payload.get("fallback_reason"),
+        source_sha256=str(payload["source_sha256"]),
+        returned_source_sha256=str(payload["returned_source_sha256"]),
+        assurance_report=payload.get("assurance_report"),
+        error=payload.get("error"),
+    )
+
+
+def assure_openqasm3_isolated(source: str) -> OpenQASMAssuranceResult:
+    """Run complete OpenQASM assurance in an isolated child interpreter."""
+
+    source_sha256 = hashlib.sha256(source.encode("utf-8")).hexdigest()
+    completed = subprocess.run(
+        [sys.executable, "-m", "rqm_qiskit._qasm_worker"],
+        input=json.dumps({"action": "assure", "source": source}, ensure_ascii=False),
+        capture_output=True,
+        check=False,
+        env=_isolated_worker_environment(),
+        text=True,
+        timeout=30,
+    )
+    if completed.returncode != 0:
+        return OpenQASMAssuranceResult(
+            returned_source=source,
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="isolated_worker_error",
+            source_sha256=source_sha256,
+            returned_source_sha256=source_sha256,
+            assurance_report=None,
+            error=f"Isolated OpenQASM assurance failed closed (exit status {completed.returncode}).",
+        )
+    try:
+        return _openqasm_assurance_from_dict(json.loads(completed.stdout))
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return OpenQASMAssuranceResult(
+            returned_source=source,
+            assurance_status="FALLBACK_ORIGINAL",
+            optimization_applied=False,
+            fallback_reason="isolated_worker_error",
+            source_sha256=source_sha256,
+            returned_source_sha256=source_sha256,
+            assurance_report=None,
+            error="Isolated OpenQASM assurance returned an invalid response.",
+        )
+
+
+async def async_assure_openqasm3(source: str) -> OpenQASMAssuranceResult:
+    """Await process-isolated OpenQASM assurance without blocking the event loop."""
+
+    return await asyncio.to_thread(assure_openqasm3_isolated, source)
 
 
 def export_openqasm3(source: Any) -> QiskitExportResult:

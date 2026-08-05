@@ -4,7 +4,23 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
-## [0.3.0] — EXP-012 Quaternion-Cartan SU(4) Promotion
+## [0.4.0] — Unreleased candidate: Quaternionic Circuit Lens
+
+- Added EXP-014-backed canonical SU(2) fingerprints and versioned geometric
+  reports for Qiskit circuits and bounded states.
+- Added standard-compatible quaternionic-wavefunction, Bloch, ideal
+  measurement, SU(4)/Weyl, and entanglement report sections by delegating math
+  to `rqm-core`, `rqm-entanglement`, and `rqm-compiler`.
+- Added terminal-measurement preservation and compiler-owned verified regional
+  optimization for larger circuits.
+- Added synchronous and process-isolated asynchronous OpenQASM assurance plus
+  offline `analyze` and `assure` CLI commands.
+- Updated the bounded compatibility target to Qiskit `>=2.5.1,<2.6` and Python
+  3.11–3.13.
+- The release remains blocked: absolute latency gates pass, but relative
+  adapter overhead is about `98.6%` versus the required `25%`.
+
+## [0.3.0] — Withdrawn, unreleased candidate
 
 - Added target-local `Q3`, `QF`, `QC`, `QX`, and direct `RQ` synthesis
   candidates for compiler-owned internal `su4q` blocks.
@@ -19,6 +35,8 @@ All notable changes to **rqm-qiskit** are documented here.
   IBM Runtime 0.45.0 compatibility baseline and exact upstream RQM commits.
 - Added offline generic-block, target-selection, direct-RQ, standard-gate,
   descriptor, and Weyl-landmark tests. No IBM hardware was used.
+- This candidate was not published because its frozen adapter-overhead gate
+  failed. Its evidence remains preserved under `benchmarks/`.
 
 ## [0.1.0] — Architecture Spine Validated
 

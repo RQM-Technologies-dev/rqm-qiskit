@@ -335,7 +335,10 @@ def _apply_operation(
         # rqm-compiler guarantees the quaternion is already unit-normalised;
         # delegate the SU(2) matrix conversion entirely to rqm-core.
         matrix = Quaternion(w, x, y, z).to_su2_matrix()
-        qc.append(UnitaryGate(matrix), [targets[0]])
+        # The compiler has already validated the unit quaternion and rqm-core
+        # constructs the corresponding SU(2) matrix. Avoid repeating Qiskit's
+        # generic matrix validation on this proof-carrying hot path.
+        qc.append(UnitaryGate(matrix, check_input=False), [targets[0]])
     elif gate == "barrier":
         if targets:
             qc.barrier(targets)
