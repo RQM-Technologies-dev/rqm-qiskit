@@ -5,12 +5,16 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import sys
 from dataclasses import dataclass, replace
 from fractions import Fraction
 from importlib.metadata import PackageNotFoundError, version
 from typing import Any, Literal, Sequence
 
 import numpy as np
+import qiskit
+import rqm_compiler
+import rqm_core
 from qiskit import QuantumCircuit
 from qiskit.circuit import ParameterExpression
 from qiskit.quantum_info import Operator, Statevector
@@ -308,12 +312,16 @@ class RQMGeometricReport:
 
 
 def _provenance() -> dict[str, str]:
+    package = sys.modules.get("rqm_qiskit")
+    rqm_qiskit_version = getattr(package, "__version__", None)
+    if rqm_qiskit_version is None:
+        rqm_qiskit_version = _package_version("rqm-qiskit")
     return {
-        "rqm_qiskit": _package_version("rqm-qiskit"),
-        "rqm_core": _package_version("rqm-core"),
+        "rqm_qiskit": str(rqm_qiskit_version),
+        "rqm_core": str(rqm_core.__version__),
         "rqm_entanglement": _package_version("rqm-entanglement"),
-        "rqm_compiler": _package_version("rqm-compiler"),
-        "qiskit": _package_version("qiskit"),
+        "rqm_compiler": str(rqm_compiler.__version__),
+        "qiskit": str(qiskit.__version__),
         "qiskit_interface": "public Operator and Statevector APIs",
         "fingerprint_convention": _FINGERPRINT_CONVENTION,
     }
@@ -615,6 +623,53 @@ def _state_probabilities(state: Statevector) -> dict[str, float]:
     }
 
 
+def _one_qubit_state_geometry(
+    statevector: Statevector,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    alpha, beta = (complex(value) for value in statevector.data)
+    quaternion = spinor_to_quaternion(alpha, beta).normalize()
+    components = _rounded_components(quaternion)
+    axis, angle = quaternion.to_axis_angle()
+    bloch = state_to_bloch(alpha, beta)
+    predicted = measurement_probabilities(*bloch)
+    local = {
+        "qubit": 0,
+        "quaternionic_wavefunction": components,
+        "quaternionic_wavefunction_fingerprint": _sha256(components),
+        "physical_state_fingerprint": _sha256(
+            _rounded_components(quaternion.canonicalize())
+        ),
+        "axis": _rounded_vector(axis),
+        "angle": _zero_small(angle),
+        "angle_degrees": _zero_small(math.degrees(angle)),
+        "angle_pi_multiple": _pi_multiple(angle),
+        "su2_matrix": _complex_matrix(np.asarray(quaternion.to_su2_matrix())),
+        "bloch": _rounded_vector(bloch),
+        "ideal_z_probabilities": {
+            "0": _zero_small(predicted[0]),
+            "1": _zero_small(predicted[1]),
+        },
+    }
+    measurement = {
+        "basis": "computational",
+        "probabilities": _state_probabilities(statevector),
+    }
+    return local, measurement
+
+
+def _two_qubit_state_geometry(
+    statevector: Statevector,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    entanglement = analyze_entanglement(
+        np.asarray(statevector.data, dtype=np.complex128)
+    )
+    measurement = {
+        "basis": "computational",
+        "probabilities": _state_probabilities(statevector),
+    }
+    return {"entanglement": _json_ready(entanglement)}, measurement
+
+
 def analyze_qiskit_state(state: Statevector | Sequence[complex]) -> RQMGeometricReport:
     """Analyze a normalized one- or two-qubit state through existing RQM math."""
 
@@ -679,32 +734,8 @@ def analyze_qiskit_state(state: Statevector | Sequence[complex]) -> RQMGeometric
             )
         )
 
-    probabilities = _state_probabilities(statevector)
     if size == 2:
-        alpha, beta = (complex(value) for value in statevector.data)
-        quaternion = spinor_to_quaternion(alpha, beta).normalize()
-        components = _rounded_components(quaternion)
-        axis, angle = quaternion.to_axis_angle()
-        bloch = state_to_bloch(alpha, beta)
-        predicted = measurement_probabilities(*bloch)
-        local = {
-            "qubit": 0,
-            "quaternionic_wavefunction": components,
-            "quaternionic_wavefunction_fingerprint": _sha256(components),
-            "physical_state_fingerprint": _sha256(
-                _rounded_components(quaternion.canonicalize())
-            ),
-            "axis": _rounded_vector(axis),
-            "angle": _zero_small(angle),
-            "angle_degrees": _zero_small(math.degrees(angle)),
-            "angle_pi_multiple": _pi_multiple(angle),
-            "su2_matrix": _complex_matrix(np.asarray(quaternion.to_su2_matrix())),
-            "bloch": _rounded_vector(bloch),
-            "ideal_z_probabilities": {
-                "0": _zero_small(predicted[0]),
-                "1": _zero_small(predicted[1]),
-            },
-        }
+        local, measurement = _one_qubit_state_geometry(statevector)
         return _finish(
             RQMGeometricReport(
                 schema_version=GEOMETRY_SCHEMA_VERSION,
@@ -712,10 +743,7 @@ def analyze_qiskit_state(state: Statevector | Sequence[complex]) -> RQMGeometric
                 circuit_summary={"source_type": "statevector", "num_qubits": 1},
                 local_geometry=(local,),
                 nonlocal_geometry=(),
-                measurement_predictions={
-                    "basis": "computational",
-                    "probabilities": probabilities,
-                },
+                measurement_predictions=measurement,
                 optimization=None,
                 assurance=None,
                 not_computed=(),
@@ -727,20 +755,15 @@ def analyze_qiskit_state(state: Statevector | Sequence[complex]) -> RQMGeometric
             )
         )
 
-    entanglement = analyze_entanglement(
-        np.asarray(statevector.data, dtype=np.complex128)
-    )
+    nonlocal_item, measurement = _two_qubit_state_geometry(statevector)
     return _finish(
         RQMGeometricReport(
             schema_version=GEOMETRY_SCHEMA_VERSION,
             status="complete",
             circuit_summary={"source_type": "statevector", "num_qubits": 2},
             local_geometry=(),
-            nonlocal_geometry=({"entanglement": _json_ready(entanglement)},),
-            measurement_predictions={
-                "basis": "computational",
-                "probabilities": probabilities,
-            },
+            nonlocal_geometry=(nonlocal_item,),
+            measurement_predictions=measurement,
             optimization=None,
             assurance=None,
             not_computed=("single_qubit_pure_state_geometry",),
@@ -888,8 +911,9 @@ def analyze_qiskit_circuit(
             phase, quaternion, special_unitary = _canonical_quaternion(semantic)
             components = _rounded_components(quaternion)
             axis, angle = quaternion.to_axis_angle()
-            state_report = analyze_qiskit_state(Statevector.from_instruction(semantic))
-            state_local = state_report.local_geometry[0]
+            state_local, measurement_predictions = _one_qubit_state_geometry(
+                Statevector.from_instruction(semantic)
+            )
             local_geometry.append(
                 {
                     "qubit": 0,
@@ -910,14 +934,15 @@ def analyze_qiskit_circuit(
                     "final_state": state_local,
                 }
             )
-            measurement_predictions = state_report.measurement_predictions
             status: GeometryStatus = "complete"
         elif circuit.num_qubits == 2:
             unitary = np.asarray(Operator(semantic).data, dtype=np.complex128)
             decomposition = decompose_su4_verified(unitary)
             decomposition_payload = decomposition.to_dict()
             classification = decomposition_payload["classification"]
-            state_report = analyze_qiskit_state(Statevector.from_instruction(semantic))
+            state_nonlocal, measurement_predictions = _two_qubit_state_geometry(
+                Statevector.from_instruction(semantic)
+            )
             nonlocal_geometry.append(
                 {
                     "su4": decomposition_payload,
@@ -927,10 +952,9 @@ def analyze_qiskit_circuit(
                         "class_label": classification["class_label"],
                         "convention_version": classification["convention_version"],
                     },
-                    "entanglement": state_report.nonlocal_geometry[0]["entanglement"],
+                    "entanglement": state_nonlocal["entanglement"],
                 }
             )
-            measurement_predictions = state_report.measurement_predictions
             not_computed.append("per_qubit_pure_state_geometry")
             status = "complete"
         else:
