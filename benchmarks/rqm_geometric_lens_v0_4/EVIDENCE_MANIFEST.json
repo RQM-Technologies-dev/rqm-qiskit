@@ -24,6 +24,21 @@
     "primary_cohort_immutable": true,
     "passed": true
   },
+  "performance_follow_up": {
+    "id": "EXP-015",
+    "authority_preregistration_commit": "fe9d0a15609aa96d7fac751c7434f5e87cf2ebd7",
+    "implementation_commits": {
+      "rqm_qiskit": "c17d0cc77b053fe35095ca71196eee1f26508dea",
+      "rqm_compiler": "b6111abb2cd223328bc5bf20e31aedfe02446815"
+    },
+    "corpus_digest": "d244cfaa87ca2775c79845ae546e57e0931d5828aaee0d9b079bd12b51c16459",
+    "decision_result_digest": "4516b9e1124d59cc6de645249bcf72c79d28da137227f14c6af77fa50a9bba2c",
+    "reproduction_result_digest": "dfc3a2dfb373b9054838f95e50707dcd007beba4d0aae54dafbca6a95043331f",
+    "adapter_overhead_ratio_median": 0.7427405750674037,
+    "adapter_overhead_ratio_max": 0.25,
+    "release_gate_passed": false,
+    "verdict": "native_adapter_overhead_gate_failed"
+  },
   "provider": "local-only",
   "hardware": false,
   "credentials": false
