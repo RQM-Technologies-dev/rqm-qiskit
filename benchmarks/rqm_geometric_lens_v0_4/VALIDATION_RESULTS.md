@@ -39,10 +39,12 @@ The Python smoke case verified exact reversed terminal-measurement mapping
 
 ## Release status
 
-This validation does not authorize release. The frozen relative adapter
-overhead is `98.62%` against the `25%` maximum, so `rqm-qiskit` `0.4.0`
-remains an unreleased candidate. No credentials, remote simulator, provider,
-or quantum hardware were used.
+This historical validation does not authorize release. At the time, the frozen
+relative adapter overhead of `98.62%` against the `25%` maximum blocked the
+performance-led candidate. That result remains valid but is no longer a
+product gate after the formal explanation-bridge reframe. The current
+candidate requires EXP-016 plus new pure-wheel and cross-platform validation.
+No credentials, remote simulator, provider, or quantum hardware were used.
 
 ## EXP-015 native follow-up
 
@@ -62,7 +64,8 @@ native implementation are pinned at the commits above.
   Python fallback and still returned `VERIFIED`.
 - CPython 3.11–3.13 wheels and the sdist passed `twine check`.
 
-The native follow-up did not pass the performance gate. Its decision-run ratio
-was `0.7427`, and three fresh processes reproduced ratios from `0.7477` to
-`0.7523`. Release remains blocked; no roadmap item or public performance claim
-is promoted.
+The native follow-up did not pass its frozen performance gate. Its decision-run
+ratio was `0.7427`, and three fresh processes reproduced ratios from `0.7477`
+to `0.7523`. No roadmap item or public performance claim was promoted. The
+native code is retained in Git history and evidence but removed from the
+current pure-Python product.

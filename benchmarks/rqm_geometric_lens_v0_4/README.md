@@ -38,8 +38,10 @@ separate representative/boundary extension added after a conformance audit.
 It does not alter the primary cohorts or advantage decision and cannot
 authorize package release.
 
-`VALIDATION_RESULTS.md` records the source, distribution, and fresh Python
-3.11–3.13 wheel checks. The separate performance failure still blocks release.
+`VALIDATION_RESULTS.md` records the historical source, distribution, and fresh
+Python 3.11–3.13 checks. Those results remain evidence for the earlier
+performance-led candidate; the current explanation-led candidate has its own
+pure-wheel validation gate.
 
 EXP-015 is the guarded-native performance follow-up. Its preregistration mirror,
 decision result, and three-process reproduction retain the exact EXP-014 corpus
@@ -50,6 +52,15 @@ fingerprint verdict. The private authority preregistration is pinned at
 `fe9d0a15609aa96d7fac751c7434f5e87cf2ebd7`, the native implementation and
 raw result at `c17d0cc77b053fe35095ca71196eee1f26508dea`, and the compiler
 serializer at `b6111abb2cd223328bc5bf20e31aedfe02446815`.
+
+EXP-016 is the prospective hybrid explanation gate. It preserves EXP-014 and
+EXP-015 without reclassification, removes comparative performance from the
+current product criteria, and tests 36 frozen circuit/state/boundary records
+for mathematical agreement, deterministic explanation, public-Qiskit
+compatibility, input immutability, explicit partial results, and absolute
+responsiveness. Its sanitized artifacts are mirrored in this directory with
+the `EXP-016_` prefix. Passing EXP-016 alone does not publish the package;
+current pure-wheel and cross-platform installation gates remain separate.
 
 ## Boundary
 

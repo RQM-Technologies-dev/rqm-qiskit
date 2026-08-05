@@ -14,7 +14,7 @@ classifiers = [
 ]
 dependencies = [
   "qiskit>=2.5.1,<2.6",
-  "rqm-core>=0.2,<0.3",
+  "rqm-core>=0.2.2,<0.3",
   "rqm-entanglement>=0.2,<0.3",
   "rqm-compiler>=0.3,<0.4",
 ]
@@ -36,8 +36,3 @@ Repository = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 [build-system]
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
-
-[tool.cibuildwheel]
-build = ["cp311-*", "cp312-*", "cp313-*"]
-skip = ["*-musllinux_*", "*-manylinux_i686", "*-win32"]
-test-command = "python -c \"from rqm_qiskit._accelerator import native_build_info; assert native_build_info()['available']\""

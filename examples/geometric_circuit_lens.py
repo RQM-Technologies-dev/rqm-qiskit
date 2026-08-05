@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import math
 
 from qiskit import QuantumCircuit
@@ -17,10 +16,9 @@ single.rz(1.13, 0)
 single.measure(0, 0)
 
 print("Canonical SU(2) fingerprint:", canonical_su2_fingerprint(single))
-print(json.dumps(analyze_qiskit_circuit(single, optimize=True).to_dict(), indent=2))
+print(analyze_qiskit_circuit(single).to_text(detail="standard"))
 
 bell = QuantumCircuit(2, name="bell")
 bell.ry(math.pi / 2, 0)
 bell.cx(0, 1)
-print(json.dumps(analyze_qiskit_circuit(bell).to_dict(), indent=2))
-
+print(analyze_qiskit_circuit(bell).to_text(detail="standard"))

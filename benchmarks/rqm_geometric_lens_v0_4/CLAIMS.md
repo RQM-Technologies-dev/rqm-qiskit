@@ -10,3 +10,5 @@
 | SU(4) reconstruction | maximum error `8.18e-16` | conformance only |
 | SU(4) two-qubit cost | median improvement `0` | parity; no advantage claim |
 | Representative and boundary extension | all six frozen correctness checks passed | conformance only; primary advantage cohort unchanged |
+| Hybrid quaternionic explanation (EXP-016) | 36/36 frozen records passed local correctness, determinism, immutability, explanatory-coverage, public-interface, and absolute-latency gates | bounded standard-compatible explanation claim; packaging remains separate |
+| EXP-015 relative performance | `0.7427` versus `0.25` | retained negative engineering evidence; not a current product criterion |

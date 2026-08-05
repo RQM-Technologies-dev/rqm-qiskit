@@ -1,5 +1,5 @@
 """
-rqm_qiskit – IBM Quantum / Qiskit execution bridge for the RQM ecosystem.
+rqm_qiskit – Qiskit-compatible quaternionic explanation and execution bridge.
 
 Architecture
 ------------
@@ -22,8 +22,16 @@ parsed/validated upstream → optimized by rqm-compiler → rqm-qiskit lowers to
 Qiskit and executes.  Helper functions in this package accept compiler Circuit
 objects directly for in-process / server-side usage.
 
-Public API — three tiers
+Public API — explanation plus three execution tiers
 ------------------------
+
+Explanation (start here for understanding)
+  analyze_qiskit_circuit(circuit) → RQMGeometricReport
+  analyze_qiskit_state(state) → RQMGeometricReport
+  report.to_text(detail="summary" | "standard" | "technical") → str
+
+  Explanation uses public Qiskit operators and statevectors and does not
+  mutate the input. Optimization is optional and independently fail-closed.
 
 Tier 1 — Execution  (start here)
   Functional (primary):
@@ -90,7 +98,16 @@ See :func:`get_ibmq_provider` for details.
 
 from rqm_qiskit.quaternion import Quaternion
 from rqm_qiskit.state import RQMState, spinor_embed
-from rqm_qiskit.gates import RQMGate, gate_h, gate_s, gate_t, gate_rx, gate_ry, gate_rz, match_gate
+from rqm_qiskit.gates import (
+    RQMGate,
+    gate_h,
+    gate_s,
+    gate_t,
+    gate_rx,
+    gate_ry,
+    gate_rz,
+    match_gate,
+)
 from rqm_qiskit.circuit import RQMCircuit
 from rqm_qiskit.convert import (
     compiled_circuit_to_qiskit,
@@ -100,8 +117,19 @@ from rqm_qiskit.convert import (
 from rqm_qiskit.results import summarize_counts, format_counts_summary
 
 # New architecture components
-from rqm_qiskit.translator import QiskitTranslator, compile_to_qiskit_circuit, to_backend_circuit, to_qiskit_circuit
-from rqm_qiskit.execution import run_local, run_backend, run_qiskit, async_run_qiskit, execute_rqm_program
+from rqm_qiskit.translator import (
+    QiskitTranslator,
+    compile_to_qiskit_circuit,
+    to_backend_circuit,
+    to_qiskit_circuit,
+)
+from rqm_qiskit.execution import (
+    run_local,
+    run_backend,
+    run_qiskit,
+    async_run_qiskit,
+    execute_rqm_program,
+)
 from rqm_qiskit.backend import QiskitBackend
 from rqm_qiskit.result import QiskitResult
 from rqm_qiskit.job import QiskitJob
@@ -134,6 +162,8 @@ from rqm_qiskit.assurance import (
 )
 from rqm_qiskit.geometry import (
     GEOMETRY_SCHEMA_VERSION,
+    RQMExplanation,
+    RQMExplanationSection,
     RQMGeometricReport,
     analyze_qiskit_circuit,
     analyze_qiskit_state,
@@ -142,13 +172,13 @@ from rqm_qiskit.geometry import (
 
 __all__ = [
     # Tier 1 — Execution
-    "run_qiskit",            # functional primary
-    "async_run_qiskit",      # functional async
-    "execute_rqm_program",   # high-level canonical API integration
-    "QiskitBackend",         # OO equivalent
+    "run_qiskit",  # functional primary
+    "async_run_qiskit",  # functional async
+    "execute_rqm_program",  # high-level canonical API integration
+    "QiskitBackend",  # OO equivalent
     # Tier 2 — Translation
-    "to_qiskit_circuit",     # functional primary
-    "QiskitTranslator",      # OO equivalent
+    "to_qiskit_circuit",  # functional primary
+    "QiskitTranslator",  # OO equivalent
     # Tier 3 — Advanced / internal
     "QiskitResult",
     "QiskitJob",
@@ -179,6 +209,8 @@ __all__ = [
     "QiskitAssuranceResult",
     "QiskitExportResult",
     "OpenQASMAssuranceResult",
+    "RQMExplanation",
+    "RQMExplanationSection",
     "RQMGeometricReport",
     "GEOMETRY_SCHEMA_VERSION",
     "SUPPORTED_QISKIT_GATES",

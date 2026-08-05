@@ -39,6 +39,16 @@
     "release_gate_passed": false,
     "verdict": "native_adapter_overhead_gate_failed"
   },
+  "current_product_gate": {
+    "id": "EXP-016",
+    "mission": "Help the world understand ordinary quantum computing through quaternionic geometry while remaining compatible with Qiskit.",
+    "comparative_performance_gate": false,
+    "historical_performance_result_reclassified": false,
+    "native_accelerator_shipped": false,
+    "local_explanation_gate_passed": true,
+    "packaging_and_cross_platform_gate": "pending",
+    "release_authorized": false
+  },
   "provider": "local-only",
   "hardware": false,
   "credentials": false

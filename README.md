@@ -1,6 +1,9 @@
 # rqm-qiskit
 
-**Quaternionic geometric lens and IBM Quantum / Qiskit execution bridge for the RQM ecosystem.**
+**A Qiskit-compatible quaternionic explanation bridge for ordinary quantum computing.**
+
+> Help the world understand ordinary quantum computing through quaternionic
+> geometry while remaining compatible with Qiskit.
 
 Receives compiler-optimized circuit representations and lowers them into Qiskit
 `QuantumCircuit` objects for execution on Aer simulators or IBM Quantum hardware.
@@ -18,16 +21,22 @@ advantage. See [RQM_TECHNICAL_CANON_V2.md](RQM_TECHNICAL_CANON_V2.md).
 
 ## Version 0.4 candidate status
 
-The unreleased 0.4 candidate adds a standard-compatible quaternion/SU(2)/SU(4)
-view of ordinary Qiskit circuits. EXP-014 supports one narrow benefit: equivalent
-one-qubit gate spellings converge to a deterministic phase-aware SU(2)
-fingerprint. Native one-qubit and bounded SU(4) circuit cost were parity.
+The unreleased 0.4 candidate explains ordinary one- and two-qubit Qiskit
+circuits through quaternion/SU(2), rotation, Bloch, phase, measurement,
+SU(4)/Weyl, and entanglement geometry. Explanation uses Qiskit's public
+`Operator` and `Statevector` interfaces and leaves the input circuit unchanged.
+Optimization is an optional, narrower, independently verified workflow.
 
-The candidate is **not release-ready**. Direct and OpenQASM p95 latency gates
-pass, but median adapter overhead remains about `98.6%` of compiler
-optimize-and-verify time versus the frozen `25%` requirement. See the
-[public evidence packet](benchmarks/rqm_geometric_lens_v0_4/) and
-[performance result](benchmarks/rqm_geometric_lens_v0_4/PERFORMANCE_RESULTS.md).
+EXP-016 passed its 36-record local correctness, determinism, compatibility,
+and absolute-responsiveness gate. The candidate is still **not released**:
+fresh Python 3.11–3.13 wheel installs and Linux/macOS/Windows workflow runs must
+also pass before release readiness is recorded. No publication or invitation is
+authorized by this repository state.
+
+EXP-014's `100%` versus `6.25%` canonical-convergence result remains valid.
+EXP-015's failed `0.7427` native-adapter ratio also remains valid historical
+engineering evidence, but comparative performance is not a 0.4 product gate.
+See the [public evidence packet](benchmarks/rqm_geometric_lens_v0_4/).
 
 ---
 
@@ -58,7 +67,7 @@ that can be applied before handing circuits to either bridge.
 | `rqm-core` | Quaternion algebra, SU(2) matrices, Bloch conversions, spinor helpers |
 | `rqm-circuits` | Canonical **external** circuit IR — the public schema used by Studio, API, and callers |
 | `rqm-compiler` | Internal optimization and rewriting engine; produces compiler circuits consumed by bridge layers |
-| `rqm-qiskit` | Compiler circuit → Qiskit lowering; Aer/IBM execution; async job handling; result shaping |
+| `rqm-qiskit` | Qiskit-compatible quaternionic explanation; compiler circuit → Qiskit lowering; Aer/IBM execution; result shaping |
 
 ### Typical data flow
 
@@ -82,6 +91,7 @@ IBM Quantum / Aer
 
 ### What this repo owns
 
+- Deterministic explanations of public-Qiskit-evaluable one- and two-qubit circuits
 - Compiler circuit → Qiskit gate mapping
 - Qiskit `QuantumCircuit` generation
 - Qiskit/Aer execution
@@ -131,7 +141,10 @@ After 0.4 is published, the five-minute circuit-lens installation will be:
 
 ```bash
 pip install "rqm-qiskit[cli]"
-rqm-qiskit analyze circuit.qasm --report report.json
+rqm-qiskit explain circuit.qasm \
+  --detail standard \
+  --output EXPLANATION.md \
+  --report REPORT.json
 ```
 
 For the unreleased candidate, install this checkout with
@@ -167,15 +180,22 @@ circuit.ry(-0.81, 0)
 circuit.rz(1.13, 0)
 circuit.measure(0, 0)
 
-report = analyze_qiskit_circuit(circuit, optimize=True)
-print(report.local_geometry[0]["canonical_quaternion"])
+report = analyze_qiskit_circuit(circuit)
+print(report.to_text(detail="standard"))
+
+# The complete evidence remains available as deterministic JSON.
+payload = report.to_dict()
+print(payload["local_geometry"][0]["canonical_quaternion"])
 print(canonical_su2_fingerprint(circuit))
-print(report.measurement_predictions)
 ```
 
-The report is JSON-safe through `report.to_dict()`. The quaternionic
-wavefunction is a geometric regrouping of the standard complex spinor; the
-report does not claim additional quantum information or a new observable.
+The explanation answers what the quaternion is, which axis and angle it
+represents, where the |0⟩ input ends on the Bloch sphere, how phase behaves,
+and what ideal computational-basis measurements predict. For supported
+two-qubit circuits it also explains SU(4), Weyl, local-equivalence, perfect-
+entangler, concurrence, and entropy structure. The quaternionic wavefunction
+is a geometric regrouping of the standard complex spinor; the report does not
+claim additional information, a new observable, or new physics.
 
 ### Existing execution bridge
 
@@ -256,9 +276,12 @@ The v0.3 run retained 100% eligible verification coverage and every fail-closed
 gate, but its `191.19%` median adapter overhead still exceeds the frozen `25%`
 release gate. Version 0.3.0 therefore remains unreleased.
 
-The 0.4 candidate separates direct Qiskit and OpenQASM timing. Its absolute
-latency gates pass, while the relative adapter-overhead gate remains open; 0.4
-therefore also remains unreleased.
+EXP-015 retained the unchanged 0.4 performance cohort and failed its native
+acceleration gate at a `0.7427` adapter/compiler ratio versus `0.25`. That
+negative result remains preserved. The C accelerator and private packed-Qiskit
+access are not part of the explanation product. Version 0.4 uses public Qiskit
+interfaces and is judged on correctness, explanatory usefulness,
+compatibility, fail-closed behavior, packaging, and absolute responsiveness.
 
 ---
 
