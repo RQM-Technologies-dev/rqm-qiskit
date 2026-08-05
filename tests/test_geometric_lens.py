@@ -82,7 +82,11 @@ def test_fingerprint_property_split_rotations_converge(seed: int) -> None:
     rng = np.random.default_rng(seed)
     direct = QuantumCircuit(1)
     split = QuantumCircuit(1)
-    for gate, angle in zip(("rx", "ry", "rz", "rx", "rz"), rng.uniform(-2, 2), strict=True):
+    for gate, angle in zip(
+        ("rx", "ry", "rz", "rx", "rz"),
+        rng.uniform(-2, 2, size=5),
+        strict=True,
+    ):
         getattr(direct, gate)(float(angle), 0)
         getattr(split, gate)(float(angle) / 2, 0)
         getattr(split, gate)(float(angle) / 2, 0)
@@ -110,7 +114,7 @@ def test_generated_assurance_differentially_matches_qiskit(seed: int) -> None:
     circuit = QuantumCircuit(1)
     for gate, angle in zip(
         ("rx", "ry", "rz", "ry", "rx", "rz", "rx"),
-        rng.uniform(-math.pi, math.pi),
+        rng.uniform(-math.pi, math.pi, size=7),
         strict=True,
     ):
         getattr(circuit, gate)(float(angle), 0)
