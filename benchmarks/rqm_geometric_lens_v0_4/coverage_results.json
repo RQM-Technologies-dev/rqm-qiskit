@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0",
+  "extension_id": "EXP-014-A01",
+  "manifest_digest": "a28cd5a2131f3996c19c4abc8c20c74ddf3d416560a6a5d2bcce8c7ed07f9864",
+  "primary_cohort_immutable": true,
+  "generated": {
+    "rows": [
+      {
+        "partition": "discovery",
+        "index": 0,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.482534153247273e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 1,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.618455766672135e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 2,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 4.0029660424867215e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 3,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 1.2412670766236366e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 4,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.376611507232129e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 5,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 6.473657049138937e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 6,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.220446049250313e-16
+      },
+      {
+        "partition": "discovery",
+        "index": 7,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.7755575615628914e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 0,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.9893669801409083e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 1,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.1401849173675503e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 2,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.1401849173675503e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 3,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.220446049250313e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 4,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 1.1102230246251565e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 5,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.220446049250313e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 6,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 1.1102230246251565e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 7,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.563284171228371e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 8,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 4.0029660424867215e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 9,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 5.095246377785861e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 10,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.376611507232129e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 11,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 1.5700924586837752e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 12,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 4.561234287365988e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 13,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.7553457920377367e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 14,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 3.7238012298709097e-16
+      },
+      {
+        "partition": "holdout",
+        "index": 15,
+        "equivalent_fingerprints_match": true,
+        "reversed_counterexample_distinct": true,
+        "equivalent_operator_error": 2.498001805406602e-16
+      }
+    ]
+  },
+  "representatives": {
+    "rows": [
+      {
+        "name": "bell",
+        "num_qubits": 2,
+        "assurance_status": "VERIFIED",
+        "optimization_applied": true,
+        "report_status": "complete",
+        "report_has_bounded_geometry": true
+      },
+      {
+        "name": "ghz",
+        "num_qubits": 3,
+        "assurance_status": "VERIFIED",
+        "optimization_applied": true,
+        "report_status": "partial",
+        "report_has_bounded_geometry": true
+      },
+      {
+        "name": "qft_style",
+        "num_qubits": 3,
+        "assurance_status": "VERIFIED",
+        "optimization_applied": true,
+        "report_status": "partial",
+        "report_has_bounded_geometry": true
+      },
+      {
+        "name": "vqe_style",
+        "num_qubits": 4,
+        "assurance_status": "VERIFIED",
+        "optimization_applied": true,
+        "report_status": "partial",
+        "report_has_bounded_geometry": true
+      },
+      {
+        "name": "qaoa_style",
+        "num_qubits": 5,
+        "assurance_status": "VERIFIED",
+        "optimization_applied": true,
+        "report_status": "partial",
+        "report_has_bounded_geometry": true
+      }
+    ]
+  },
+  "boundaries": {
+    "unsupported": [
+      {
+        "name": "mid_circuit_measurement",
+        "status": "FALLBACK_ORIGINAL",
+        "fallback_reason": "unsupported_input",
+        "exact_original_returned": true
+      },
+      {
+        "name": "reset",
+        "status": "FALLBACK_ORIGINAL",
+        "fallback_reason": "unsupported_input",
+        "exact_original_returned": true
+      },
+      {
+        "name": "symbolic_parameter",
+        "status": "FALLBACK_ORIGINAL",
+        "fallback_reason": "unsupported_input",
+        "exact_original_returned": true
+      },
+      {
+        "name": "custom_instruction",
+        "status": "FALLBACK_ORIGINAL",
+        "fallback_reason": "unsupported_input",
+        "exact_original_returned": true
+      },
+      {
+        "name": "controlled_phase",
+        "status": "FALLBACK_ORIGINAL",
+        "fallback_reason": "unsupported_input",
+        "exact_original_returned": true
+      }
+    ],
+    "terminal_measurement": {
+      "status": "VERIFIED",
+      "quantum_registers": [
+        "science"
+      ],
+      "classical_registers": [
+        "readout"
+      ],
+      "mapping": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    }
+  },
+  "q_neg_q": {
+    "standalone_probability_error": 0.0,
+    "controlled_operator_phase_aligned_separation": 1.8382047943315492
+  },
+  "checks": {
+    "generated_equivalence": true,
+    "noncommuting_counterexamples": true,
+    "representatives_verified": true,
+    "unsupported_fail_closed": true,
+    "terminal_measurement_exact": true,
+    "q_neg_q_control": true
+  },
+  "passed": true,
+  "claim_boundary": "Correctness and coverage validation only; the primary EXP-014 advantage cohort and claim are unchanged.",
+  "result_digest": "e6990ab95c74289667d19698ecaa182665e5f933e71cbfdd72da33f19f9ff01f"
+}

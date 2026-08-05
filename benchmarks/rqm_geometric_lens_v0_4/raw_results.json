@@ -1,0 +1,3680 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-014",
+  "policy_digest": "7e83f2dc6fcc302a80adbd6309d08c33265cea38292104ec58c5186d0c6d9009",
+  "corpus_digest": "d244cfaa87ca2775c79845ae546e57e0931d5828aaee0d9b079bd12b51c16459",
+  "environment": {
+    "python": "3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 21:00:12) [Clang 16.0.6 ]",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "qiskit": "2.5.1",
+    "numpy": "2.5.1"
+  },
+  "discovery": {
+    "family_count": 32,
+    "rqm_convergence": 1.0,
+    "qiskit_serialization_convergence": 0.0625,
+    "convergence_advantage_percentage_points": 0.9375,
+    "control_collisions": 0,
+    "non_verified_variants": 0,
+    "max_phase_aligned_error": 4.847302891456678e-16,
+    "median_native_one_qubit_cost_delta": 0.0,
+    "median_native_one_qubit_cost_improvement": 0.0,
+    "native_one_qubit_cost_improvement_bootstrap_interval": [
+      0.0,
+      0.0
+    ],
+    "rqm_direct_latency_ns": {
+      "median": 1074126.5,
+      "p95": 1559247.2999999996
+    },
+    "qiskit_transpile_latency_ns": {
+      "median": 10438498.0,
+      "p95": 14564868.0
+    },
+    "rows": [
+      {
+        "id": "discovery-000",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.554447978966673e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          7049662,
+          1592356,
+          1298959,
+          1348499
+        ],
+        "qiskit_transpile_latencies_ns": [
+          70436278,
+          13481899,
+          12639689,
+          14900737
+        ]
+      },
+      {
+        "id": "discovery-001",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.2591401799415137e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1045086,
+          1300316,
+          1175005,
+          1325615
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13673075,
+          12086467,
+          12494117,
+          13533590
+        ]
+      },
+      {
+        "id": "discovery-002",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1230329,
+          1288917,
+          1167933,
+          1079084
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13700833,
+          14405173,
+          14526921,
+          14585301
+        ]
+      },
+      {
+        "id": "discovery-003",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.2898349882893854e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1040251,
+          1458210,
+          1393567,
+          1286950
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13158482,
+          12158683,
+          14325134,
+          14757778
+        ]
+      },
+      {
+        "id": "discovery-004",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1190630,
+          1281639,
+          1167813,
+          1142062
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13048059,
+          12999914,
+          12486511,
+          12870701
+        ]
+      },
+      {
+        "id": "discovery-005",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1001976,
+          1327898,
+          1152827,
+          1097888
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13320762,
+          13974647,
+          14830360,
+          12920994
+        ]
+      },
+      {
+        "id": "discovery-006",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          993176,
+          1344957,
+          1242977,
+          1074767
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12494863,
+          14361582,
+          14035381,
+          13464175
+        ]
+      },
+      {
+        "id": "discovery-007",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1054365,
+          1475865,
+          1593772,
+          1097632
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13306595,
+          12565659,
+          13545762,
+          13607934
+        ]
+      },
+      {
+        "id": "discovery-008",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.3877787807814457e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1254804,
+          1376500,
+          1182276,
+          1106998
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13295804,
+          13498845,
+          11866048,
+          13654012
+        ]
+      },
+      {
+        "id": "discovery-009",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1056207,
+          991773,
+          1292727,
+          885382
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13063032,
+          10783051,
+          9344218,
+          10699835
+        ]
+      },
+      {
+        "id": "discovery-010",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.2412670766236366e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          931784,
+          1000633,
+          1004029,
+          924729
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9079888,
+          9427545,
+          9835647,
+          9457738
+        ]
+      },
+      {
+        "id": "discovery-011",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          745459,
+          999861,
+          893339,
+          830174
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9389322,
+          8797391,
+          9035879,
+          8676557
+        ]
+      },
+      {
+        "id": "discovery-012",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          951475,
+          991024,
+          1154149,
+          1217176
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9968111,
+          10291260,
+          9856801,
+          10447116
+        ]
+      },
+      {
+        "id": "discovery-013",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          777328,
+          1198750,
+          890154,
+          860094
+        ],
+        "qiskit_transpile_latencies_ns": [
+          8993283,
+          9630598,
+          10432162,
+          9418484
+        ]
+      },
+      {
+        "id": "discovery-014",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          784395,
+          988837,
+          1041908,
+          840178
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9534941,
+          8876138,
+          9384470,
+          8889304
+        ]
+      },
+      {
+        "id": "discovery-015",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          838015,
+          1524445,
+          903741,
+          867386
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9536702,
+          9569640,
+          10227987,
+          9735412
+        ]
+      },
+      {
+        "id": "discovery-016",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          841768,
+          1071046,
+          1211904,
+          949277
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9908228,
+          9911003,
+          12168562,
+          9658804
+        ]
+      },
+      {
+        "id": "discovery-017",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1365176,
+          1123369,
+          949437,
+          986672
+        ],
+        "qiskit_transpile_latencies_ns": [
+          11098704,
+          12837786,
+          10928683,
+          9916359
+        ]
+      },
+      {
+        "id": "discovery-018",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1680544,
+          1231498,
+          1141810,
+          895085
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13347353,
+          11387331,
+          9453635,
+          10533807
+        ]
+      },
+      {
+        "id": "discovery-019",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          839702,
+          1079026,
+          1160800,
+          1085194
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9749836,
+          9531415,
+          10377746,
+          9859808
+        ]
+      },
+      {
+        "id": "discovery-020",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.2412670766236366e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          803808,
+          1055473,
+          1068162,
+          878592
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9710692,
+          9454127,
+          10677278,
+          10601576
+        ]
+      },
+      {
+        "id": "discovery-021",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          778687,
+          1416885,
+          925413,
+          1111810
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9212565,
+          9987858,
+          11888819,
+          10208464
+        ]
+      },
+      {
+        "id": "discovery-022",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.6653345369377348e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          893894,
+          1073486,
+          949825,
+          1474498
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10567986,
+          9814763,
+          10003986,
+          13401113
+        ]
+      },
+      {
+        "id": "discovery-023",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          829542,
+          1071166,
+          1345174,
+          1198220
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9491753,
+          10393239,
+          11649550,
+          9520320
+        ]
+      },
+      {
+        "id": "discovery-024",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.847302891456678e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1004211,
+          1090075,
+          925360,
+          880108
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10144001,
+          10035661,
+          9676371,
+          9857150
+        ]
+      },
+      {
+        "id": "discovery-025",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          869271,
+          1228449,
+          1246274,
+          853682
+        ],
+        "qiskit_transpile_latencies_ns": [
+          11023940,
+          9886964,
+          10445708,
+          9879560
+        ]
+      },
+      {
+        "id": "discovery-026",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.7755575615628914e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          857458,
+          1168557,
+          1249826,
+          894913
+        ],
+        "qiskit_transpile_latencies_ns": [
+          34249392,
+          9588605,
+          9957218,
+          9646761
+        ]
+      },
+      {
+        "id": "discovery-027",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 9.71445146547012e-17,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          5477251,
+          1132291,
+          949378,
+          889482
+        ],
+        "qiskit_transpile_latencies_ns": [
+          35754035,
+          10483704,
+          11911126,
+          9766777
+        ]
+      },
+      {
+        "id": "discovery-028",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.4672134748494927e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          948001,
+          1018330,
+          921736,
+          864569
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10008789,
+          11409202,
+          9243693,
+          10430005
+        ]
+      },
+      {
+        "id": "discovery-029",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          810333,
+          1660576,
+          1139685,
+          859487
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10343338,
+          10255967,
+          9609484,
+          9121891
+        ]
+      },
+      {
+        "id": "discovery-030",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1210071,
+          1577987,
+          1139069,
+          1081162
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10638946,
+          11721753,
+          9283928,
+          10444834
+        ]
+      },
+      {
+        "id": "discovery-031",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.4033044459902308e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          770405,
+          1058647,
+          1078827,
+          982183
+        ],
+        "qiskit_transpile_latencies_ns": [
+          11546226,
+          9718759,
+          9853549,
+          9269918
+        ]
+      }
+    ]
+  },
+  "holdout": {
+    "family_count": 64,
+    "rqm_convergence": 1.0,
+    "qiskit_serialization_convergence": 0.0625,
+    "convergence_advantage_percentage_points": 0.9375,
+    "control_collisions": 0,
+    "non_verified_variants": 0,
+    "max_phase_aligned_error": 5.933464366067995e-16,
+    "median_native_one_qubit_cost_delta": 0.0,
+    "median_native_one_qubit_cost_improvement": 0.0,
+    "native_one_qubit_cost_improvement_bootstrap_interval": [
+      0.0,
+      0.0
+    ],
+    "rqm_direct_latency_ns": {
+      "median": 1324243.0,
+      "p95": 2047766.0
+    },
+    "qiskit_transpile_latency_ns": {
+      "median": 14165197.5,
+      "p95": 18586426.0
+    },
+    "rows": [
+      {
+        "id": "holdout-000",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          859721,
+          1433015,
+          1015611,
+          971665
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10712058,
+          9744871,
+          9378115,
+          9727162
+        ]
+      },
+      {
+        "id": "holdout-001",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1163597,
+          1071354,
+          931238,
+          937121
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10153945,
+          10119831,
+          9624562,
+          11085123
+        ]
+      },
+      {
+        "id": "holdout-002",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          850602,
+          1065776,
+          1283457,
+          858826
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10538426,
+          9866700,
+          10661329,
+          9582509
+        ]
+      },
+      {
+        "id": "holdout-003",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1289858,
+          1086455,
+          921067,
+          1067368
+        ],
+        "qiskit_transpile_latencies_ns": [
+          11729816,
+          11572634,
+          9243224,
+          11535933
+        ]
+      },
+      {
+        "id": "holdout-004",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0014830212433607e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          782430,
+          1190584,
+          951390,
+          857870
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9495067,
+          9564827,
+          10126690,
+          9619491
+        ]
+      },
+      {
+        "id": "holdout-005",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 6.938893903907228e-17,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          821169,
+          1073439,
+          1073537,
+          1146835
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10546595,
+          10440873,
+          9508438,
+          12246884
+        ]
+      },
+      {
+        "id": "holdout-006",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.554447978966673e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1121284,
+          1060856,
+          1261058,
+          864016
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10658856,
+          9636219,
+          10757933,
+          9649390
+        ]
+      },
+      {
+        "id": "holdout-007",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          913231,
+          1276900,
+          949609,
+          1127965
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9895229,
+          11452046,
+          9525430,
+          11409429
+        ]
+      },
+      {
+        "id": "holdout-008",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.1102230246251565e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1394866,
+          1056461,
+          1544290,
+          1341374
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10701200,
+          10666388,
+          10231513,
+          13782872
+        ]
+      },
+      {
+        "id": "holdout-009",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          831855,
+          1083615,
+          1414767,
+          863367
+        ],
+        "qiskit_transpile_latencies_ns": [
+          9620791,
+          10243810,
+          11509035,
+          9584977
+        ]
+      },
+      {
+        "id": "holdout-010",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.237726045655905e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          816489,
+          1031244,
+          1361730,
+          1451006
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10489483,
+          11278910,
+          10282798,
+          13875916
+        ]
+      },
+      {
+        "id": "holdout-011",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0014830212433607e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1344452,
+          1697247,
+          2047937,
+          1274522
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14248839,
+          12092654,
+          12126789,
+          12187606
+        ]
+      },
+      {
+        "id": "holdout-012",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 5.933464366067995e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          953883,
+          1572300,
+          1019878,
+          1244694
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12170646,
+          10670324,
+          10994693,
+          11483487
+        ]
+      },
+      {
+        "id": "holdout-013",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.1102230246251565e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          882567,
+          1632546,
+          1598539,
+          955655
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13494078,
+          11753505,
+          15582913,
+          12333047
+        ]
+      },
+      {
+        "id": "holdout-014",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.3877787807814457e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1414751,
+          1596525,
+          1604950,
+          946048
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10850699,
+          14719275,
+          12832799,
+          12299889
+        ]
+      },
+      {
+        "id": "holdout-015",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          892766,
+          1702840,
+          1374991,
+          1553964
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12725024,
+          14099345,
+          14851255,
+          17509854
+        ]
+      },
+      {
+        "id": "holdout-016",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1316271,
+          1776905,
+          1555614,
+          1502717
+        ],
+        "qiskit_transpile_latencies_ns": [
+          17091257,
+          17899331,
+          18364108,
+          16715250
+        ]
+      },
+      {
+        "id": "holdout-017",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0014830212433607e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          2332771,
+          2758116,
+          1635500,
+          1119692
+        ],
+        "qiskit_transpile_latencies_ns": [
+          24608287,
+          20222038,
+          16833311,
+          18233433
+        ]
+      },
+      {
+        "id": "holdout-018",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.1401849173675503e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1169421,
+          1216808,
+          1182842,
+          1013252
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16199283,
+          14853647,
+          13854566,
+          18661945
+        ]
+      },
+      {
+        "id": "holdout-019",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.885780586188048e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1373484,
+          1942640,
+          1480181,
+          1542430
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15347723,
+          16993572,
+          15415975,
+          17650578
+        ]
+      },
+      {
+        "id": "holdout-020",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.1401849173675503e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1396100,
+          1304458,
+          1109477,
+          1275005
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14526235,
+          13398296,
+          12024076,
+          14293204
+        ]
+      },
+      {
+        "id": "holdout-021",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1644121,
+          1619784,
+          1610350,
+          1144920
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12712960,
+          12460791,
+          13117644,
+          14450795
+        ]
+      },
+      {
+        "id": "holdout-022",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.2887833992611187e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1579380,
+          1255436,
+          1115703,
+          1289906
+        ],
+        "qiskit_transpile_latencies_ns": [
+          17598283,
+          11396044,
+          15190011,
+          13541078
+        ]
+      },
+      {
+        "id": "holdout-023",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0087056691137481e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1021227,
+          1331010,
+          1151969,
+          977992
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13451170,
+          11493382,
+          13425853,
+          14744424
+        ]
+      },
+      {
+        "id": "holdout-024",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.1401849173675503e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          929956,
+          1249887,
+          1108485,
+          1439626
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12996068,
+          11504842,
+          12125495,
+          11527269
+        ]
+      },
+      {
+        "id": "holdout-025",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0014830212433607e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1327826,
+          1263373,
+          1098759,
+          1368403
+        ],
+        "qiskit_transpile_latencies_ns": [
+          10535445,
+          12387826,
+          11707728,
+          12629706
+        ]
+      },
+      {
+        "id": "holdout-026",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1604317,
+          1912863,
+          1041929,
+          1297479
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15475311,
+          13738765,
+          14048281,
+          11781969
+        ]
+      },
+      {
+        "id": "holdout-027",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1005884,
+          1255145,
+          1807771,
+          954298
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14190813,
+          14043137,
+          13422548,
+          14395309
+        ]
+      },
+      {
+        "id": "holdout-028",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.888257972851056e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1447128,
+          1409324,
+          2246593,
+          1336846
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15255511,
+          15351537,
+          15288369,
+          14094514
+        ]
+      },
+      {
+        "id": "holdout-029",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.1102230246251565e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1174529,
+          1546817,
+          1295559,
+          1405075
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14693139,
+          14440013,
+          14298875,
+          16565015
+        ]
+      },
+      {
+        "id": "holdout-030",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.498001805406602e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1263470,
+          2047709,
+          1472779,
+          1208996
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15641260,
+          17192660,
+          18698215,
+          13849575
+        ]
+      },
+      {
+        "id": "holdout-031",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.2412670766236366e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1077835,
+          1613742,
+          1255780,
+          1311057
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14555746,
+          15347256,
+          14116123,
+          14816806
+        ]
+      },
+      {
+        "id": "holdout-032",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1321744,
+          1463909,
+          1416934,
+          1276069
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15245668,
+          15289697,
+          14512207,
+          17486348
+        ]
+      },
+      {
+        "id": "holdout-033",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.7755575615628914e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1183154,
+          1598256,
+          1619018,
+          2795722
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16071106,
+          16649027,
+          13997705,
+          16585815
+        ]
+      },
+      {
+        "id": "holdout-034",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.0014830212433607e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1495137,
+          1513813,
+          1744736,
+          1365762
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16455492,
+          15586378,
+          16104091,
+          18424700
+        ]
+      },
+      {
+        "id": "holdout-035",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.2887833992611187e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1963387,
+          6723202,
+          1691839,
+          1288150
+        ],
+        "qiskit_transpile_latencies_ns": [
+          18561253,
+          19243909,
+          16034189,
+          15318351
+        ]
+      },
+      {
+        "id": "holdout-036",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.220446049250313e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1444190,
+          2480188,
+          1570352,
+          1353486
+        ],
+        "qiskit_transpile_latencies_ns": [
+          18337613,
+          18089944,
+          19066777,
+          15678632
+        ]
+      },
+      {
+        "id": "holdout-037",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.2412670766236366e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1187091,
+          1757606,
+          1618015,
+          1536861
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15749725,
+          18529896,
+          18389424,
+          17661919
+        ]
+      },
+      {
+        "id": "holdout-038",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1268928,
+          1645614,
+          1509570,
+          1332466
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16886066,
+          17165488,
+          17531758,
+          16467396
+        ]
+      },
+      {
+        "id": "holdout-039",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.2729511820139823e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1407965,
+          1211957,
+          1101102,
+          1300129
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16064264,
+          11982958,
+          15779734,
+          12912431
+        ]
+      },
+      {
+        "id": "holdout-040",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.7336071744532853e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          972958,
+          1319594,
+          1267621,
+          1079364
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14555254,
+          13492932,
+          12514514,
+          14094955
+        ]
+      },
+      {
+        "id": "holdout-041",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0412728104402656e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1501345,
+          1614161,
+          1543752,
+          1264696
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16242680,
+          14122395,
+          16909269,
+          16207042
+        ]
+      },
+      {
+        "id": "holdout-042",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.3306690738754696e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1011195,
+          1394551,
+          1126708,
+          1366792
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15304672,
+          13528861,
+          15866286,
+          12717081
+        ]
+      },
+      {
+        "id": "holdout-043",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": true,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.8609792490763985e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1533066,
+          1183214,
+          1835285,
+          1595447
+        ],
+        "qiskit_transpile_latencies_ns": [
+          17141096,
+          14448748,
+          14558781,
+          14139582
+        ]
+      },
+      {
+        "id": "holdout-044",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.9893669801409083e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          940227,
+          1320455,
+          1080211,
+          1063017
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14474420,
+          12801073,
+          15690054,
+          13878249
+        ]
+      },
+      {
+        "id": "holdout-045",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1420935,
+          1436364,
+          1786291,
+          1415248
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12974782,
+          13536674,
+          16696946,
+          16170423
+        ]
+      },
+      {
+        "id": "holdout-046",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1077219,
+          1326742,
+          2284068,
+          1183932
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14118202,
+          15866505,
+          17244039,
+          14624670
+        ]
+      },
+      {
+        "id": "holdout-047",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1246352,
+          1261878,
+          1701123,
+          1352047
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14058848,
+          13365672,
+          15587682,
+          19040810
+        ]
+      },
+      {
+        "id": "holdout-048",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          964595,
+          1251374,
+          1147164,
+          1257124
+        ],
+        "qiskit_transpile_latencies_ns": [
+          19902694,
+          16467887,
+          14881419,
+          13644094
+        ]
+      },
+      {
+        "id": "holdout-049",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.1102230246251565e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1034622,
+          1329990,
+          1616414,
+          1141560
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13021662,
+          15047813,
+          12251100,
+          13304567
+        ]
+      },
+      {
+        "id": "holdout-050",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.2412670766236366e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1086628,
+          1576625,
+          1478755,
+          1601949
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15538708,
+          13089273,
+          14127983,
+          13781798
+        ]
+      },
+      {
+        "id": "holdout-051",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1557125,
+          1523968,
+          1263508,
+          1546690
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15643018,
+          17228836,
+          16028216,
+          18483694
+        ]
+      },
+      {
+        "id": "holdout-052",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.7772239894833365e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1372237,
+          1576533,
+          1535446,
+          1637786
+        ],
+        "qiskit_transpile_latencies_ns": [
+          16027711,
+          18931693,
+          18165835,
+          16288320
+        ]
+      },
+      {
+        "id": "holdout-053",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.9893669801409083e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1844347,
+          2525402,
+          1497888,
+          1061383
+        ],
+        "qiskit_transpile_latencies_ns": [
+          14881357,
+          15036268,
+          14538668,
+          13708088
+        ]
+      },
+      {
+        "id": "holdout-054",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1029859,
+          1451789,
+          1547037,
+          1071368
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15172582,
+          14940506,
+          12530350,
+          14292118
+        ]
+      },
+      {
+        "id": "holdout-055",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.510833468576701e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1165435,
+          1938785,
+          1134219,
+          1744657
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13299902,
+          13956425,
+          12696951,
+          12756301
+        ]
+      },
+      {
+        "id": "holdout-056",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 2.482534153247273e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1370045,
+          2053489,
+          1530059,
+          1082786
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13073954,
+          14846911,
+          12834942,
+          13650844
+        ]
+      },
+      {
+        "id": "holdout-057",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.433175098891678e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1368332,
+          1358277,
+          1341057,
+          1085678
+        ],
+        "qiskit_transpile_latencies_ns": [
+          12517037,
+          13968037,
+          16387837,
+          15311818
+        ]
+      },
+      {
+        "id": "holdout-058",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 7.850462293418876e-17,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1399423,
+          1311315,
+          1518821,
+          1130825
+        ],
+        "qiskit_transpile_latencies_ns": [
+          13669553,
+          14328159,
+          15473432,
+          13878210
+        ]
+      },
+      {
+        "id": "holdout-059",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 1.5700924586837752e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1180021,
+          2133790,
+          3088724,
+          1051201
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15908291,
+          34383910,
+          39023357,
+          13061685
+        ]
+      },
+      {
+        "id": "holdout-060",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 3.376611507232129e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1020116,
+          1887996,
+          1151137,
+          1873749
+        ],
+        "qiskit_transpile_latencies_ns": [
+          46239260,
+          12925218,
+          14192275,
+          13399069
+        ]
+      },
+      {
+        "id": "holdout-061",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1237960,
+          1466255,
+          1918599,
+          1090827
+        ],
+        "qiskit_transpile_latencies_ns": [
+          17766593,
+          15123341,
+          13000063,
+          14048691
+        ]
+      },
+      {
+        "id": "holdout-062",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.0029660424867215e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1124163,
+          2338610,
+          1674351,
+          1138002
+        ],
+        "qiskit_transpile_latencies_ns": [
+          15215402,
+          18273258,
+          18386485,
+          16254674
+        ]
+      },
+      {
+        "id": "holdout-063",
+        "rqm_converged": true,
+        "qiskit_serialization_converged": false,
+        "control_collision": false,
+        "statuses": [
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED",
+          "VERIFIED"
+        ],
+        "max_phase_aligned_error": 4.47545209131181e-16,
+        "native_one_qubit_cost_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "native_one_qubit_cost_improvements": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rqm_direct_latencies_ns": [
+          1569640,
+          1566357,
+          1757542,
+          1585802
+        ],
+        "qiskit_transpile_latencies_ns": [
+          19400295,
+          17199820,
+          16922408,
+          16017517
+        ]
+      }
+    ]
+  },
+  "quaternionic_wavefunction": {
+    "records": 64,
+    "max_probability_error": 4.440892098500626e-16,
+    "max_q_negation_error": 0.0,
+    "interpretation": "standard-compatible spinor regrouping and ideal Z-basis prediction"
+  },
+  "su4": {
+    "rows": [
+      {
+        "name": "cx",
+        "verified_decomposition": true,
+        "reconstruction_error": 1.1176312178820974e-16,
+        "fingerprint": "fc31ee2128c4eaf1654d1dfb9c1316233d03e9ec50f6a1325de45ce876c83dde",
+        "assurance_status": "VERIFIED",
+        "source_two_qubit_cost": 1,
+        "rqm_two_qubit_cost": 1
+      },
+      {
+        "name": "cartan_axes",
+        "verified_decomposition": true,
+        "reconstruction_error": 8.177321602803612e-16,
+        "fingerprint": "3fdfb9d39257bc513c81c9fdfa34fed52a554e85e070c724fc38ed2900130d72",
+        "assurance_status": "VERIFIED",
+        "source_two_qubit_cost": 3,
+        "rqm_two_qubit_cost": 3
+      },
+      {
+        "name": "bell_like",
+        "verified_decomposition": true,
+        "reconstruction_error": 3.469446951953614e-16,
+        "fingerprint": "fc31ee2128c4eaf1654d1dfb9c1316233d03e9ec50f6a1325de45ce876c83dde",
+        "assurance_status": "VERIFIED",
+        "source_two_qubit_cost": 1,
+        "rqm_two_qubit_cost": 1
+      },
+      {
+        "name": "fixed_pair_window",
+        "verified_decomposition": true,
+        "reconstruction_error": 4.889835937043899e-16,
+        "fingerprint": "55b3077e011c2da411da8b75512b08765a9b58b8dcf9ac5c77b12b75fe3f8b0a",
+        "assurance_status": "VERIFIED",
+        "source_two_qubit_cost": 3,
+        "rqm_two_qubit_cost": 3
+      }
+    ],
+    "max_reconstruction_error": 8.177321602803612e-16,
+    "median_two_qubit_cost_improvement": 0.0
+  },
+  "decision": {
+    "canonical_fingerprint_gate": true,
+    "target_native_cost_gate": false,
+    "target_native_cost_interval": [
+      0.0,
+      0.0
+    ],
+    "latency_advantage_gate": null,
+    "latency_advantage_note": "Not promoted because RQM direct assurance and Qiskit level-3 transpilation end at different output stages.",
+    "su4_cost_gate": false,
+    "winning_candidate": "phase_aware_su2_canonical_fingerprint",
+    "verdict": "canonical_assurance_workflow_advantage_supported",
+    "candidate_productization_authorized": true,
+    "package_release_authorized": false,
+    "claim_boundary": "Deterministic canonical SU(2) fingerprint convergence for the frozen equivalent-family workflow only; no general Qiskit, circuit-quality, latency, hardware, or physics advantage."
+  },
+  "semantic_digest": "ba6e08f81cbefa0f35e6eeb811ca1f2190efaf54d457f4c7af261447f9da376c",
+  "result_digest": "e7786b49957eca8426cf9b1322639d87088e88252b1f6e15da658e314f2ae868"
+}
