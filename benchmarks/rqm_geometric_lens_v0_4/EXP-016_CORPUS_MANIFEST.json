@@ -1,0 +1,395 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-016",
+  "records": [
+    {
+      "id": "1q_identity",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": []
+    },
+    {
+      "id": "1q_x",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "x"
+      ]
+    },
+    {
+      "id": "1q_h",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "h"
+      ]
+    },
+    {
+      "id": "1q_s",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "s"
+      ]
+    },
+    {
+      "id": "1q_t",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "t"
+      ]
+    },
+    {
+      "id": "1q_rx_pi_2",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "rx"
+      ]
+    },
+    {
+      "id": "1q_ry_pi_2",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "ry"
+      ]
+    },
+    {
+      "id": "1q_rz_pi_2",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "rz"
+      ]
+    },
+    {
+      "id": "1q_noncommuting_rx_ry",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "rx",
+        "ry"
+      ]
+    },
+    {
+      "id": "1q_zyz_general",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "rz",
+        "ry",
+        "rz"
+      ]
+    },
+    {
+      "id": "1q_global_phase",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "x"
+      ]
+    },
+    {
+      "id": "1q_terminal_measurement",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 1,
+      "operations": [
+        "ry",
+        "measure"
+      ]
+    },
+    {
+      "id": "1q_public_unitary",
+      "category": "one_qubit_circuits",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "unitary"
+      ]
+    },
+    {
+      "id": "2q_product",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "h",
+        "x"
+      ]
+    },
+    {
+      "id": "2q_bell",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "h",
+        "cx"
+      ]
+    },
+    {
+      "id": "2q_cz",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "h",
+        "h",
+        "cz"
+      ]
+    },
+    {
+      "id": "2q_iswap",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "x",
+        "iswap"
+      ]
+    },
+    {
+      "id": "2q_swap",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "x",
+        "swap"
+      ]
+    },
+    {
+      "id": "2q_rxx_pi_4",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "rxx"
+      ]
+    },
+    {
+      "id": "2q_local_equivalent_cx",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "h",
+        "cx",
+        "h"
+      ]
+    },
+    {
+      "id": "2q_public_unitary",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 0,
+      "operations": [
+        "unitary"
+      ]
+    },
+    {
+      "id": "2q_terminal_measurement_reversed",
+      "category": "two_qubit_circuits",
+      "num_qubits": 2,
+      "num_clbits": 2,
+      "operations": [
+        "h",
+        "cx",
+        "measure",
+        "measure"
+      ]
+    },
+    {
+      "id": "state_zero",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": 1.0,
+          "imag": 0.0
+        },
+        {
+          "real": 0.0,
+          "imag": 0.0
+        }
+      ]
+    },
+    {
+      "id": "state_one",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        {
+          "real": 1.0,
+          "imag": 0.0
+        }
+      ]
+    },
+    {
+      "id": "state_plus",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": 0.7071067811865475,
+          "imag": 0.0
+        },
+        {
+          "real": 0.7071067811865475,
+          "imag": 0.0
+        }
+      ]
+    },
+    {
+      "id": "state_plus_i",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": 0.7071067811865475,
+          "imag": 0.0
+        },
+        {
+          "real": 0.0,
+          "imag": 0.7071067811865475
+        }
+      ]
+    },
+    {
+      "id": "state_general",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": 0.5773502691896258,
+          "imag": 0.0
+        },
+        {
+          "real": 0.0,
+          "imag": 0.816496580927726
+        }
+      ]
+    },
+    {
+      "id": "state_general_negative",
+      "category": "states",
+      "dimension": 2,
+      "amplitudes": [
+        {
+          "real": -0.5773502691896258,
+          "imag": -0.0
+        },
+        {
+          "real": -0.0,
+          "imag": -0.816496580927726
+        }
+      ]
+    },
+    {
+      "id": "boundary_symbolic",
+      "category": "partial_boundaries",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "rx"
+      ]
+    },
+    {
+      "id": "boundary_reset",
+      "category": "partial_boundaries",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "reset"
+      ]
+    },
+    {
+      "id": "boundary_initialize",
+      "category": "partial_boundaries",
+      "num_qubits": 1,
+      "num_clbits": 0,
+      "operations": [
+        "initialize"
+      ]
+    },
+    {
+      "id": "boundary_mid_circuit_measurement",
+      "category": "partial_boundaries",
+      "num_qubits": 1,
+      "num_clbits": 1,
+      "operations": [
+        "h",
+        "measure",
+        "x"
+      ]
+    },
+    {
+      "id": "boundary_control_flow",
+      "category": "partial_boundaries",
+      "num_qubits": 1,
+      "num_clbits": 1,
+      "operations": [
+        "if_else"
+      ]
+    },
+    {
+      "id": "boundary_ghz_3q",
+      "category": "partial_boundaries",
+      "num_qubits": 3,
+      "num_clbits": 0,
+      "operations": [
+        "h",
+        "cx",
+        "cx"
+      ]
+    },
+    {
+      "id": "boundary_qft_3q",
+      "category": "partial_boundaries",
+      "num_qubits": 3,
+      "num_clbits": 0,
+      "operations": [
+        "qft"
+      ]
+    },
+    {
+      "id": "boundary_regional_6q",
+      "category": "partial_boundaries",
+      "num_qubits": 6,
+      "num_clbits": 0,
+      "operations": [
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry"
+      ]
+    }
+  ],
+  "corpus_digest": "a1e511885f42ea526ca4406f28d58797a3c4de5480e76ac96b629dd2aebae14e"
+}

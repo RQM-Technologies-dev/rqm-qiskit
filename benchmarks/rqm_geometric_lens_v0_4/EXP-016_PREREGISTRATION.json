@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-016",
+  "date": "2026-08-05",
+  "mission": "Help the world understand ordinary quantum computing through quaternionic geometry while remaining compatible with Qiskit.",
+  "records": {
+    "one_qubit_circuits": [
+      "1q_identity",
+      "1q_x",
+      "1q_h",
+      "1q_s",
+      "1q_t",
+      "1q_rx_pi_2",
+      "1q_ry_pi_2",
+      "1q_rz_pi_2",
+      "1q_noncommuting_rx_ry",
+      "1q_zyz_general",
+      "1q_global_phase",
+      "1q_terminal_measurement",
+      "1q_public_unitary"
+    ],
+    "two_qubit_circuits": [
+      "2q_product",
+      "2q_bell",
+      "2q_cz",
+      "2q_iswap",
+      "2q_swap",
+      "2q_rxx_pi_4",
+      "2q_local_equivalent_cx",
+      "2q_public_unitary",
+      "2q_terminal_measurement_reversed"
+    ],
+    "states": [
+      "state_zero",
+      "state_one",
+      "state_plus",
+      "state_plus_i",
+      "state_general",
+      "state_general_negative"
+    ],
+    "partial_boundaries": [
+      "boundary_symbolic",
+      "boundary_reset",
+      "boundary_initialize",
+      "boundary_mid_circuit_measurement",
+      "boundary_control_flow",
+      "boundary_ghz_3q",
+      "boundary_qft_3q",
+      "boundary_regional_6q"
+    ]
+  },
+  "counts": {
+    "one_qubit_circuits": 13,
+    "two_qubit_circuits": 9,
+    "states": 6,
+    "partial_boundaries": 8,
+    "total": 36
+  },
+  "repetitions_per_record": 5,
+  "numeric_tolerance": 1e-9,
+  "latency_thresholds_ms": {
+    "direct_explanation_p95_max": 50.0,
+    "openqasm_explanation_p95_max": 100.0
+  },
+  "invariants": {
+    "qiskit_public_apis_only": true,
+    "input_mutation_allowed": false,
+    "optimization_default": false,
+    "missing_geometry_must_be_explicit": true,
+    "comparative_performance_gate": false,
+    "circuit_dependent_cache_allowed": false
+  },
+  "execution": {
+    "provider": "local-only",
+    "hardware": false,
+    "remote_simulator": false,
+    "credentials": false,
+    "network": false
+  }
+}

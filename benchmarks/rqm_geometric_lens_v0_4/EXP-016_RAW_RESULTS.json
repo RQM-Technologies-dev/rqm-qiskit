@@ -1,0 +1,838 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-016",
+  "decision": "pass",
+  "corpus_digest": "a1e511885f42ea526ca4406f28d58797a3c4de5480e76ac96b629dd2aebae14e",
+  "record_count": 36,
+  "repetitions_per_record": 5,
+  "records": [
+    {
+      "id": "1q_identity",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        4.746133,
+        4.065434,
+        5.024853,
+        4.842933,
+        4.747735
+      ],
+      "text_sha256": "da1d5a9ae6a33a459efd2d143f1266aacc092441bee81cb4a0db284bb00356ae",
+      "json_sha256": "a23f4f451ead6626f3a2d0496bd97bf94ee0e3c3658fae0e193c93207a5ecfa0"
+    },
+    {
+      "id": "1q_x",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 6.123233995736766e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.441608,
+        6.717263,
+        7.465058,
+        4.844609,
+        7.017982
+      ],
+      "text_sha256": "c271a8e8ccb1be80009acaf6bc8e438ee7c10e3e4b67f52374b365651bee4f58",
+      "json_sha256": "842c190fe4d35e6fa39d4f91dd5481cabecb98e5ee21730a8cb1aee2755fd1a1"
+    },
+    {
+      "id": "1q_h",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 4.329780281177466e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        4.996603,
+        6.302959,
+        4.895918,
+        5.095516,
+        5.967423
+      ],
+      "text_sha256": "7e27c2a24fa38654667f91c58486d689bdcc5a83d730faa1993037d463c3c05b",
+      "json_sha256": "9b77b56104f84215502efd0a5120e58f477e6bceec3bc30f0ca2d64e8d578344"
+    },
+    {
+      "id": "1q_s",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 1.0146536357569526e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.13339,
+        5.607466,
+        4.917048,
+        4.859231,
+        5.943716
+      ],
+      "text_sha256": "a0c46abf6c94861a82da30088403322b79805f5e06e68fbbb8800e95add9187d",
+      "json_sha256": "2f1c3d454386068757a57925cb7163ab40e8237d0d6128738779fbfa4ddb19ea"
+    },
+    {
+      "id": "1q_t",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 2.1634997285925725e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.07074,
+        5.553775,
+        5.496849,
+        4.690299,
+        4.904003
+      ],
+      "text_sha256": "3b7b4b198bf2db785608f49dc86160e803d7a1c46865d08a970ef0eda24c8eab",
+      "json_sha256": "41bb68725344d795d65960ccecbc02773eadb80483058242588f72142f070e0d"
+    },
+    {
+      "id": "1q_rx_pi_2",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.016647,
+        4.967464,
+        6.11937,
+        4.86345,
+        5.027998
+      ],
+      "text_sha256": "c4409491945f11ba0d1c5663727a1708ff5d942a596256a667a3d54f8b1f9dae",
+      "json_sha256": "774da4ee0fdfc50b065ccb2831cfe2f805825273dbfe1d7510c72e3433a037d4"
+    },
+    {
+      "id": "1q_ry_pi_2",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        6.508044,
+        5.501215,
+        4.865863,
+        4.662456,
+        4.946867
+      ],
+      "text_sha256": "05b16e8bc7c11902a514bce32ac2fc83a65c75f20337bafecdd7f77104f885f1",
+      "json_sha256": "b0a09f91b980b8e9c68a7c2c99d81277296bf2d2a7413dedef344ba36fdbdecb"
+    },
+    {
+      "id": "1q_rz_pi_2",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.002516,
+        4.84401,
+        5.146419,
+        4.701775,
+        4.65992
+      ],
+      "text_sha256": "006c379737e916771f7b428578a7a6eabe83477bffff978e7be523835fd77060",
+      "json_sha256": "2347ccc0ebd895984e0cd344841eb20cc554ef8291a74110259c99a3b88d1fc4"
+    },
+    {
+      "id": "1q_noncommuting_rx_ry",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.620064,
+        5.429714,
+        5.813873,
+        5.368671,
+        5.459289
+      ],
+      "text_sha256": "0648058eed898e1997526ab7319b4e390ef5a552ea7f29beb92753deec0b175c",
+      "json_sha256": "25b4ba5482c7c11e93ac0c98fdb0f866c87d7c7b86bd793482a3975b87ded764"
+    },
+    {
+      "id": "1q_zyz_general",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        6.781083,
+        7.018055,
+        6.150007,
+        5.852628,
+        6.056125
+      ],
+      "text_sha256": "ec95a4f36fdd0fe9a24043d37aa7bceac3c9cc34f7cb82367fa63353f5488142",
+      "json_sha256": "4c3dd4e98e111b05c8ca18b5201e14f694be6b53d2ad94a47051cd7ec69c3897"
+    },
+    {
+      "id": "1q_global_phase",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 5.551115123125783e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        8.423576,
+        5.854384,
+        4.877981,
+        4.982683,
+        5.514795
+      ],
+      "text_sha256": "51b922149615a72f8232cc3c986d3f03eeb3d68b0ca65c29fe57bb4bb5e63ce4",
+      "json_sha256": "8ce03f1e348f8a1aa93ca9708a72af7bf499ce75893544fd2bb3f365888476ab"
+    },
+    {
+      "id": "1q_terminal_measurement",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [
+        {
+          "qubit": 0,
+          "clbit": 0
+        }
+      ],
+      "direct_explanation_ms": [
+        5.27129,
+        5.962778,
+        5.031664,
+        5.43768,
+        6.047151
+      ],
+      "text_sha256": "30522fe27c4dc46068b5feec7dcc92e374f908f489072fbfc76324441ee7eae3",
+      "json_sha256": "c94062c576c9a3498b7baa0b9e7ec42c0b82abbd0d1822956ce58f9ccc3cc7da"
+    },
+    {
+      "id": "1q_public_unitary",
+      "category": "one_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 2.7755575615628914e-17,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        4.955633,
+        4.900475,
+        4.804781,
+        6.601557,
+        4.943848
+      ],
+      "text_sha256": "cfc88992989e0bd8861e8cf6823026295bd6f97ee8c6c89520491c0351ff5fb8",
+      "json_sha256": "1a138a479c5cb626584d65c22284242d395da20d9a78f55ef1c572bddfdeceba"
+    },
+    {
+      "id": "2q_product",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 1.1102230246251565e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        14.927615,
+        13.840967,
+        13.117051,
+        14.150317,
+        13.494374
+      ],
+      "text_sha256": "bcf2e338231a9d6a1853c4fefa9669a2633ac65b5574137ae8a97feeaa8e2964",
+      "json_sha256": "ff4e7cfb6b257c549c250c933368219fd4b698ba414e1340cebe40df9eae0df4"
+    },
+    {
+      "id": "2q_bell",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 3.469446951953614e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        15.284042,
+        15.187212,
+        13.122072,
+        14.075353,
+        14.23571
+      ],
+      "text_sha256": "39b8ef72934242f4bf1d8cd243960abe7eb945956c401fcb621d1f450e7b9ccc",
+      "json_sha256": "8cff5f1f873cace8d993f6b15f7a1996c495e869adc6fd9a0a6b7059040f9bf4"
+    },
+    {
+      "id": "2q_cz",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 4.509880698970257e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        15.871393,
+        19.594373,
+        16.434629,
+        16.562747,
+        16.732282
+      ],
+      "text_sha256": "91dc8816fb41033e38ab736b9d36d6c6ccd68ce4ad630ef816f47df87b2640c1",
+      "json_sha256": "7b5c5e892d0bbfef0e8d9ca7f4de0ce0c26a23468922f753e6470090459133a8"
+    },
+    {
+      "id": "2q_iswap",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 2.220446049250313e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        15.872802,
+        12.971029,
+        14.015011,
+        14.994953,
+        13.472035
+      ],
+      "text_sha256": "1c0912191fb222b15a6f1dd72cae27e47b91b2e083de8f59b564d1d2ed6a9641",
+      "json_sha256": "807b5e11a5bf084073f2c0ec28accda68f479fed61602de8e7f616c1d5437523"
+    },
+    {
+      "id": "2q_swap",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 2.854809140732311e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        15.383163,
+        13.781748,
+        14.021091,
+        14.238848,
+        14.318878
+      ],
+      "text_sha256": "d9567eb066dd86785934c0efb1ab35c4f6e5157cc01fe10f27f955d47512cadf",
+      "json_sha256": "aaab7edd1ec2259471e684ee3d1e7037386feb6cd338d5b8cc20898aeafa4c30"
+    },
+    {
+      "id": "2q_rxx_pi_4",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 6.118829799797332e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        17.189115,
+        13.476931,
+        14.590167,
+        14.161805,
+        13.235349
+      ],
+      "text_sha256": "aeecce22c06b3ebb5cf3f271a877aa8ea310b5e17d1422c0133bddb21918798e",
+      "json_sha256": "c29407efa6526df494b8421819fa7e41dbf87f91094a39c5b71537e6d24abc20"
+    },
+    {
+      "id": "2q_local_equivalent_cx",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 7.217783939387125e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        14.728946,
+        13.633669,
+        15.083819,
+        13.55067,
+        15.594472
+      ],
+      "text_sha256": "465578bc5646a26e14333437d2f3addb193cc129e8d3526bcd82f88253cf87c3",
+      "json_sha256": "4fdcaecdde7aae309b148061b1cb125e6f2f7a1a25c775f0506132cc3a4d2fa6"
+    },
+    {
+      "id": "2q_public_unitary",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 6.804363002006077e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        12.612086,
+        14.14514,
+        13.158952,
+        14.551779,
+        13.03042
+      ],
+      "text_sha256": "7cae275f15dcf52fa80805076dcaf46c8f0abd13c0f3dca986a1d9f06bf52534",
+      "json_sha256": "a424d41fe4dbf77b6101a99c0c75623bb180ffcceb31eb1d46cc4af1d36c7351"
+    },
+    {
+      "id": "2q_terminal_measurement_reversed",
+      "category": "two_qubit_circuits",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 3.469446951953614e-16,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [
+        {
+          "qubit": 0,
+          "clbit": 1
+        },
+        {
+          "qubit": 1,
+          "clbit": 0
+        }
+      ],
+      "direct_explanation_ms": [
+        13.699952,
+        14.622441,
+        14.187816,
+        14.967817,
+        14.531863
+      ],
+      "text_sha256": "ecb23b995df3a9ecf90502e4cbbf27efbcd0e27df320fc5b8e02e71f4765c9a4",
+      "json_sha256": "81fd623553736096ca30184445f99ae30222a52d69a8f2db33d3a89e3cd3abcc"
+    },
+    {
+      "id": "state_zero",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        3.147858,
+        3.143378,
+        2.353605,
+        2.275603,
+        3.055395
+      ],
+      "text_sha256": "98a9d1a5757e6cdc5c3ff5174ee22da60f6e5ebddebc07765603a48de8b1b4eb",
+      "json_sha256": "7a1434d54c9c2b21d841c5b17f4755f19a8f7aba7f48764960ae55306a992c2c"
+    },
+    {
+      "id": "state_one",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        2.88241,
+        2.463739,
+        2.345001,
+        2.326419,
+        2.583259
+      ],
+      "text_sha256": "d471c561ee3b4c3f03d37d6cb0e4f91f0008c33246f048cc96e6288cce77ce83",
+      "json_sha256": "380550c0180d754ddd26986a17091174b48811f57fbb6149d551709e696610ec"
+    },
+    {
+      "id": "state_plus",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        2.718409,
+        2.650965,
+        2.467606,
+        2.411693,
+        2.609544
+      ],
+      "text_sha256": "5b54b457e838a20409eff7e4d413d5fa6ffb24f4a9e3d217be6512096532106a",
+      "json_sha256": "afd3e48dd8912238b12de443439757db8e11b951b3487111ac2eff7a67c24545"
+    },
+    {
+      "id": "state_plus_i",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        2.960429,
+        2.593203,
+        2.919589,
+        2.3992,
+        2.383337
+      ],
+      "text_sha256": "cdb503aaccd7f74a6ed19a28f8bebcaa7ba8f882c9b06652afe1d203421c9315",
+      "json_sha256": "2a9d0e924f8fba140b7909c26616b6d534de438acdf06e73bb9d3de4d599cfb2"
+    },
+    {
+      "id": "state_general",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        2.601872,
+        2.460858,
+        2.65411,
+        2.635413,
+        2.524248
+      ],
+      "text_sha256": "4c09b2eb26f23047e6abfbd8310accbd5c268b4c7ed2127ba60966cd1172d8f4",
+      "json_sha256": "69931ec74a9423d75bbf80b13e544d38652e22fba1a18121a4ab2ee1774de4b9"
+    },
+    {
+      "id": "state_general_negative",
+      "category": "states",
+      "status": "complete",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": null,
+      "direct_explanation_ms": [
+        2.919541,
+        2.495458,
+        2.919059,
+        2.497828,
+        2.516588
+      ],
+      "text_sha256": "d3585eb24e1c855a4e7a3446caf204e8a9bda3a335345b557905c954abef18b3",
+      "json_sha256": "f8afa4e5a94bf0f14bb298a6bbb48d5240d8ee0b7b643753f6433380ca1e3ad8"
+    },
+    {
+      "id": "boundary_symbolic",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        2.992235,
+        2.556492,
+        2.440382,
+        2.081422,
+        2.040103
+      ],
+      "text_sha256": "de070286ec4eba63c4c25cec494bea395ba80b78549b4045a1f8735a05ed926a",
+      "json_sha256": "d11dcf0c21460182d518435a05e2e602edcceab26e199c62e0c062267d9920ea"
+    },
+    {
+      "id": "boundary_reset",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        2.802577,
+        2.290982,
+        2.030035,
+        2.099309,
+        1.973059
+      ],
+      "text_sha256": "5d2121ffdf32602f2ec37a9aa692b648635b9848ed49a87de75168aeae64781f",
+      "json_sha256": "565064b271604b0ddcda1f5962ff9bfa0a383304baa4acc63e248e12ba9a445f"
+    },
+    {
+      "id": "boundary_initialize",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        2.064487,
+        2.425194,
+        2.105473,
+        2.391057,
+        2.219498
+      ],
+      "text_sha256": "01940559f9f9e14013b87b50432198e29737a97079baf146f590071dbeb312e6",
+      "json_sha256": "cb6004e485e1725bd4754d621c5f9d9c48668181a1df4a4e943bf7f732370d24"
+    },
+    {
+      "id": "boundary_mid_circuit_measurement",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [
+        {
+          "qubit": 0,
+          "clbit": 0
+        }
+      ],
+      "direct_explanation_ms": [
+        10.409256,
+        2.694531,
+        2.079529,
+        2.008386,
+        2.039541
+      ],
+      "text_sha256": "2255d6270ea43679627dc5604b24af3c6a0cc132d93d3b3ffefd96c65f33bd5d",
+      "json_sha256": "4ad2c1d3a2f4235d0e9ea4de12947afa3d8d892fc66a1b916c61741fe820c47f"
+    },
+    {
+      "id": "boundary_control_flow",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        2.096841,
+        2.208176,
+        2.04174,
+        2.011419,
+        1.923302
+      ],
+      "text_sha256": "b80b429f83d59a50d44639c1c329055e8811b4cc843f0936f56dde77501f8d73",
+      "json_sha256": "e9b70876b82c09bb1c8b689e13a5f26f80474eb60bad0d7ba34adae7bcf34caa"
+    },
+    {
+      "id": "boundary_ghz_3q",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        5.5684,
+        5.264034,
+        4.826194,
+        5.311369,
+        6.042943
+      ],
+      "text_sha256": "99aecd9686979f984323a24da432775d56ed3afb45ac5ba96ef3e9c4594e3894",
+      "json_sha256": "5671483fea7e105d42ea4977aedc87f9aad37a6526833cd91bbb4d2363c46591"
+    },
+    {
+      "id": "boundary_qft_3q",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        2.827527,
+        2.888463,
+        2.953243,
+        2.786797,
+        2.708434
+      ],
+      "text_sha256": "931eab832baceaffe221fb05d2ec0dcf66e125441483c3b1c42be3527c59e45a",
+      "json_sha256": "da75dbb556a34c5665ec04b7f63a699f604418e768bef13bb3648d3532f4cfb3"
+    },
+    {
+      "id": "boundary_regional_6q",
+      "category": "partial_boundaries",
+      "status": "partial",
+      "status_ok": true,
+      "deterministic_five_runs": true,
+      "input_unchanged": true,
+      "explanatory_coverage_ok": true,
+      "numeric_max_error": 0.0,
+      "numeric_ok": true,
+      "terminal_measurement_mapping": [],
+      "direct_explanation_ms": [
+        12.834517,
+        13.396811,
+        11.785344,
+        11.815606,
+        12.142953
+      ],
+      "text_sha256": "73d194bef9ba1eaae8aa83dcfe62331b7bed6c3191c91a5903980ed326879269",
+      "json_sha256": "1af5cc0a4ed52d14c54da61eba9fc8f96ce04e6c166a27f5fd77b2ecf6cbc79f"
+    }
+  ],
+  "summary": {
+    "complete_records": 28,
+    "partial_or_unsupported_records": 8,
+    "deterministic_records": 36,
+    "unchanged_inputs": 36,
+    "numeric_records_within_tolerance": 36,
+    "explanatory_coverage_records": 36,
+    "direct_explanation_p95_ms": 15.87216795,
+    "direct_explanation_median_ms": 6.134688499999999,
+    "openqasm_explanation_p95_ms": 25.122383499999998,
+    "openqasm_explanation_median_ms": 9.029131,
+    "openqasm_records": [
+      "1q_identity",
+      "1q_x",
+      "1q_h",
+      "1q_s",
+      "1q_t",
+      "1q_rx_pi_2",
+      "1q_ry_pi_2",
+      "1q_rz_pi_2",
+      "1q_noncommuting_rx_ry",
+      "1q_zyz_general",
+      "1q_global_phase",
+      "1q_terminal_measurement",
+      "1q_public_unitary",
+      "2q_product",
+      "2q_bell",
+      "2q_cz",
+      "2q_iswap",
+      "2q_swap",
+      "2q_rxx_pi_4",
+      "2q_local_equivalent_cx",
+      "2q_public_unitary",
+      "2q_terminal_measurement_reversed",
+      "boundary_symbolic",
+      "boundary_reset",
+      "boundary_mid_circuit_measurement",
+      "boundary_control_flow"
+    ],
+    "private_qiskit_api_violations": [],
+    "record_gate_passed": true,
+    "absolute_latency_gate_passed": true
+  },
+  "environment": {
+    "python": "3.12.2",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "qiskit": "2.5.1",
+    "rqm_qiskit_commit": "6b520bec7cdf2be6e4bc0fc070ef1a66ceb21389",
+    "rqm_experiments_commit": "c73fc2df94e98d3a8099cbd9300bdcb51be6e5e5",
+    "provider": "local-only",
+    "network": false,
+    "hardware": false
+  }
+}
