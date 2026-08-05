@@ -1,8 +1,13 @@
 # RQM-Qiskit 0.4 Candidate Validation
 
-Validation date: August 5, 2026  
-Measured implementation: `126bde8311e1613db8888247e88b933253d92973`  
-Compiler implementation: `f05ead9b56311947fd123f5e461412a83779a420`
+Validation date: August 5, 2026
+
+- EXP-014 measured implementation:
+  `126bde8311e1613db8888247e88b933253d92973`
+- EXP-015 adapter implementation:
+  `c17d0cc77b053fe35095ca71196eee1f26508dea`
+- EXP-015 compiler implementation:
+  `b6111abb2cd223328bc5bf20e31aedfe02446815`
 
 ## Source validation
 
@@ -40,6 +45,10 @@ remains an unreleased candidate. No credentials, remote simulator, provider,
 or quantum hardware were used.
 
 ## EXP-015 native follow-up
+
+The private authority preregistration is pinned at
+`fe9d0a15609aa96d7fac751c7434f5e87cf2ebd7`; the public result files and
+native implementation are pinned at the commits above.
 
 - `rqm-qiskit`: `556` tests passed, including native/reference differential,
   fallback, mutation-isolation, register-preservation, `q`/`-q`, injected

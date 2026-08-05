@@ -46,7 +46,10 @@ decision result, and three-process reproduction retain the exact EXP-014 corpus
 and timing boundary. The relative ratio improved from `0.9862` to `0.7427` in
 the decision run and reproduced between `0.7477` and `0.7523`, but remained far
 above `0.25`. This negative result is retained and does not change the semantic
-fingerprint verdict.
+fingerprint verdict. The private authority preregistration is pinned at
+`fe9d0a15609aa96d7fac751c7434f5e87cf2ebd7`, the native implementation and
+raw result at `c17d0cc77b053fe35095ca71196eee1f26508dea`, and the compiler
+serializer at `b6111abb2cd223328bc5bf20e31aedfe02446815`.
 
 ## Boundary
 
