@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-014",
+  "seed": 20260805,
+  "qiskit_version": "2.5.1",
+  "qiskit_transpiler_seed": 991,
+  "qiskit_optimization_level": 3,
+  "basis_gates": ["rz", "sx", "x", "cx"],
+  "partitions": {
+    "discovery_families": 32,
+    "holdout_families": 64,
+    "equivalent_variants_per_family": 4,
+    "inequivalent_controls_per_family": 1
+  },
+  "correctness": {
+    "max_phase_aligned_operator_error": 1e-9,
+    "required_assurance_status": "VERIFIED",
+    "max_false_equivalence": 0,
+    "max_fingerprint_collisions": 0
+  },
+  "advantage": {
+    "canonical_rqm_convergence": 1.0,
+    "canonical_minimum_percentage_point_advantage": 0.2,
+    "circuit_efficiency_minimum_median_improvement": 0.1,
+    "latency_minimum_median_improvement": 0.2,
+    "latency_maximum_p95_regression": 0.1,
+    "su4_minimum_two_qubit_improvement": 0.2
+  },
+  "execution": {
+    "provider": "local-only",
+    "hardware": false,
+    "remote_simulator": false,
+    "credentials": false
+  },
+  "statistics": {
+    "paired_bootstrap_seed": 20260805,
+    "paired_bootstrap_resamples": 10000,
+    "confidence_level": 0.95
+  }
+}

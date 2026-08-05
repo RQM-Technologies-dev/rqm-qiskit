@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-014",
+  "baseline_commits": {
+    "rqm_experiments": "2e9b486",
+    "rqm_qiskit": "3984c3c",
+    "rqm_compiler": "10f1e36"
+  },
+  "candidate_commits": {
+    "rqm_qiskit": "126bde8311e1613db8888247e88b933253d92973",
+    "rqm_compiler": "f05ead9b56311947fd123f5e461412a83779a420"
+  },
+  "package_versions": {
+    "qiskit": "2.5.1",
+    "rqm_core": "0.2.1",
+    "rqm_entanglement": "0.2.1"
+  },
+  "corpus_digest": "d244cfaa87ca2775c79845ae546e57e0931d5828aaee0d9b079bd12b51c16459",
+  "semantic_digest": "ba6e08f81cbefa0f35e6eeb811ca1f2190efaf54d457f4c7af261447f9da376c",
+  "coverage_extension": {
+    "id": "EXP-014-A01",
+    "manifest_digest": "a28cd5a2131f3996c19c4abc8c20c74ddf3d416560a6a5d2bcce8c7ed07f9864",
+    "result_digest": "e6990ab95c74289667d19698ecaa182665e5f933e71cbfdd72da33f19f9ff01f",
+    "primary_cohort_immutable": true,
+    "passed": true
+  },
+  "provider": "local-only",
+  "hardware": false,
+  "credentials": false
+}

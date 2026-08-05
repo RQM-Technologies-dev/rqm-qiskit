@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "extension_id": "EXP-014-A01",
+  "primary_cohort_immutable": true,
+  "seed": 20260806,
+  "generated_chains": {
+    "discovery": 8,
+    "holdout": 16,
+    "length": 9,
+    "gates": ["rx", "ry", "rz"]
+  },
+  "representatives": [
+    "bell",
+    "ghz",
+    "qft_style",
+    "vqe_style",
+    "qaoa_style"
+  ],
+  "unsupported_boundaries": [
+    "mid_circuit_measurement",
+    "reset",
+    "symbolic_parameter",
+    "custom_instruction",
+    "controlled_phase"
+  ],
+  "thresholds": {
+    "max_phase_aligned_operator_error": 1e-9,
+    "max_standalone_q_neg_q_probability_error": 1e-12,
+    "minimum_controlled_q_neg_q_operator_separation": 0.5
+  }
+}

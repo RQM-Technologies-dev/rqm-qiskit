@@ -1,0 +1,4653 @@
+{
+  "schema_version": "1.0",
+  "corpus_digest": "d244cfaa87ca2775c79845ae546e57e0931d5828aaee0d9b079bd12b51c16459",
+  "environment": {
+    "python": "3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 21:00:12) [Clang 16.0.6 ]",
+    "platform": "macOS-26.5.2-x86_64-i386-64bit",
+    "qiskit": "2.5.1",
+    "rqm_qiskit": "0.4.0",
+    "rqm_compiler": "0.3.0"
+  },
+  "thresholds": {
+    "adapter_overhead_ratio_max": 0.25,
+    "direct_assurance_p95_ms_max": 5.0,
+    "openqasm_assurance_p95_ms_max": 25.0,
+    "openqasm_each_stage_p95_ms_max": 25.0
+  },
+  "metrics": {
+    "adapter_overhead_ratio_median": 0.9862073841703107,
+    "direct_assurance_p95_ms": 0.93743575,
+    "openqasm_assurance_p95_ms": 4.76382975,
+    "openqasm_stage_p95_ms": {
+      "import": 3.1893635,
+      "assurance": 0.83735025,
+      "export": 0.76761025
+    },
+    "stage_medians_us": {
+      "import": 84.083,
+      "compiler": 279.351,
+      "lowering": 100.5725,
+      "report": 85.8445
+    },
+    "sample_count": 256
+  },
+  "raw_samples": [
+    {
+      "record_id": "holdout-000",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71487,
+        "compiler": 252263,
+        "lowering": 96815,
+        "report": 81692
+      },
+      "adapter_overhead_ratio": 0.9910054189476856,
+      "direct_assurance_ns": 579025.0,
+      "openqasm_stage_ns": {
+        "import": 1747141.0,
+        "assurance": 612077.0,
+        "export": 716230.0
+      },
+      "openqasm_complete_ns": 2896046.0
+    },
+    {
+      "record_id": "holdout-000",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96146,
+        "compiler": 306475,
+        "lowering": 93428,
+        "report": 86305
+      },
+      "adapter_overhead_ratio": 0.9001680398074884,
+      "direct_assurance_ns": 701802.0,
+      "openqasm_stage_ns": {
+        "import": 3965323.0,
+        "assurance": 797101.0,
+        "export": 581039.0
+      },
+      "openqasm_complete_ns": 4136406.0
+    },
+    {
+      "record_id": "holdout-000",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84403,
+        "compiler": 272907,
+        "lowering": 95583,
+        "report": 82737
+      },
+      "adapter_overhead_ratio": 0.9626832583993815,
+      "direct_assurance_ns": 683394.0,
+      "openqasm_stage_ns": {
+        "import": 3717876.0,
+        "assurance": 682559.0,
+        "export": 583329.0
+      },
+      "openqasm_complete_ns": 3780144.0
+    },
+    {
+      "record_id": "holdout-000",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 80385,
+        "compiler": 265851,
+        "lowering": 105858,
+        "report": 85520
+      },
+      "adapter_overhead_ratio": 1.022238020545343,
+      "direct_assurance_ns": 625489.0,
+      "openqasm_stage_ns": {
+        "import": 2917126.0,
+        "assurance": 637510.0,
+        "export": 567775.0
+      },
+      "openqasm_complete_ns": 2958857.0
+    },
+    {
+      "record_id": "holdout-001",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 160661,
+        "compiler": 375166,
+        "lowering": 121557,
+        "report": 97051
+      },
+      "adapter_overhead_ratio": 1.0109364921128248,
+      "direct_assurance_ns": 648218.0,
+      "openqasm_stage_ns": {
+        "import": 2659342.0,
+        "assurance": 631882.0,
+        "export": 814116.0
+      },
+      "openqasm_complete_ns": 3293421.0
+    },
+    {
+      "record_id": "holdout-001",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 104522,
+        "compiler": 332126,
+        "lowering": 107500,
+        "report": 91898
+      },
+      "adapter_overhead_ratio": 0.9150743994748981,
+      "direct_assurance_ns": 732186.0,
+      "openqasm_stage_ns": {
+        "import": 3455421.0,
+        "assurance": 746381.0,
+        "export": 566599.0
+      },
+      "openqasm_complete_ns": 4150670.0
+    },
+    {
+      "record_id": "holdout-001",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 82514,
+        "compiler": 272650,
+        "lowering": 95537,
+        "report": 85014
+      },
+      "adapter_overhead_ratio": 0.9648450394278378,
+      "direct_assurance_ns": 683594.0,
+      "openqasm_stage_ns": {
+        "import": 2374871.0,
+        "assurance": 705219.0,
+        "export": 595224.0
+      },
+      "openqasm_complete_ns": 3582676.0
+    },
+    {
+      "record_id": "holdout-001",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 130491,
+        "compiler": 264537,
+        "lowering": 110665,
+        "report": 87579
+      },
+      "adapter_overhead_ratio": 1.2426806080056854,
+      "direct_assurance_ns": 590437.0,
+      "openqasm_stage_ns": {
+        "import": 2580592.0,
+        "assurance": 600595.0,
+        "export": 531258.0
+      },
+      "openqasm_complete_ns": 2899484.0
+    },
+    {
+      "record_id": "holdout-002",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72917,
+        "compiler": 246531,
+        "lowering": 95833,
+        "report": 80546
+      },
+      "adapter_overhead_ratio": 1.0112156280548896,
+      "direct_assurance_ns": 587338.0,
+      "openqasm_stage_ns": {
+        "import": 2025683.0,
+        "assurance": 711110.0,
+        "export": 860979.0
+      },
+      "openqasm_complete_ns": 3141488.0
+    },
+    {
+      "record_id": "holdout-002",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95203,
+        "compiler": 308656,
+        "lowering": 96134,
+        "report": 84144
+      },
+      "adapter_overhead_ratio": 0.8925178839873517,
+      "direct_assurance_ns": 716389.0,
+      "openqasm_stage_ns": {
+        "import": 3368853.0,
+        "assurance": 736919.0,
+        "export": 560125.0
+      },
+      "openqasm_complete_ns": 4029873.0
+    },
+    {
+      "record_id": "holdout-002",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83383,
+        "compiler": 277121,
+        "lowering": 100282,
+        "report": 85702
+      },
+      "adapter_overhead_ratio": 0.9720194427704866,
+      "direct_assurance_ns": 663167.0,
+      "openqasm_stage_ns": {
+        "import": 2459569.0,
+        "assurance": 720653.0,
+        "export": 575682.0
+      },
+      "openqasm_complete_ns": 3553808.0
+    },
+    {
+      "record_id": "holdout-002",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 75232,
+        "compiler": 247937,
+        "lowering": 97467,
+        "report": 82715
+      },
+      "adapter_overhead_ratio": 1.0301568543621968,
+      "direct_assurance_ns": 584147.0,
+      "openqasm_stage_ns": {
+        "import": 2568602.0,
+        "assurance": 599528.0,
+        "export": 512122.0
+      },
+      "openqasm_complete_ns": 2958426.0
+    },
+    {
+      "record_id": "holdout-003",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76787,
+        "compiler": 261570,
+        "lowering": 102549,
+        "report": 83213
+      },
+      "adapter_overhead_ratio": 1.003742783958405,
+      "direct_assurance_ns": 602457.0,
+      "openqasm_stage_ns": {
+        "import": 1801052.0,
+        "assurance": 655000.0,
+        "export": 774096.0
+      },
+      "openqasm_complete_ns": 2992129.0
+    },
+    {
+      "record_id": "holdout-003",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95715,
+        "compiler": 302905,
+        "lowering": 96761,
+        "report": 83794
+      },
+      "adapter_overhead_ratio": 0.9120681401759627,
+      "direct_assurance_ns": 708096.0,
+      "openqasm_stage_ns": {
+        "import": 2915345.0,
+        "assurance": 721177.0,
+        "export": 529586.0
+      },
+      "openqasm_complete_ns": 4603976.0
+    },
+    {
+      "record_id": "holdout-003",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 90039,
+        "compiler": 295855,
+        "lowering": 106460,
+        "report": 87585
+      },
+      "adapter_overhead_ratio": 0.9602136181575434,
+      "direct_assurance_ns": 678778.0,
+      "openqasm_stage_ns": {
+        "import": 2954113.0,
+        "assurance": 1097150.0,
+        "export": 623285.0
+      },
+      "openqasm_complete_ns": 3794026.0
+    },
+    {
+      "record_id": "holdout-003",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 127277,
+        "compiler": 340151,
+        "lowering": 119296,
+        "report": 88769
+      },
+      "adapter_overhead_ratio": 0.9858621612166362,
+      "direct_assurance_ns": 610512.0,
+      "openqasm_stage_ns": {
+        "import": 3188235.0,
+        "assurance": 1255342.0,
+        "export": 675606.0
+      },
+      "openqasm_complete_ns": 3497487.0
+    },
+    {
+      "record_id": "holdout-004",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 111144,
+        "compiler": 279135,
+        "lowering": 113497,
+        "report": 89331
+      },
+      "adapter_overhead_ratio": 1.1248034105361204,
+      "direct_assurance_ns": 747228.0,
+      "openqasm_stage_ns": {
+        "import": 3204397.0,
+        "assurance": 909197.0,
+        "export": 1102402.0
+      },
+      "openqasm_complete_ns": 4538987.0
+    },
+    {
+      "record_id": "holdout-004",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 118506,
+        "compiler": 342421,
+        "lowering": 121975,
+        "report": 91301
+      },
+      "adapter_overhead_ratio": 0.9689300597802121,
+      "direct_assurance_ns": 758823.0,
+      "openqasm_stage_ns": {
+        "import": 3305363.0,
+        "assurance": 927602.0,
+        "export": 618653.0
+      },
+      "openqasm_complete_ns": 5486028.0
+    },
+    {
+      "record_id": "holdout-004",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85340,
+        "compiler": 283806,
+        "lowering": 97621,
+        "report": 83616
+      },
+      "adapter_overhead_ratio": 0.9392930382021522,
+      "direct_assurance_ns": 866140.0,
+      "openqasm_stage_ns": {
+        "import": 3245471.0,
+        "assurance": 760137.0,
+        "export": 628158.0
+      },
+      "openqasm_complete_ns": 3841387.0
+    },
+    {
+      "record_id": "holdout-004",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 102928,
+        "compiler": 354290,
+        "lowering": 191402,
+        "report": 143252
+      },
+      "adapter_overhead_ratio": 1.2350955431990742,
+      "direct_assurance_ns": 721854.0,
+      "openqasm_stage_ns": {
+        "import": 3064340.0,
+        "assurance": 694102.0,
+        "export": 1143879.0
+      },
+      "openqasm_complete_ns": 3798547.0
+    },
+    {
+      "record_id": "holdout-005",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 92297,
+        "compiler": 294888,
+        "lowering": 130717,
+        "report": 92666
+      },
+      "adapter_overhead_ratio": 1.0705081251186892,
+      "direct_assurance_ns": 681268.0,
+      "openqasm_stage_ns": {
+        "import": 2150592.0,
+        "assurance": 752328.0,
+        "export": 595922.0
+      },
+      "openqasm_complete_ns": 3383240.0
+    },
+    {
+      "record_id": "holdout-005",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 99022,
+        "compiler": 319394,
+        "lowering": 101971,
+        "report": 87239
+      },
+      "adapter_overhead_ratio": 0.9024339843578777,
+      "direct_assurance_ns": 719792.0,
+      "openqasm_stage_ns": {
+        "import": 3057807.0,
+        "assurance": 882779.0,
+        "export": 773983.0
+      },
+      "openqasm_complete_ns": 4725713.0
+    },
+    {
+      "record_id": "holdout-005",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84641,
+        "compiler": 280427,
+        "lowering": 97743,
+        "report": 85550
+      },
+      "adapter_overhead_ratio": 0.9554500814828815,
+      "direct_assurance_ns": 639821.0,
+      "openqasm_stage_ns": {
+        "import": 2090673.0,
+        "assurance": 680704.0,
+        "export": 593916.0
+      },
+      "openqasm_complete_ns": 4208555.0
+    },
+    {
+      "record_id": "holdout-005",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 82421,
+        "compiler": 287902,
+        "lowering": 129613,
+        "report": 101094
+      },
+      "adapter_overhead_ratio": 1.0876200929482949,
+      "direct_assurance_ns": 1001829.0,
+      "openqasm_stage_ns": {
+        "import": 2956840.0,
+        "assurance": 720270.0,
+        "export": 634465.0
+      },
+      "openqasm_complete_ns": 3892805.0
+    },
+    {
+      "record_id": "holdout-006",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 83691,
+        "compiler": 282593,
+        "lowering": 109280,
+        "report": 88115
+      },
+      "adapter_overhead_ratio": 0.9946672422883794,
+      "direct_assurance_ns": 619220.0,
+      "openqasm_stage_ns": {
+        "import": 1954650.0,
+        "assurance": 656604.0,
+        "export": 626657.0
+      },
+      "openqasm_complete_ns": 4619975.0
+    },
+    {
+      "record_id": "holdout-006",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 154021,
+        "compiler": 477623,
+        "lowering": 175278,
+        "report": 100754
+      },
+      "adapter_overhead_ratio": 0.9004026188018583,
+      "direct_assurance_ns": 864340.0,
+      "openqasm_stage_ns": {
+        "import": 3192749.0,
+        "assurance": 862552.0,
+        "export": 644838.0
+      },
+      "openqasm_complete_ns": 4302114.0
+    },
+    {
+      "record_id": "holdout-006",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83037,
+        "compiler": 272395,
+        "lowering": 98442,
+        "report": 84907
+      },
+      "adapter_overhead_ratio": 0.9779401237173957,
+      "direct_assurance_ns": 642148.0,
+      "openqasm_stage_ns": {
+        "import": 3420476.0,
+        "assurance": 810784.0,
+        "export": 833872.0
+      },
+      "openqasm_complete_ns": 4988978.0
+    },
+    {
+      "record_id": "holdout-006",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 205591,
+        "compiler": 417808,
+        "lowering": 124760,
+        "report": 89148
+      },
+      "adapter_overhead_ratio": 1.0040473135985908,
+      "direct_assurance_ns": 630172.0,
+      "openqasm_stage_ns": {
+        "import": 2552160.0,
+        "assurance": 806407.0,
+        "export": 680869.0
+      },
+      "openqasm_complete_ns": 4273782.0
+    },
+    {
+      "record_id": "holdout-007",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 130992,
+        "compiler": 353598,
+        "lowering": 205779,
+        "report": 132565
+      },
+      "adapter_overhead_ratio": 1.3273151997466048,
+      "direct_assurance_ns": 819594.0,
+      "openqasm_stage_ns": {
+        "import": 2591742.0,
+        "assurance": 763294.0,
+        "export": 820012.0
+      },
+      "openqasm_complete_ns": 4048397.0
+    },
+    {
+      "record_id": "holdout-007",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 103117,
+        "compiler": 323071,
+        "lowering": 105484,
+        "report": 89899
+      },
+      "adapter_overhead_ratio": 0.9239455104295959,
+      "direct_assurance_ns": 737291.0,
+      "openqasm_stage_ns": {
+        "import": 3602201.0,
+        "assurance": 836599.0,
+        "export": 630896.0
+      },
+      "openqasm_complete_ns": 5016167.0
+    },
+    {
+      "record_id": "holdout-007",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 165074,
+        "compiler": 338128,
+        "lowering": 152904,
+        "report": 90032
+      },
+      "adapter_overhead_ratio": 1.2066732125112383,
+      "direct_assurance_ns": 666630.0,
+      "openqasm_stage_ns": {
+        "import": 2484550.0,
+        "assurance": 754856.0,
+        "export": 703569.0
+      },
+      "openqasm_complete_ns": 4621419.0
+    },
+    {
+      "record_id": "holdout-007",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 84806,
+        "compiler": 277549,
+        "lowering": 114307,
+        "report": 87664
+      },
+      "adapter_overhead_ratio": 1.0332481832036866,
+      "direct_assurance_ns": 621125.0,
+      "openqasm_stage_ns": {
+        "import": 1905373.0,
+        "assurance": 646291.0,
+        "export": 577430.0
+      },
+      "openqasm_complete_ns": 3478866.0
+    },
+    {
+      "record_id": "holdout-008",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 91082,
+        "compiler": 307838,
+        "lowering": 143505,
+        "report": 190289
+      },
+      "adapter_overhead_ratio": 1.3801934783879832,
+      "direct_assurance_ns": 827437.0,
+      "openqasm_stage_ns": {
+        "import": 1879620.0,
+        "assurance": 628450.0,
+        "export": 554928.0
+      },
+      "openqasm_complete_ns": 3740151.0
+    },
+    {
+      "record_id": "holdout-008",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 106932,
+        "compiler": 399605,
+        "lowering": 163428,
+        "report": 96566
+      },
+      "adapter_overhead_ratio": 0.9182217439721725,
+      "direct_assurance_ns": 792684.0,
+      "openqasm_stage_ns": {
+        "import": 2918526.0,
+        "assurance": 851168.0,
+        "export": 604568.0
+      },
+      "openqasm_complete_ns": 4646190.0
+    },
+    {
+      "record_id": "holdout-008",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85127,
+        "compiler": 280699,
+        "lowering": 98212,
+        "report": 83898
+      },
+      "adapter_overhead_ratio": 0.9520411544038276,
+      "direct_assurance_ns": 780731.0,
+      "openqasm_stage_ns": {
+        "import": 2748274.0,
+        "assurance": 777749.0,
+        "export": 633308.0
+      },
+      "openqasm_complete_ns": 3801591.0
+    },
+    {
+      "record_id": "holdout-008",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 81205,
+        "compiler": 331227,
+        "lowering": 146095,
+        "report": 98321
+      },
+      "adapter_overhead_ratio": 0.9830750512488414,
+      "direct_assurance_ns": 661463.0,
+      "openqasm_stage_ns": {
+        "import": 2438818.0,
+        "assurance": 654269.0,
+        "export": 651007.0
+      },
+      "openqasm_complete_ns": 3205710.0
+    },
+    {
+      "record_id": "holdout-009",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71197,
+        "compiler": 249381,
+        "lowering": 96197,
+        "report": 82324
+      },
+      "adapter_overhead_ratio": 1.001351345932529,
+      "direct_assurance_ns": 581013.0,
+      "openqasm_stage_ns": {
+        "import": 2188157.0,
+        "assurance": 689524.0,
+        "export": 594087.0
+      },
+      "openqasm_complete_ns": 3414118.0
+    },
+    {
+      "record_id": "holdout-009",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 99934,
+        "compiler": 313382,
+        "lowering": 99843,
+        "report": 85313
+      },
+      "adapter_overhead_ratio": 0.9097204051285651,
+      "direct_assurance_ns": 717501.0,
+      "openqasm_stage_ns": {
+        "import": 3083970.0,
+        "assurance": 766048.0,
+        "export": 720967.0
+      },
+      "openqasm_complete_ns": 4812699.0
+    },
+    {
+      "record_id": "holdout-009",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 98571,
+        "compiler": 310273,
+        "lowering": 122561,
+        "report": 102097
+      },
+      "adapter_overhead_ratio": 1.041756775484815,
+      "direct_assurance_ns": 711250.0,
+      "openqasm_stage_ns": {
+        "import": 2149363.0,
+        "assurance": 705163.0,
+        "export": 560058.0
+      },
+      "openqasm_complete_ns": 4399516.0
+    },
+    {
+      "record_id": "holdout-009",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73645,
+        "compiler": 255623,
+        "lowering": 98965,
+        "report": 82152
+      },
+      "adapter_overhead_ratio": 0.9966317584880859,
+      "direct_assurance_ns": 592463.0,
+      "openqasm_stage_ns": {
+        "import": 1724155.0,
+        "assurance": 618690.0,
+        "export": 546707.0
+      },
+      "openqasm_complete_ns": 3556862.0
+    },
+    {
+      "record_id": "holdout-010",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 83057,
+        "compiler": 275154,
+        "lowering": 115486,
+        "report": 90880
+      },
+      "adapter_overhead_ratio": 1.0518582321172871,
+      "direct_assurance_ns": 627683.0,
+      "openqasm_stage_ns": {
+        "import": 1806495.0,
+        "assurance": 644153.0,
+        "export": 572392.0
+      },
+      "openqasm_complete_ns": 3345691.0
+    },
+    {
+      "record_id": "holdout-010",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 99105,
+        "compiler": 441203,
+        "lowering": 113197,
+        "report": 87836
+      },
+      "adapter_overhead_ratio": 0.6802718929835019,
+      "direct_assurance_ns": 732489.0,
+      "openqasm_stage_ns": {
+        "import": 2757368.0,
+        "assurance": 731080.0,
+        "export": 570665.0
+      },
+      "openqasm_complete_ns": 4764468.0
+    },
+    {
+      "record_id": "holdout-010",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 90529,
+        "compiler": 287174,
+        "lowering": 100351,
+        "report": 82652
+      },
+      "adapter_overhead_ratio": 0.9524956994714007,
+      "direct_assurance_ns": 639235.0,
+      "openqasm_stage_ns": {
+        "import": 2043294.0,
+        "assurance": 646242.0,
+        "export": 552865.0
+      },
+      "openqasm_complete_ns": 3842323.0
+    },
+    {
+      "record_id": "holdout-010",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 71271,
+        "compiler": 249325,
+        "lowering": 95975,
+        "report": 83374
+      },
+      "adapter_overhead_ratio": 1.005194023864434,
+      "direct_assurance_ns": 597434.0,
+      "openqasm_stage_ns": {
+        "import": 1675085.0,
+        "assurance": 650149.0,
+        "export": 673831.0
+      },
+      "openqasm_complete_ns": 3759396.0
+    },
+    {
+      "record_id": "holdout-011",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 85251,
+        "compiler": 276704,
+        "lowering": 114428,
+        "report": 85906
+      },
+      "adapter_overhead_ratio": 1.0320956690181566,
+      "direct_assurance_ns": 610794.0,
+      "openqasm_stage_ns": {
+        "import": 1814314.0,
+        "assurance": 651755.0,
+        "export": 592421.0
+      },
+      "openqasm_complete_ns": 3549271.0
+    },
+    {
+      "record_id": "holdout-011",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 101419,
+        "compiler": 326495,
+        "lowering": 106629,
+        "report": 86451
+      },
+      "adapter_overhead_ratio": 0.9020015620453605,
+      "direct_assurance_ns": 747911.0,
+      "openqasm_stage_ns": {
+        "import": 3066073.0,
+        "assurance": 831188.0,
+        "export": 656103.0
+      },
+      "openqasm_complete_ns": 4605276.0
+    },
+    {
+      "record_id": "holdout-011",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86399,
+        "compiler": 283094,
+        "lowering": 103183,
+        "report": 87439
+      },
+      "adapter_overhead_ratio": 0.9785477615209083,
+      "direct_assurance_ns": 642874.0,
+      "openqasm_stage_ns": {
+        "import": 2065156.0,
+        "assurance": 663190.0,
+        "export": 577944.0
+      },
+      "openqasm_complete_ns": 3709246.0
+    },
+    {
+      "record_id": "holdout-011",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 84328,
+        "compiler": 273726,
+        "lowering": 112089,
+        "report": 87157
+      },
+      "adapter_overhead_ratio": 1.0359775834228389,
+      "direct_assurance_ns": 642757.0,
+      "openqasm_stage_ns": {
+        "import": 1812756.0,
+        "assurance": 669537.0,
+        "export": 611718.0
+      },
+      "openqasm_complete_ns": 3183207.0
+    },
+    {
+      "record_id": "holdout-012",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 77040,
+        "compiler": 256977,
+        "lowering": 102283,
+        "report": 85198
+      },
+      "adapter_overhead_ratio": 1.029356712857571,
+      "direct_assurance_ns": 607494.0,
+      "openqasm_stage_ns": {
+        "import": 1789446.0,
+        "assurance": 639317.0,
+        "export": 564033.0
+      },
+      "openqasm_complete_ns": 3257449.0
+    },
+    {
+      "record_id": "holdout-012",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 105701,
+        "compiler": 337502,
+        "lowering": 199442,
+        "report": 103514
+      },
+      "adapter_overhead_ratio": 1.210828380276265,
+      "direct_assurance_ns": 1072896.0,
+      "openqasm_stage_ns": {
+        "import": 2949484.0,
+        "assurance": 796513.0,
+        "export": 576526.0
+      },
+      "openqasm_complete_ns": 4446345.0
+    },
+    {
+      "record_id": "holdout-012",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86436,
+        "compiler": 288353,
+        "lowering": 101987,
+        "report": 87318
+      },
+      "adapter_overhead_ratio": 0.956261942827021,
+      "direct_assurance_ns": 666986.0,
+      "openqasm_stage_ns": {
+        "import": 2028365.0,
+        "assurance": 669110.0,
+        "export": 578956.0
+      },
+      "openqasm_complete_ns": 4633058.0
+    },
+    {
+      "record_id": "holdout-012",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 77065,
+        "compiler": 260442,
+        "lowering": 101904,
+        "report": 84518
+      },
+      "adapter_overhead_ratio": 1.011691662635059,
+      "direct_assurance_ns": 580676.0,
+      "openqasm_stage_ns": {
+        "import": 1738013.0,
+        "assurance": 686547.0,
+        "export": 552957.0
+      },
+      "openqasm_complete_ns": 3224100.0
+    },
+    {
+      "record_id": "holdout-013",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73515,
+        "compiler": 254782,
+        "lowering": 97975,
+        "report": 82731
+      },
+      "adapter_overhead_ratio": 0.9977981176064243,
+      "direct_assurance_ns": 587403.0,
+      "openqasm_stage_ns": {
+        "import": 1814777.0,
+        "assurance": 640951.0,
+        "export": 730306.0
+      },
+      "openqasm_complete_ns": 3698424.0
+    },
+    {
+      "record_id": "holdout-013",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 113995,
+        "compiler": 339138,
+        "lowering": 111865,
+        "report": 86943
+      },
+      "adapter_overhead_ratio": 0.9223472450742766,
+      "direct_assurance_ns": 758274.0,
+      "openqasm_stage_ns": {
+        "import": 2988187.0,
+        "assurance": 752418.0,
+        "export": 566087.0
+      },
+      "openqasm_complete_ns": 4993509.0
+    },
+    {
+      "record_id": "holdout-013",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 133200,
+        "compiler": 381861,
+        "lowering": 108148,
+        "report": 87002
+      },
+      "adapter_overhead_ratio": 0.8598678576759606,
+      "direct_assurance_ns": 650153.0,
+      "openqasm_stage_ns": {
+        "import": 2494932.0,
+        "assurance": 783211.0,
+        "export": 627227.0
+      },
+      "openqasm_complete_ns": 3741327.0
+    },
+    {
+      "record_id": "holdout-013",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72949,
+        "compiler": 394833,
+        "lowering": 122832,
+        "report": 126606
+      },
+      "adapter_overhead_ratio": 0.8165148303206672,
+      "direct_assurance_ns": 712178.0,
+      "openqasm_stage_ns": {
+        "import": 1771850.0,
+        "assurance": 621028.0,
+        "export": 575103.0
+      },
+      "openqasm_complete_ns": 3346626.0
+    },
+    {
+      "record_id": "holdout-014",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73496,
+        "compiler": 251707,
+        "lowering": 96429,
+        "report": 83915
+      },
+      "adapter_overhead_ratio": 1.0084741385817637,
+      "direct_assurance_ns": 598627.0,
+      "openqasm_stage_ns": {
+        "import": 1908152.0,
+        "assurance": 707306.0,
+        "export": 621113.0
+      },
+      "openqasm_complete_ns": 3320696.0
+    },
+    {
+      "record_id": "holdout-014",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95917,
+        "compiler": 312493,
+        "lowering": 96838,
+        "report": 85027
+      },
+      "adapter_overhead_ratio": 0.8889223118597857,
+      "direct_assurance_ns": 717377.0,
+      "openqasm_stage_ns": {
+        "import": 2803138.0,
+        "assurance": 748586.0,
+        "export": 551546.0
+      },
+      "openqasm_complete_ns": 4781140.0
+    },
+    {
+      "record_id": "holdout-014",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 90663,
+        "compiler": 294464,
+        "lowering": 109478,
+        "report": 90215
+      },
+      "adapter_overhead_ratio": 0.9860492284286024,
+      "direct_assurance_ns": 670794.0,
+      "openqasm_stage_ns": {
+        "import": 2165683.0,
+        "assurance": 692428.0,
+        "export": 592199.0
+      },
+      "openqasm_complete_ns": 3674561.0
+    },
+    {
+      "record_id": "holdout-014",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72701,
+        "compiler": 294298,
+        "lowering": 118476,
+        "report": 186514
+      },
+      "adapter_overhead_ratio": 1.2833624421504732,
+      "direct_assurance_ns": 652639.0,
+      "openqasm_stage_ns": {
+        "import": 1798610.0,
+        "assurance": 624368.0,
+        "export": 550262.0
+      },
+      "openqasm_complete_ns": 3809501.0
+    },
+    {
+      "record_id": "holdout-015",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 83051,
+        "compiler": 277651,
+        "lowering": 112910,
+        "report": 88290
+      },
+      "adapter_overhead_ratio": 1.0237708490154906,
+      "direct_assurance_ns": 632516.0,
+      "openqasm_stage_ns": {
+        "import": 1765294.0,
+        "assurance": 619520.0,
+        "export": 546778.0
+      },
+      "openqasm_complete_ns": 3205512.0
+    },
+    {
+      "record_id": "holdout-015",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94823,
+        "compiler": 314819,
+        "lowering": 97544,
+        "report": 85327
+      },
+      "adapter_overhead_ratio": 0.8820750971192971,
+      "direct_assurance_ns": 746646.0,
+      "openqasm_stage_ns": {
+        "import": 2807573.0,
+        "assurance": 1047592.0,
+        "export": 816749.0
+      },
+      "openqasm_complete_ns": 4763617.0
+    },
+    {
+      "record_id": "holdout-015",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 87634,
+        "compiler": 287471,
+        "lowering": 102184,
+        "report": 135023
+      },
+      "adapter_overhead_ratio": 1.1299957213075407,
+      "direct_assurance_ns": 1012248.0,
+      "openqasm_stage_ns": {
+        "import": 2245008.0,
+        "assurance": 733990.0,
+        "export": 583362.0
+      },
+      "openqasm_complete_ns": 4503357.0
+    },
+    {
+      "record_id": "holdout-015",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 71863,
+        "compiler": 242978,
+        "lowering": 96065,
+        "report": 81616
+      },
+      "adapter_overhead_ratio": 1.0270230226604877,
+      "direct_assurance_ns": 574045.0,
+      "openqasm_stage_ns": {
+        "import": 1921790.0,
+        "assurance": 658141.0,
+        "export": 576337.0
+      },
+      "openqasm_complete_ns": 3187321.0
+    },
+    {
+      "record_id": "holdout-016",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71405,
+        "compiler": 250035,
+        "lowering": 96576,
+        "report": 81247
+      },
+      "adapter_overhead_ratio": 0.99677245185674,
+      "direct_assurance_ns": 569880.0,
+      "openqasm_stage_ns": {
+        "import": 1714433.0,
+        "assurance": 576247.0,
+        "export": 526846.0
+      },
+      "openqasm_complete_ns": 3279516.0
+    },
+    {
+      "record_id": "holdout-016",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 93151,
+        "compiler": 303143,
+        "lowering": 93492,
+        "report": 84325
+      },
+      "adapter_overhead_ratio": 0.8938619727323408,
+      "direct_assurance_ns": 699814.0,
+      "openqasm_stage_ns": {
+        "import": 3037071.0,
+        "assurance": 837160.0,
+        "export": 618089.0
+      },
+      "openqasm_complete_ns": 4574372.0
+    },
+    {
+      "record_id": "holdout-016",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83856,
+        "compiler": 271700,
+        "lowering": 99980,
+        "report": 83500
+      },
+      "adapter_overhead_ratio": 0.9839381670960619,
+      "direct_assurance_ns": 633262.0,
+      "openqasm_stage_ns": {
+        "import": 2377856.0,
+        "assurance": 705233.0,
+        "export": 578419.0
+      },
+      "openqasm_complete_ns": 3719698.0
+    },
+    {
+      "record_id": "holdout-016",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 77244,
+        "compiler": 266876,
+        "lowering": 102118,
+        "report": 84070
+      },
+      "adapter_overhead_ratio": 0.9870951303226967,
+      "direct_assurance_ns": 640906.0,
+      "openqasm_stage_ns": {
+        "import": 1945425.0,
+        "assurance": 709501.0,
+        "export": 613325.0
+      },
+      "openqasm_complete_ns": 3219683.0
+    },
+    {
+      "record_id": "holdout-017",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73642,
+        "compiler": 252080,
+        "lowering": 98197,
+        "report": 82225
+      },
+      "adapter_overhead_ratio": 1.0078705172960964,
+      "direct_assurance_ns": 588849.0,
+      "openqasm_stage_ns": {
+        "import": 1690917.0,
+        "assurance": 593665.0,
+        "export": 517283.0
+      },
+      "openqasm_complete_ns": 3099051.0
+    },
+    {
+      "record_id": "holdout-017",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97277,
+        "compiler": 313570,
+        "lowering": 101629,
+        "report": 86072
+      },
+      "adapter_overhead_ratio": 0.9088178078260037,
+      "direct_assurance_ns": 818707.0,
+      "openqasm_stage_ns": {
+        "import": 2929925.0,
+        "assurance": 799647.0,
+        "export": 575733.0
+      },
+      "openqasm_complete_ns": 4395508.0
+    },
+    {
+      "record_id": "holdout-017",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 81844,
+        "compiler": 277587,
+        "lowering": 98274,
+        "report": 82983
+      },
+      "adapter_overhead_ratio": 0.9478145590391481,
+      "direct_assurance_ns": 662885.0,
+      "openqasm_stage_ns": {
+        "import": 2032652.0,
+        "assurance": 660377.0,
+        "export": 564279.0
+      },
+      "openqasm_complete_ns": 3798693.0
+    },
+    {
+      "record_id": "holdout-017",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 80211,
+        "compiler": 271061,
+        "lowering": 110763,
+        "report": 90267
+      },
+      "adapter_overhead_ratio": 1.0375561220537075,
+      "direct_assurance_ns": 631548.0,
+      "openqasm_stage_ns": {
+        "import": 1759127.0,
+        "assurance": 659997.0,
+        "export": 577799.0
+      },
+      "openqasm_complete_ns": 3152642.0
+    },
+    {
+      "record_id": "holdout-018",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73753,
+        "compiler": 253594,
+        "lowering": 97258,
+        "report": 92097
+      },
+      "adapter_overhead_ratio": 1.0375166604888129,
+      "direct_assurance_ns": 702022.0,
+      "openqasm_stage_ns": {
+        "import": 1831740.0,
+        "assurance": 631442.0,
+        "export": 606930.0
+      },
+      "openqasm_complete_ns": 3434364.0
+    },
+    {
+      "record_id": "holdout-018",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 107456,
+        "compiler": 332401,
+        "lowering": 113764,
+        "report": 90712
+      },
+      "adapter_overhead_ratio": 0.9384207628737579,
+      "direct_assurance_ns": 762829.0,
+      "openqasm_stage_ns": {
+        "import": 2784776.0,
+        "assurance": 764171.0,
+        "export": 570512.0
+      },
+      "openqasm_complete_ns": 4344435.0
+    },
+    {
+      "record_id": "holdout-018",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84114,
+        "compiler": 275612,
+        "lowering": 103500,
+        "report": 84019
+      },
+      "adapter_overhead_ratio": 0.9855630378938508,
+      "direct_assurance_ns": 650109.0,
+      "openqasm_stage_ns": {
+        "import": 2002956.0,
+        "assurance": 640490.0,
+        "export": 582584.0
+      },
+      "openqasm_complete_ns": 4586882.0
+    },
+    {
+      "record_id": "holdout-018",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 71824,
+        "compiler": 250918,
+        "lowering": 98693,
+        "report": 81065
+      },
+      "adapter_overhead_ratio": 1.0026462828493772,
+      "direct_assurance_ns": 578919.0,
+      "openqasm_stage_ns": {
+        "import": 1724725.0,
+        "assurance": 587270.0,
+        "export": 513976.0
+      },
+      "openqasm_complete_ns": 28142308.0
+    },
+    {
+      "record_id": "holdout-019",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 87019,
+        "compiler": 284575,
+        "lowering": 112743,
+        "report": 88109
+      },
+      "adapter_overhead_ratio": 1.0115821839585346,
+      "direct_assurance_ns": 610577.0,
+      "openqasm_stage_ns": {
+        "import": 1814148.0,
+        "assurance": 601942.0,
+        "export": 596294.0
+      },
+      "openqasm_complete_ns": 3383142.0
+    },
+    {
+      "record_id": "holdout-019",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96180,
+        "compiler": 313970,
+        "lowering": 96820,
+        "report": 86525
+      },
+      "adapter_overhead_ratio": 0.890292066120967,
+      "direct_assurance_ns": 714328.0,
+      "openqasm_stage_ns": {
+        "import": 3060492.0,
+        "assurance": 827609.0,
+        "export": 577039.0
+      },
+      "openqasm_complete_ns": 4611474.0
+    },
+    {
+      "record_id": "holdout-019",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84052,
+        "compiler": 270609,
+        "lowering": 95256,
+        "report": 83246
+      },
+      "adapter_overhead_ratio": 0.9702338059709765,
+      "direct_assurance_ns": 625310.0,
+      "openqasm_stage_ns": {
+        "import": 2050471.0,
+        "assurance": 631272.0,
+        "export": 510824.0
+      },
+      "openqasm_complete_ns": 3628436.0
+    },
+    {
+      "record_id": "holdout-019",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 74451,
+        "compiler": 317867,
+        "lowering": 122114,
+        "report": 90879
+      },
+      "adapter_overhead_ratio": 0.9042901590916956,
+      "direct_assurance_ns": 624009.0,
+      "openqasm_stage_ns": {
+        "import": 2371815.0,
+        "assurance": 715525.0,
+        "export": 623738.0
+      },
+      "openqasm_complete_ns": 3437675.0
+    },
+    {
+      "record_id": "holdout-020",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76616,
+        "compiler": 256909,
+        "lowering": 99256,
+        "report": 84460
+      },
+      "adapter_overhead_ratio": 1.0133237839079208,
+      "direct_assurance_ns": 592626.0,
+      "openqasm_stage_ns": {
+        "import": 1785742.0,
+        "assurance": 638921.0,
+        "export": 664488.0
+      },
+      "openqasm_complete_ns": 3423465.0
+    },
+    {
+      "record_id": "holdout-020",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 101293,
+        "compiler": 316802,
+        "lowering": 102089,
+        "report": 88296
+      },
+      "adapter_overhead_ratio": 0.9206949451076698,
+      "direct_assurance_ns": 730350.0,
+      "openqasm_stage_ns": {
+        "import": 3203695.0,
+        "assurance": 832121.0,
+        "export": 604437.0
+      },
+      "openqasm_complete_ns": 4477626.0
+    },
+    {
+      "record_id": "holdout-020",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 89726,
+        "compiler": 287764,
+        "lowering": 104918,
+        "report": 89325
+      },
+      "adapter_overhead_ratio": 0.9868121099234095,
+      "direct_assurance_ns": 654420.0,
+      "openqasm_stage_ns": {
+        "import": 2040362.0,
+        "assurance": 656722.0,
+        "export": 543799.0
+      },
+      "openqasm_complete_ns": 3441743.0
+    },
+    {
+      "record_id": "holdout-020",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72811,
+        "compiler": 247719,
+        "lowering": 97649,
+        "report": 84363
+      },
+      "adapter_overhead_ratio": 1.0286776549235221,
+      "direct_assurance_ns": 684452.0,
+      "openqasm_stage_ns": {
+        "import": 1897820.0,
+        "assurance": 708719.0,
+        "export": 670959.0
+      },
+      "openqasm_complete_ns": 3235949.0
+    },
+    {
+      "record_id": "holdout-021",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 75424,
+        "compiler": 254514,
+        "lowering": 99004,
+        "report": 82768
+      },
+      "adapter_overhead_ratio": 1.0105377307338692,
+      "direct_assurance_ns": 588212.0,
+      "openqasm_stage_ns": {
+        "import": 2009198.0,
+        "assurance": 647766.0,
+        "export": 577989.0
+      },
+      "openqasm_complete_ns": 4146153.0
+    },
+    {
+      "record_id": "holdout-021",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 123962,
+        "compiler": 357645,
+        "lowering": 203636,
+        "report": 165395
+      },
+      "adapter_overhead_ratio": 1.3784423101119825,
+      "direct_assurance_ns": 1445242.0,
+      "openqasm_stage_ns": {
+        "import": 2826709.0,
+        "assurance": 784531.0,
+        "export": 576078.0
+      },
+      "openqasm_complete_ns": 4719090.0
+    },
+    {
+      "record_id": "holdout-021",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 94041,
+        "compiler": 291446,
+        "lowering": 118759,
+        "report": 89055
+      },
+      "adapter_overhead_ratio": 1.0357150209644326,
+      "direct_assurance_ns": 662100.0,
+      "openqasm_stage_ns": {
+        "import": 2399006.0,
+        "assurance": 787762.0,
+        "export": 800511.0
+      },
+      "openqasm_complete_ns": 4354186.0
+    },
+    {
+      "record_id": "holdout-021",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 78171,
+        "compiler": 302271,
+        "lowering": 102786,
+        "report": 86274
+      },
+      "adapter_overhead_ratio": 0.8840775330746251,
+      "direct_assurance_ns": 662910.0,
+      "openqasm_stage_ns": {
+        "import": 1791750.0,
+        "assurance": 637316.0,
+        "export": 661646.0
+      },
+      "openqasm_complete_ns": 3907956.0
+    },
+    {
+      "record_id": "holdout-022",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73018,
+        "compiler": 246353,
+        "lowering": 95031,
+        "report": 88559
+      },
+      "adapter_overhead_ratio": 1.0416272584462134,
+      "direct_assurance_ns": 596644.0,
+      "openqasm_stage_ns": {
+        "import": 1769950.0,
+        "assurance": 676088.0,
+        "export": 585551.0
+      },
+      "openqasm_complete_ns": 3184941.0
+    },
+    {
+      "record_id": "holdout-022",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97741,
+        "compiler": 314129,
+        "lowering": 96795,
+        "report": 85575
+      },
+      "adapter_overhead_ratio": 0.8917069102184134,
+      "direct_assurance_ns": 712387.0,
+      "openqasm_stage_ns": {
+        "import": 2994078.0,
+        "assurance": 766760.0,
+        "export": 567216.0
+      },
+      "openqasm_complete_ns": 4345422.0
+    },
+    {
+      "record_id": "holdout-022",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83794,
+        "compiler": 368018,
+        "lowering": 149740,
+        "report": 136460
+      },
+      "adapter_overhead_ratio": 1.0053693025884602,
+      "direct_assurance_ns": 1037911.0,
+      "openqasm_stage_ns": {
+        "import": 3270412.0,
+        "assurance": 771880.0,
+        "export": 791801.0
+      },
+      "openqasm_complete_ns": 4994763.0
+    },
+    {
+      "record_id": "holdout-022",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 75745,
+        "compiler": 266037,
+        "lowering": 100554,
+        "report": 88185
+      },
+      "adapter_overhead_ratio": 0.9941624661231333,
+      "direct_assurance_ns": 602397.0,
+      "openqasm_stage_ns": {
+        "import": 2242212.0,
+        "assurance": 759915.0,
+        "export": 596364.0
+      },
+      "openqasm_complete_ns": 3403764.0
+    },
+    {
+      "record_id": "holdout-023",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72639,
+        "compiler": 255589,
+        "lowering": 97196,
+        "report": 84410
+      },
+      "adapter_overhead_ratio": 0.9947415577352703,
+      "direct_assurance_ns": 583875.0,
+      "openqasm_stage_ns": {
+        "import": 1775211.0,
+        "assurance": 590270.0,
+        "export": 546443.0
+      },
+      "openqasm_complete_ns": 3466429.0
+    },
+    {
+      "record_id": "holdout-023",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 98454,
+        "compiler": 321814,
+        "lowering": 101105,
+        "report": 89210
+      },
+      "adapter_overhead_ratio": 0.8973164623043124,
+      "direct_assurance_ns": 731275.0,
+      "openqasm_stage_ns": {
+        "import": 3089489.0,
+        "assurance": 882260.0,
+        "export": 674278.0
+      },
+      "openqasm_complete_ns": 4785305.0
+    },
+    {
+      "record_id": "holdout-023",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83153,
+        "compiler": 270969,
+        "lowering": 100723,
+        "report": 84910
+      },
+      "adapter_overhead_ratio": 0.991943727880311,
+      "direct_assurance_ns": 639719.0,
+      "openqasm_stage_ns": {
+        "import": 2414750.0,
+        "assurance": 699788.0,
+        "export": 608339.0
+      },
+      "openqasm_complete_ns": 3960191.0
+    },
+    {
+      "record_id": "holdout-023",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 82264,
+        "compiler": 277725,
+        "lowering": 109014,
+        "report": 90874
+      },
+      "adapter_overhead_ratio": 1.0159402286434422,
+      "direct_assurance_ns": 642832.0,
+      "openqasm_stage_ns": {
+        "import": 1907196.0,
+        "assurance": 686636.0,
+        "export": 586538.0
+      },
+      "openqasm_complete_ns": 3269738.0
+    },
+    {
+      "record_id": "holdout-024",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 74759,
+        "compiler": 254604,
+        "lowering": 100907,
+        "report": 82509
+      },
+      "adapter_overhead_ratio": 1.0140257026598167,
+      "direct_assurance_ns": 607670.0,
+      "openqasm_stage_ns": {
+        "import": 1740827.0,
+        "assurance": 628794.0,
+        "export": 553695.0
+      },
+      "openqasm_complete_ns": 2887692.0
+    },
+    {
+      "record_id": "holdout-024",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97347,
+        "compiler": 312782,
+        "lowering": 101833,
+        "report": 89807
+      },
+      "adapter_overhead_ratio": 0.9239246503954831,
+      "direct_assurance_ns": 1250859.0,
+      "openqasm_stage_ns": {
+        "import": 3387905.0,
+        "assurance": 844584.0,
+        "export": 591259.0
+      },
+      "openqasm_complete_ns": 4565731.0
+    },
+    {
+      "record_id": "holdout-024",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85590,
+        "compiler": 280050,
+        "lowering": 96405,
+        "report": 85793
+      },
+      "adapter_overhead_ratio": 0.9562149616139975,
+      "direct_assurance_ns": 631909.0,
+      "openqasm_stage_ns": {
+        "import": 1931588.0,
+        "assurance": 615550.0,
+        "export": 523953.0
+      },
+      "openqasm_complete_ns": 3436675.0
+    },
+    {
+      "record_id": "holdout-024",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 79360,
+        "compiler": 261814,
+        "lowering": 100944,
+        "report": 83986
+      },
+      "adapter_overhead_ratio": 1.0094570954952753,
+      "direct_assurance_ns": 599368.0,
+      "openqasm_stage_ns": {
+        "import": 1765188.0,
+        "assurance": 662944.0,
+        "export": 570776.0
+      },
+      "openqasm_complete_ns": 3883620.0
+    },
+    {
+      "record_id": "holdout-025",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 83840,
+        "compiler": 263042,
+        "lowering": 108743,
+        "report": 82645
+      },
+      "adapter_overhead_ratio": 1.046327202499981,
+      "direct_assurance_ns": 620990.0,
+      "openqasm_stage_ns": {
+        "import": 1827768.0,
+        "assurance": 637779.0,
+        "export": 557854.0
+      },
+      "openqasm_complete_ns": 3716855.0
+    },
+    {
+      "record_id": "holdout-025",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 104471,
+        "compiler": 334088,
+        "lowering": 110513,
+        "report": 89327
+      },
+      "adapter_overhead_ratio": 0.9108707885347573,
+      "direct_assurance_ns": 736315.0,
+      "openqasm_stage_ns": {
+        "import": 2854709.0,
+        "assurance": 758195.0,
+        "export": 579049.0
+      },
+      "openqasm_complete_ns": 4545516.0
+    },
+    {
+      "record_id": "holdout-025",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84670,
+        "compiler": 282318,
+        "lowering": 97960,
+        "report": 84191
+      },
+      "adapter_overhead_ratio": 0.9451079987815159,
+      "direct_assurance_ns": 635985.0,
+      "openqasm_stage_ns": {
+        "import": 2236461.0,
+        "assurance": 732431.0,
+        "export": 620649.0
+      },
+      "openqasm_complete_ns": 3945869.0
+    },
+    {
+      "record_id": "holdout-025",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 74386,
+        "compiler": 256850,
+        "lowering": 97226,
+        "report": 85336
+      },
+      "adapter_overhead_ratio": 1.0003815456492116,
+      "direct_assurance_ns": 590676.0,
+      "openqasm_stage_ns": {
+        "import": 1763414.0,
+        "assurance": 619445.0,
+        "export": 561580.0
+      },
+      "openqasm_complete_ns": 3227592.0
+    },
+    {
+      "record_id": "holdout-026",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 74708,
+        "compiler": 250882,
+        "lowering": 97962,
+        "report": 83716
+      },
+      "adapter_overhead_ratio": 1.0219386006170232,
+      "direct_assurance_ns": 585183.0,
+      "openqasm_stage_ns": {
+        "import": 1747521.0,
+        "assurance": 700740.0,
+        "export": 592081.0
+      },
+      "openqasm_complete_ns": 3504262.0
+    },
+    {
+      "record_id": "holdout-026",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 98009,
+        "compiler": 310545,
+        "lowering": 97238,
+        "report": 84875
+      },
+      "adapter_overhead_ratio": 0.9020335217118292,
+      "direct_assurance_ns": 722700.0,
+      "openqasm_stage_ns": {
+        "import": 2850558.0,
+        "assurance": 734790.0,
+        "export": 543191.0
+      },
+      "openqasm_complete_ns": 4476024.0
+    },
+    {
+      "record_id": "holdout-026",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83631,
+        "compiler": 282647,
+        "lowering": 99543,
+        "report": 89605
+      },
+      "adapter_overhead_ratio": 0.9650871935665335,
+      "direct_assurance_ns": 661429.0,
+      "openqasm_stage_ns": {
+        "import": 2238685.0,
+        "assurance": 740815.0,
+        "export": 600198.0
+      },
+      "openqasm_complete_ns": 3817701.0
+    },
+    {
+      "record_id": "holdout-026",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 78540,
+        "compiler": 263037,
+        "lowering": 102352,
+        "report": 86501
+      },
+      "adapter_overhead_ratio": 1.0165604078513668,
+      "direct_assurance_ns": 605765.0,
+      "openqasm_stage_ns": {
+        "import": 1786867.0,
+        "assurance": 618595.0,
+        "export": 579463.0
+      },
+      "openqasm_complete_ns": 3557389.0
+    },
+    {
+      "record_id": "holdout-027",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 144580,
+        "compiler": 284327,
+        "lowering": 128906,
+        "report": 91396
+      },
+      "adapter_overhead_ratio": 1.2833181512835574,
+      "direct_assurance_ns": 637470.0,
+      "openqasm_stage_ns": {
+        "import": 1891230.0,
+        "assurance": 689864.0,
+        "export": 600375.0
+      },
+      "openqasm_complete_ns": 3297310.0
+    },
+    {
+      "record_id": "holdout-027",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96933,
+        "compiler": 319216,
+        "lowering": 102913,
+        "report": 84899
+      },
+      "adapter_overhead_ratio": 0.8920135582176332,
+      "direct_assurance_ns": 735656.0,
+      "openqasm_stage_ns": {
+        "import": 2739915.0,
+        "assurance": 714218.0,
+        "export": 542971.0
+      },
+      "openqasm_complete_ns": 4292254.0
+    },
+    {
+      "record_id": "holdout-027",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86309,
+        "compiler": 284900,
+        "lowering": 103292,
+        "report": 87424
+      },
+      "adapter_overhead_ratio": 0.9723587223587223,
+      "direct_assurance_ns": 666532.0,
+      "openqasm_stage_ns": {
+        "import": 2085959.0,
+        "assurance": 670384.0,
+        "export": 560015.0
+      },
+      "openqasm_complete_ns": 3454652.0
+    },
+    {
+      "record_id": "holdout-027",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73895,
+        "compiler": 246910,
+        "lowering": 94760,
+        "report": 82862
+      },
+      "adapter_overhead_ratio": 1.018658620549998,
+      "direct_assurance_ns": 596753.0,
+      "openqasm_stage_ns": {
+        "import": 1955029.0,
+        "assurance": 642085.0,
+        "export": 565953.0
+      },
+      "openqasm_complete_ns": 4386727.0
+    },
+    {
+      "record_id": "holdout-028",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 87430,
+        "compiler": 288989,
+        "lowering": 119985,
+        "report": 87433
+      },
+      "adapter_overhead_ratio": 1.0202741280809997,
+      "direct_assurance_ns": 647062.0,
+      "openqasm_stage_ns": {
+        "import": 1877848.0,
+        "assurance": 647475.0,
+        "export": 593853.0
+      },
+      "openqasm_complete_ns": 3410375.0
+    },
+    {
+      "record_id": "holdout-028",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 111283,
+        "compiler": 316140,
+        "lowering": 100955,
+        "report": 92372
+      },
+      "adapter_overhead_ratio": 0.9635288163471879,
+      "direct_assurance_ns": 740718.0,
+      "openqasm_stage_ns": {
+        "import": 3005270.0,
+        "assurance": 837921.0,
+        "export": 732447.0
+      },
+      "openqasm_complete_ns": 4928483.0
+    },
+    {
+      "record_id": "holdout-028",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84363,
+        "compiler": 280379,
+        "lowering": 98315,
+        "report": 85715
+      },
+      "adapter_overhead_ratio": 0.9572507213450365,
+      "direct_assurance_ns": 638700.0,
+      "openqasm_stage_ns": {
+        "import": 2138285.0,
+        "assurance": 678800.0,
+        "export": 554475.0
+      },
+      "openqasm_complete_ns": 3508745.0
+    },
+    {
+      "record_id": "holdout-028",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 107339,
+        "compiler": 267669,
+        "lowering": 105400,
+        "report": 97260
+      },
+      "adapter_overhead_ratio": 1.1581430796991807,
+      "direct_assurance_ns": 617077.0,
+      "openqasm_stage_ns": {
+        "import": 1707641.0,
+        "assurance": 600159.0,
+        "export": 552919.0
+      },
+      "openqasm_complete_ns": 3505279.0
+    },
+    {
+      "record_id": "holdout-029",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 87847,
+        "compiler": 268643,
+        "lowering": 106132,
+        "report": 83583
+      },
+      "adapter_overhead_ratio": 1.033200195054403,
+      "direct_assurance_ns": 608275.0,
+      "openqasm_stage_ns": {
+        "import": 1920034.0,
+        "assurance": 595566.0,
+        "export": 525617.0
+      },
+      "openqasm_complete_ns": 3368278.0
+    },
+    {
+      "record_id": "holdout-029",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94632,
+        "compiler": 313510,
+        "lowering": 97470,
+        "report": 86354
+      },
+      "adapter_overhead_ratio": 0.8881885745271283,
+      "direct_assurance_ns": 720522.0,
+      "openqasm_stage_ns": {
+        "import": 2898564.0,
+        "assurance": 823860.0,
+        "export": 621113.0
+      },
+      "openqasm_complete_ns": 4623210.0
+    },
+    {
+      "record_id": "holdout-029",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86200,
+        "compiler": 279567,
+        "lowering": 98583,
+        "report": 85014
+      },
+      "adapter_overhead_ratio": 0.9650530999724574,
+      "direct_assurance_ns": 644547.0,
+      "openqasm_stage_ns": {
+        "import": 2187897.0,
+        "assurance": 714824.0,
+        "export": 586221.0
+      },
+      "openqasm_complete_ns": 3720476.0
+    },
+    {
+      "record_id": "holdout-029",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 99500,
+        "compiler": 283257,
+        "lowering": 126607,
+        "report": 90962
+      },
+      "adapter_overhead_ratio": 1.1193686299014676,
+      "direct_assurance_ns": 648374.0,
+      "openqasm_stage_ns": {
+        "import": 1967817.0,
+        "assurance": 688935.0,
+        "export": 584739.0
+      },
+      "openqasm_complete_ns": 3302058.0
+    },
+    {
+      "record_id": "holdout-030",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 74294,
+        "compiler": 254164,
+        "lowering": 97981,
+        "report": 84478
+      },
+      "adapter_overhead_ratio": 1.0101863363812342,
+      "direct_assurance_ns": 600351.0,
+      "openqasm_stage_ns": {
+        "import": 1723442.0,
+        "assurance": 625316.0,
+        "export": 552330.0
+      },
+      "openqasm_complete_ns": 2851327.0
+    },
+    {
+      "record_id": "holdout-030",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95562,
+        "compiler": 306210,
+        "lowering": 95269,
+        "report": 87597
+      },
+      "adapter_overhead_ratio": 0.9092714150419646,
+      "direct_assurance_ns": 926508.0,
+      "openqasm_stage_ns": {
+        "import": 2758969.0,
+        "assurance": 802355.0,
+        "export": 580873.0
+      },
+      "openqasm_complete_ns": 4256122.0
+    },
+    {
+      "record_id": "holdout-030",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 81206,
+        "compiler": 269406,
+        "lowering": 94692,
+        "report": 83022
+      },
+      "adapter_overhead_ratio": 0.9610773330957737,
+      "direct_assurance_ns": 639927.0,
+      "openqasm_stage_ns": {
+        "import": 2059954.0,
+        "assurance": 660368.0,
+        "export": 559281.0
+      },
+      "openqasm_complete_ns": 4035181.0
+    },
+    {
+      "record_id": "holdout-030",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 80931,
+        "compiler": 276031,
+        "lowering": 109438,
+        "report": 88318
+      },
+      "adapter_overhead_ratio": 1.0096221076618206,
+      "direct_assurance_ns": 631676.0,
+      "openqasm_stage_ns": {
+        "import": 1782887.0,
+        "assurance": 661574.0,
+        "export": 582310.0
+      },
+      "openqasm_complete_ns": 4030762.0
+    },
+    {
+      "record_id": "holdout-031",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 80415,
+        "compiler": 264138,
+        "lowering": 106224,
+        "report": 83171
+      },
+      "adapter_overhead_ratio": 1.0214736236361297,
+      "direct_assurance_ns": 597394.0,
+      "openqasm_stage_ns": {
+        "import": 1768792.0,
+        "assurance": 626033.0,
+        "export": 566337.0
+      },
+      "openqasm_complete_ns": 3447017.0
+    },
+    {
+      "record_id": "holdout-031",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 107646,
+        "compiler": 338199,
+        "lowering": 120006,
+        "report": 91829
+      },
+      "adapter_overhead_ratio": 0.9446538872084187,
+      "direct_assurance_ns": 777073.0,
+      "openqasm_stage_ns": {
+        "import": 2929056.0,
+        "assurance": 777352.0,
+        "export": 584665.0
+      },
+      "openqasm_complete_ns": 4527432.0
+    },
+    {
+      "record_id": "holdout-031",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 81025,
+        "compiler": 271453,
+        "lowering": 95619,
+        "report": 82295
+      },
+      "adapter_overhead_ratio": 0.953899938479221,
+      "direct_assurance_ns": 635770.0,
+      "openqasm_stage_ns": {
+        "import": 1992634.0,
+        "assurance": 705237.0,
+        "export": 639597.0
+      },
+      "openqasm_complete_ns": 3859657.0
+    },
+    {
+      "record_id": "holdout-031",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73549,
+        "compiler": 253942,
+        "lowering": 96508,
+        "report": 92957
+      },
+      "adapter_overhead_ratio": 1.035724693040143,
+      "direct_assurance_ns": 592927.0,
+      "openqasm_stage_ns": {
+        "import": 1740971.0,
+        "assurance": 588842.0,
+        "export": 511232.0
+      },
+      "openqasm_complete_ns": 3336445.0
+    },
+    {
+      "record_id": "holdout-032",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 75003,
+        "compiler": 259143,
+        "lowering": 97710,
+        "report": 83460
+      },
+      "adapter_overhead_ratio": 0.9885391463400516,
+      "direct_assurance_ns": 593275.0,
+      "openqasm_stage_ns": {
+        "import": 1751340.0,
+        "assurance": 622991.0,
+        "export": 603735.0
+      },
+      "openqasm_complete_ns": 3633159.0
+    },
+    {
+      "record_id": "holdout-032",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 102878,
+        "compiler": 330272,
+        "lowering": 109814,
+        "report": 86536
+      },
+      "adapter_overhead_ratio": 0.9060047476019766,
+      "direct_assurance_ns": 728969.0,
+      "openqasm_stage_ns": {
+        "import": 2840130.0,
+        "assurance": 765498.0,
+        "export": 598729.0
+      },
+      "openqasm_complete_ns": 4476377.0
+    },
+    {
+      "record_id": "holdout-032",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84975,
+        "compiler": 288780,
+        "lowering": 99875,
+        "report": 83574
+      },
+      "adapter_overhead_ratio": 0.9295103539026248,
+      "direct_assurance_ns": 637691.0,
+      "openqasm_stage_ns": {
+        "import": 2224115.0,
+        "assurance": 744295.0,
+        "export": 647944.0
+      },
+      "openqasm_complete_ns": 3848132.0
+    },
+    {
+      "record_id": "holdout-032",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 71995,
+        "compiler": 256315,
+        "lowering": 97065,
+        "report": 83095
+      },
+      "adapter_overhead_ratio": 0.9837699705440571,
+      "direct_assurance_ns": 602152.0,
+      "openqasm_stage_ns": {
+        "import": 1769019.0,
+        "assurance": 632946.0,
+        "export": 584853.0
+      },
+      "openqasm_complete_ns": 3101275.0
+    },
+    {
+      "record_id": "holdout-033",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72581,
+        "compiler": 248228,
+        "lowering": 93599,
+        "report": 83173
+      },
+      "adapter_overhead_ratio": 1.004532123692734,
+      "direct_assurance_ns": 583485.0,
+      "openqasm_stage_ns": {
+        "import": 1846010.0,
+        "assurance": 669340.0,
+        "export": 592560.0
+      },
+      "openqasm_complete_ns": 3283980.0
+    },
+    {
+      "record_id": "holdout-033",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95833,
+        "compiler": 317156,
+        "lowering": 98213,
+        "report": 85042
+      },
+      "adapter_overhead_ratio": 0.8799707399513174,
+      "direct_assurance_ns": 722465.0,
+      "openqasm_stage_ns": {
+        "import": 2680017.0,
+        "assurance": 716538.0,
+        "export": 652245.0
+      },
+      "openqasm_complete_ns": 4419490.0
+    },
+    {
+      "record_id": "holdout-033",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 87106,
+        "compiler": 294233,
+        "lowering": 112334,
+        "report": 115547
+      },
+      "adapter_overhead_ratio": 1.070535935805977,
+      "direct_assurance_ns": 707826.0,
+      "openqasm_stage_ns": {
+        "import": 2201819.0,
+        "assurance": 733499.0,
+        "export": 634035.0
+      },
+      "openqasm_complete_ns": 3648944.0
+    },
+    {
+      "record_id": "holdout-033",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 76120,
+        "compiler": 264245,
+        "lowering": 99370,
+        "report": 86240
+      },
+      "adapter_overhead_ratio": 0.9904823175462166,
+      "direct_assurance_ns": 609102.0,
+      "openqasm_stage_ns": {
+        "import": 1748661.0,
+        "assurance": 620085.0,
+        "export": 563192.0
+      },
+      "openqasm_complete_ns": 4035316.0
+    },
+    {
+      "record_id": "holdout-034",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 79687,
+        "compiler": 264618,
+        "lowering": 107787,
+        "report": 86626
+      },
+      "adapter_overhead_ratio": 1.0358327853736329,
+      "direct_assurance_ns": 614940.0,
+      "openqasm_stage_ns": {
+        "import": 1934824.0,
+        "assurance": 697279.0,
+        "export": 592110.0
+      },
+      "openqasm_complete_ns": 3294873.0
+    },
+    {
+      "record_id": "holdout-034",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 102010,
+        "compiler": 317163,
+        "lowering": 102460,
+        "report": 86250
+      },
+      "adapter_overhead_ratio": 0.9166264665172167,
+      "direct_assurance_ns": 714937.0,
+      "openqasm_stage_ns": {
+        "import": 2803751.0,
+        "assurance": 714468.0,
+        "export": 528784.0
+      },
+      "openqasm_complete_ns": 4450422.0
+    },
+    {
+      "record_id": "holdout-034",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 87966,
+        "compiler": 285653,
+        "lowering": 100591,
+        "report": 88638
+      },
+      "adapter_overhead_ratio": 0.9703906487941664,
+      "direct_assurance_ns": 652393.0,
+      "openqasm_stage_ns": {
+        "import": 2078554.0,
+        "assurance": 642692.0,
+        "export": 521435.0
+      },
+      "openqasm_complete_ns": 3435383.0
+    },
+    {
+      "record_id": "holdout-034",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72149,
+        "compiler": 254152,
+        "lowering": 122261,
+        "report": 86388
+      },
+      "adapter_overhead_ratio": 1.104842771254997,
+      "direct_assurance_ns": 765928.0,
+      "openqasm_stage_ns": {
+        "import": 1752896.0,
+        "assurance": 631478.0,
+        "export": 586565.0
+      },
+      "openqasm_complete_ns": 4443924.0
+    },
+    {
+      "record_id": "holdout-035",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 91193,
+        "compiler": 286600,
+        "lowering": 125394,
+        "report": 91194
+      },
+      "adapter_overhead_ratio": 1.0739043963712491,
+      "direct_assurance_ns": 655752.0,
+      "openqasm_stage_ns": {
+        "import": 1817739.0,
+        "assurance": 649296.0,
+        "export": 582472.0
+      },
+      "openqasm_complete_ns": 3418933.0
+    },
+    {
+      "record_id": "holdout-035",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 100274,
+        "compiler": 330555,
+        "lowering": 104429,
+        "report": 86014
+      },
+      "adapter_overhead_ratio": 0.8794814781201313,
+      "direct_assurance_ns": 751516.0,
+      "openqasm_stage_ns": {
+        "import": 2931747.0,
+        "assurance": 1015918.0,
+        "export": 845385.0
+      },
+      "openqasm_complete_ns": 5221075.0
+    },
+    {
+      "record_id": "holdout-035",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 90247,
+        "compiler": 292300,
+        "lowering": 125141,
+        "report": 89348
+      },
+      "adapter_overhead_ratio": 1.042545330140267,
+      "direct_assurance_ns": 792849.0,
+      "openqasm_stage_ns": {
+        "import": 2206684.0,
+        "assurance": 728486.0,
+        "export": 580153.0
+      },
+      "openqasm_complete_ns": 3590294.0
+    },
+    {
+      "record_id": "holdout-035",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73921,
+        "compiler": 256485,
+        "lowering": 98394,
+        "report": 82505
+      },
+      "adapter_overhead_ratio": 0.9935083923036435,
+      "direct_assurance_ns": 596468.0,
+      "openqasm_stage_ns": {
+        "import": 1963502.0,
+        "assurance": 711948.0,
+        "export": 618090.0
+      },
+      "openqasm_complete_ns": 3400279.0
+    },
+    {
+      "record_id": "holdout-036",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76296,
+        "compiler": 324614,
+        "lowering": 112418,
+        "report": 86066
+      },
+      "adapter_overhead_ratio": 0.8464822835737214,
+      "direct_assurance_ns": 613740.0,
+      "openqasm_stage_ns": {
+        "import": 1728802.0,
+        "assurance": 1327246.0,
+        "export": 926700.0
+      },
+      "openqasm_complete_ns": 3850516.0
+    },
+    {
+      "record_id": "holdout-036",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 163625,
+        "compiler": 406276,
+        "lowering": 149550,
+        "report": 101243
+      },
+      "adapter_overhead_ratio": 1.0200405635577785,
+      "direct_assurance_ns": 867678.0,
+      "openqasm_stage_ns": {
+        "import": 2943588.0,
+        "assurance": 808162.0,
+        "export": 600869.0
+      },
+      "openqasm_complete_ns": 4580267.0
+    },
+    {
+      "record_id": "holdout-036",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 90729,
+        "compiler": 290390,
+        "lowering": 104954,
+        "report": 87541
+      },
+      "adapter_overhead_ratio": 0.9753228416956506,
+      "direct_assurance_ns": 659884.0,
+      "openqasm_stage_ns": {
+        "import": 2080586.0,
+        "assurance": 670925.0,
+        "export": 603724.0
+      },
+      "openqasm_complete_ns": 4145591.0
+    },
+    {
+      "record_id": "holdout-036",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 78580,
+        "compiler": 269831,
+        "lowering": 102137,
+        "report": 85435
+      },
+      "adapter_overhead_ratio": 0.986365539912019,
+      "direct_assurance_ns": 605899.0,
+      "openqasm_stage_ns": {
+        "import": 1772386.0,
+        "assurance": 630181.0,
+        "export": 574269.0
+      },
+      "openqasm_complete_ns": 4041340.0
+    },
+    {
+      "record_id": "holdout-037",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 74792,
+        "compiler": 252921,
+        "lowering": 96956,
+        "report": 81311
+      },
+      "adapter_overhead_ratio": 1.0005456249184528,
+      "direct_assurance_ns": 577390.0,
+      "openqasm_stage_ns": {
+        "import": 1693914.0,
+        "assurance": 584213.0,
+        "export": 543598.0
+      },
+      "openqasm_complete_ns": 3567171.0
+    },
+    {
+      "record_id": "holdout-037",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 109405,
+        "compiler": 338545,
+        "lowering": 107066,
+        "report": 87205
+      },
+      "adapter_overhead_ratio": 0.8970033525823746,
+      "direct_assurance_ns": 729669.0,
+      "openqasm_stage_ns": {
+        "import": 2716832.0,
+        "assurance": 710563.0,
+        "export": 547189.0
+      },
+      "openqasm_complete_ns": 4511066.0
+    },
+    {
+      "record_id": "holdout-037",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85772,
+        "compiler": 275555,
+        "lowering": 97964,
+        "report": 84865
+      },
+      "adapter_overhead_ratio": 0.9747636587976992,
+      "direct_assurance_ns": 636109.0,
+      "openqasm_stage_ns": {
+        "import": 2352718.0,
+        "assurance": 774329.0,
+        "export": 671481.0
+      },
+      "openqasm_complete_ns": 3945550.0
+    },
+    {
+      "record_id": "holdout-037",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 91703,
+        "compiler": 272442,
+        "lowering": 133368,
+        "report": 91130
+      },
+      "adapter_overhead_ratio": 1.1606176727523656,
+      "direct_assurance_ns": 624994.0,
+      "openqasm_stage_ns": {
+        "import": 1813056.0,
+        "assurance": 684194.0,
+        "export": 701531.0
+      },
+      "openqasm_complete_ns": 3386169.0
+    },
+    {
+      "record_id": "holdout-038",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 75858,
+        "compiler": 259593,
+        "lowering": 97779,
+        "report": 80973
+      },
+      "adapter_overhead_ratio": 0.9808045671493453,
+      "direct_assurance_ns": 588828.0,
+      "openqasm_stage_ns": {
+        "import": 2010705.0,
+        "assurance": 692890.0,
+        "export": 625469.0
+      },
+      "openqasm_complete_ns": 3605779.0
+    },
+    {
+      "record_id": "holdout-038",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 101576,
+        "compiler": 331256,
+        "lowering": 104630,
+        "report": 87091
+      },
+      "adapter_overhead_ratio": 0.885408868065786,
+      "direct_assurance_ns": 747657.0,
+      "openqasm_stage_ns": {
+        "import": 2858903.0,
+        "assurance": 746629.0,
+        "export": 556040.0
+      },
+      "openqasm_complete_ns": 4350986.0
+    },
+    {
+      "record_id": "holdout-038",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86763,
+        "compiler": 286688,
+        "lowering": 102980,
+        "report": 86713
+      },
+      "adapter_overhead_ratio": 0.9643096327715147,
+      "direct_assurance_ns": 675251.0,
+      "openqasm_stage_ns": {
+        "import": 2149681.0,
+        "assurance": 690817.0,
+        "export": 562588.0
+      },
+      "openqasm_complete_ns": 3941879.0
+    },
+    {
+      "record_id": "holdout-038",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 90235,
+        "compiler": 276339,
+        "lowering": 110062,
+        "report": 88835
+      },
+      "adapter_overhead_ratio": 1.0462945874451308,
+      "direct_assurance_ns": 724661.0,
+      "openqasm_stage_ns": {
+        "import": 2067437.0,
+        "assurance": 682349.0,
+        "export": 580844.0
+      },
+      "openqasm_complete_ns": 3432843.0
+    },
+    {
+      "record_id": "holdout-039",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 82328,
+        "compiler": 271652,
+        "lowering": 115101,
+        "report": 86357
+      },
+      "adapter_overhead_ratio": 1.044667442168657,
+      "direct_assurance_ns": 635166.0,
+      "openqasm_stage_ns": {
+        "import": 1849276.0,
+        "assurance": 670678.0,
+        "export": 589919.0
+      },
+      "openqasm_complete_ns": 3068678.0
+    },
+    {
+      "record_id": "holdout-039",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97792,
+        "compiler": 315179,
+        "lowering": 100747,
+        "report": 101104
+      },
+      "adapter_overhead_ratio": 0.9507073758086675,
+      "direct_assurance_ns": 1002759.0,
+      "openqasm_stage_ns": {
+        "import": 2829398.0,
+        "assurance": 821390.0,
+        "export": 579072.0
+      },
+      "openqasm_complete_ns": 5106744.0
+    },
+    {
+      "record_id": "holdout-039",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 88289,
+        "compiler": 290607,
+        "lowering": 102635,
+        "report": 86401
+      },
+      "adapter_overhead_ratio": 0.9542956639034847,
+      "direct_assurance_ns": 645330.0,
+      "openqasm_stage_ns": {
+        "import": 2023295.0,
+        "assurance": 677722.0,
+        "export": 580841.0
+      },
+      "openqasm_complete_ns": 3660094.0
+    },
+    {
+      "record_id": "holdout-039",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73099,
+        "compiler": 261785,
+        "lowering": 101035,
+        "report": 83785
+      },
+      "adapter_overhead_ratio": 0.9852321561586799,
+      "direct_assurance_ns": 607208.0,
+      "openqasm_stage_ns": {
+        "import": 1686128.0,
+        "assurance": 659102.0,
+        "export": 528201.0
+      },
+      "openqasm_complete_ns": 4162788.0
+    },
+    {
+      "record_id": "holdout-040",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 80232,
+        "compiler": 272543,
+        "lowering": 109802,
+        "report": 85461
+      },
+      "adapter_overhead_ratio": 1.0108313183607724,
+      "direct_assurance_ns": 599737.0,
+      "openqasm_stage_ns": {
+        "import": 1715560.0,
+        "assurance": 615093.0,
+        "export": 581737.0
+      },
+      "openqasm_complete_ns": 3004215.0
+    },
+    {
+      "record_id": "holdout-040",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 99986,
+        "compiler": 313793,
+        "lowering": 99338,
+        "report": 94567
+      },
+      "adapter_overhead_ratio": 0.9365760230470406,
+      "direct_assurance_ns": 936122.0,
+      "openqasm_stage_ns": {
+        "import": 2829082.0,
+        "assurance": 808106.0,
+        "export": 609271.0
+      },
+      "openqasm_complete_ns": 4394632.0
+    },
+    {
+      "record_id": "holdout-040",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83423,
+        "compiler": 276213,
+        "lowering": 95073,
+        "report": 82771
+      },
+      "adapter_overhead_ratio": 0.945889585211413,
+      "direct_assurance_ns": 644602.0,
+      "openqasm_stage_ns": {
+        "import": 1969692.0,
+        "assurance": 631499.0,
+        "export": 515814.0
+      },
+      "openqasm_complete_ns": 3398082.0
+    },
+    {
+      "record_id": "holdout-040",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72111,
+        "compiler": 247635,
+        "lowering": 96385,
+        "report": 82911
+      },
+      "adapter_overhead_ratio": 1.0152320956246088,
+      "direct_assurance_ns": 591728.0,
+      "openqasm_stage_ns": {
+        "import": 1698521.0,
+        "assurance": 679899.0,
+        "export": 609744.0
+      },
+      "openqasm_complete_ns": 3277847.0
+    },
+    {
+      "record_id": "holdout-041",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73845,
+        "compiler": 255126,
+        "lowering": 97590,
+        "report": 81055
+      },
+      "adapter_overhead_ratio": 0.9896678503954909,
+      "direct_assurance_ns": 590423.0,
+      "openqasm_stage_ns": {
+        "import": 1703198.0,
+        "assurance": 597882.0,
+        "export": 518729.0
+      },
+      "openqasm_complete_ns": 3040129.0
+    },
+    {
+      "record_id": "holdout-041",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94490,
+        "compiler": 304756,
+        "lowering": 94411,
+        "report": 82958
+      },
+      "adapter_overhead_ratio": 0.8920546273084041,
+      "direct_assurance_ns": 708366.0,
+      "openqasm_stage_ns": {
+        "import": 2798628.0,
+        "assurance": 783288.0,
+        "export": 585609.0
+      },
+      "openqasm_complete_ns": 4338290.0
+    },
+    {
+      "record_id": "holdout-041",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 81058,
+        "compiler": 275913,
+        "lowering": 97087,
+        "report": 83948
+      },
+      "adapter_overhead_ratio": 0.9499117475436097,
+      "direct_assurance_ns": 643087.0,
+      "openqasm_stage_ns": {
+        "import": 1967169.0,
+        "assurance": 738798.0,
+        "export": 534307.0
+      },
+      "openqasm_complete_ns": 3650847.0
+    },
+    {
+      "record_id": "holdout-041",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73193,
+        "compiler": 260989,
+        "lowering": 99918,
+        "report": 87661
+      },
+      "adapter_overhead_ratio": 0.9991685473334125,
+      "direct_assurance_ns": 739953.0,
+      "openqasm_stage_ns": {
+        "import": 1824999.0,
+        "assurance": 703005.0,
+        "export": 608118.0
+      },
+      "openqasm_complete_ns": 3247811.0
+    },
+    {
+      "record_id": "holdout-042",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 74789,
+        "compiler": 261765,
+        "lowering": 103667,
+        "report": 85164
+      },
+      "adapter_overhead_ratio": 1.007086508891563,
+      "direct_assurance_ns": 602154.0,
+      "openqasm_stage_ns": {
+        "import": 1841028.0,
+        "assurance": 702008.0,
+        "export": 577503.0
+      },
+      "openqasm_complete_ns": 3235096.0
+    },
+    {
+      "record_id": "holdout-042",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94082,
+        "compiler": 311564,
+        "lowering": 94593,
+        "report": 87248
+      },
+      "adapter_overhead_ratio": 0.8856061675931751,
+      "direct_assurance_ns": 713439.0,
+      "openqasm_stage_ns": {
+        "import": 3028440.0,
+        "assurance": 801021.0,
+        "export": 593964.0
+      },
+      "openqasm_complete_ns": 4448020.0
+    },
+    {
+      "record_id": "holdout-042",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83950,
+        "compiler": 277321,
+        "lowering": 95315,
+        "report": 85412
+      },
+      "adapter_overhead_ratio": 0.9544066262562158,
+      "direct_assurance_ns": 632037.0,
+      "openqasm_stage_ns": {
+        "import": 2066139.0,
+        "assurance": 637768.0,
+        "export": 504293.0
+      },
+      "openqasm_complete_ns": 3702652.0
+    },
+    {
+      "record_id": "holdout-042",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 78340,
+        "compiler": 266421,
+        "lowering": 102462,
+        "report": 86489
+      },
+      "adapter_overhead_ratio": 1.003265508349567,
+      "direct_assurance_ns": 609478.0,
+      "openqasm_stage_ns": {
+        "import": 1803013.0,
+        "assurance": 646982.0,
+        "export": 550249.0
+      },
+      "openqasm_complete_ns": 3939966.0
+    },
+    {
+      "record_id": "holdout-043",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73989,
+        "compiler": 258433,
+        "lowering": 99645,
+        "report": 81193
+      },
+      "adapter_overhead_ratio": 0.9860466736059249,
+      "direct_assurance_ns": 585051.0,
+      "openqasm_stage_ns": {
+        "import": 1670832.0,
+        "assurance": 583840.0,
+        "export": 510126.0
+      },
+      "openqasm_complete_ns": 3031605.0
+    },
+    {
+      "record_id": "holdout-043",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97443,
+        "compiler": 315941,
+        "lowering": 105022,
+        "report": 129734
+      },
+      "adapter_overhead_ratio": 1.0514589749351937,
+      "direct_assurance_ns": 780024.0,
+      "openqasm_stage_ns": {
+        "import": 2852117.0,
+        "assurance": 771764.0,
+        "export": 574814.0
+      },
+      "openqasm_complete_ns": 4297396.0
+    },
+    {
+      "record_id": "holdout-043",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 100700,
+        "compiler": 281549,
+        "lowering": 100944,
+        "report": 84870
+      },
+      "adapter_overhead_ratio": 1.0176345858092197,
+      "direct_assurance_ns": 635146.0,
+      "openqasm_stage_ns": {
+        "import": 1981299.0,
+        "assurance": 636068.0,
+        "export": 534975.0
+      },
+      "openqasm_complete_ns": 3574792.0
+    },
+    {
+      "record_id": "holdout-043",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 81200,
+        "compiler": 268517,
+        "lowering": 106365,
+        "report": 87643
+      },
+      "adapter_overhead_ratio": 1.0249183478141048,
+      "direct_assurance_ns": 610009.0,
+      "openqasm_stage_ns": {
+        "import": 1822335.0,
+        "assurance": 639028.0,
+        "export": 576211.0
+      },
+      "openqasm_complete_ns": 3190730.0
+    },
+    {
+      "record_id": "holdout-044",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72910,
+        "compiler": 252217,
+        "lowering": 97586,
+        "report": 82184
+      },
+      "adapter_overhead_ratio": 1.0018357208277,
+      "direct_assurance_ns": 592186.0,
+      "openqasm_stage_ns": {
+        "import": 1811711.0,
+        "assurance": 588002.0,
+        "export": 503010.0
+      },
+      "openqasm_complete_ns": 3508493.0
+    },
+    {
+      "record_id": "holdout-044",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 100977,
+        "compiler": 325986,
+        "lowering": 105120,
+        "report": 87075
+      },
+      "adapter_overhead_ratio": 0.8993392354272883,
+      "direct_assurance_ns": 735123.0,
+      "openqasm_stage_ns": {
+        "import": 2880645.0,
+        "assurance": 720128.0,
+        "export": 529694.0
+      },
+      "openqasm_complete_ns": 4324197.0
+    },
+    {
+      "record_id": "holdout-044",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83391,
+        "compiler": 277317,
+        "lowering": 97582,
+        "report": 96348
+      },
+      "adapter_overhead_ratio": 1.000014423926409,
+      "direct_assurance_ns": 641167.0,
+      "openqasm_stage_ns": {
+        "import": 2025141.0,
+        "assurance": 633624.0,
+        "export": 502770.0
+      },
+      "openqasm_complete_ns": 3673617.0
+    },
+    {
+      "record_id": "holdout-044",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 75847,
+        "compiler": 266658,
+        "lowering": 102372,
+        "report": 89126
+      },
+      "adapter_overhead_ratio": 1.0025763337308462,
+      "direct_assurance_ns": 622194.0,
+      "openqasm_stage_ns": {
+        "import": 1785532.0,
+        "assurance": 615586.0,
+        "export": 549489.0
+      },
+      "openqasm_complete_ns": 3192255.0
+    },
+    {
+      "record_id": "holdout-045",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72962,
+        "compiler": 248517,
+        "lowering": 94090,
+        "report": 85247
+      },
+      "adapter_overhead_ratio": 1.01521827480615,
+      "direct_assurance_ns": 659804.0,
+      "openqasm_stage_ns": {
+        "import": 1724063.0,
+        "assurance": 592794.0,
+        "export": 520114.0
+      },
+      "openqasm_complete_ns": 3400942.0
+    },
+    {
+      "record_id": "holdout-045",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 102770,
+        "compiler": 337596,
+        "lowering": 108470,
+        "report": 89738
+      },
+      "adapter_overhead_ratio": 0.8915330750364341,
+      "direct_assurance_ns": 764701.0,
+      "openqasm_stage_ns": {
+        "import": 2854703.0,
+        "assurance": 746190.0,
+        "export": 573742.0
+      },
+      "openqasm_complete_ns": 4363338.0
+    },
+    {
+      "record_id": "holdout-045",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83124,
+        "compiler": 276653,
+        "lowering": 96982,
+        "report": 83059
+      },
+      "adapter_overhead_ratio": 0.9512457844303153,
+      "direct_assurance_ns": 653802.0,
+      "openqasm_stage_ns": {
+        "import": 2156108.0,
+        "assurance": 688013.0,
+        "export": 579968.0
+      },
+      "openqasm_complete_ns": 3728555.0
+    },
+    {
+      "record_id": "holdout-045",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72807,
+        "compiler": 255656,
+        "lowering": 96558,
+        "report": 82603
+      },
+      "adapter_overhead_ratio": 0.9855743655537128,
+      "direct_assurance_ns": 595994.0,
+      "openqasm_stage_ns": {
+        "import": 1813641.0,
+        "assurance": 604720.0,
+        "export": 522372.0
+      },
+      "openqasm_complete_ns": 3997696.0
+    },
+    {
+      "record_id": "holdout-046",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72269,
+        "compiler": 251320,
+        "lowering": 96731,
+        "report": 82120
+      },
+      "adapter_overhead_ratio": 0.9992042018144198,
+      "direct_assurance_ns": 584566.0,
+      "openqasm_stage_ns": {
+        "import": 1837526.0,
+        "assurance": 628592.0,
+        "export": 576799.0
+      },
+      "openqasm_complete_ns": 3455591.0
+    },
+    {
+      "record_id": "holdout-046",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96376,
+        "compiler": 310071,
+        "lowering": 95683,
+        "report": 84105
+      },
+      "adapter_overhead_ratio": 0.8906476258663338,
+      "direct_assurance_ns": 703818.0,
+      "openqasm_stage_ns": {
+        "import": 2846240.0,
+        "assurance": 717886.0,
+        "export": 532771.0
+      },
+      "openqasm_complete_ns": 4343190.0
+    },
+    {
+      "record_id": "holdout-046",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 82718,
+        "compiler": 274702,
+        "lowering": 94363,
+        "report": 82208
+      },
+      "adapter_overhead_ratio": 0.9438919265240151,
+      "direct_assurance_ns": 633275.0,
+      "openqasm_stage_ns": {
+        "import": 2170210.0,
+        "assurance": 735986.0,
+        "export": 594190.0
+      },
+      "openqasm_complete_ns": 3698532.0
+    },
+    {
+      "record_id": "holdout-046",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73022,
+        "compiler": 249723,
+        "lowering": 96857,
+        "report": 81991
+      },
+      "adapter_overhead_ratio": 1.0085975260588733,
+      "direct_assurance_ns": 584420.0,
+      "openqasm_stage_ns": {
+        "import": 1720140.0,
+        "assurance": 591750.0,
+        "export": 517510.0
+      },
+      "openqasm_complete_ns": 3081028.0
+    },
+    {
+      "record_id": "holdout-047",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71070,
+        "compiler": 242080,
+        "lowering": 92893,
+        "report": 80985
+      },
+      "adapter_overhead_ratio": 1.0118473231989424,
+      "direct_assurance_ns": 585716.0,
+      "openqasm_stage_ns": {
+        "import": 1858239.0,
+        "assurance": 662304.0,
+        "export": 581145.0
+      },
+      "openqasm_complete_ns": 3244884.0
+    },
+    {
+      "record_id": "holdout-047",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94078,
+        "compiler": 306679,
+        "lowering": 94563,
+        "report": 83440
+      },
+      "adapter_overhead_ratio": 0.8871849719087385,
+      "direct_assurance_ns": 715020.0,
+      "openqasm_stage_ns": {
+        "import": 2734132.0,
+        "assurance": 722316.0,
+        "export": 537722.0
+      },
+      "openqasm_complete_ns": 4306458.0
+    },
+    {
+      "record_id": "holdout-047",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85219,
+        "compiler": 306685,
+        "lowering": 106039,
+        "report": 88471
+      },
+      "adapter_overhead_ratio": 0.9121052545771721,
+      "direct_assurance_ns": 652311.0,
+      "openqasm_stage_ns": {
+        "import": 2177632.0,
+        "assurance": 726077.0,
+        "export": 583220.0
+      },
+      "openqasm_complete_ns": 3566676.0
+    },
+    {
+      "record_id": "holdout-047",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72460,
+        "compiler": 252876,
+        "lowering": 94369,
+        "report": 87776
+      },
+      "adapter_overhead_ratio": 1.0068373432037836,
+      "direct_assurance_ns": 584412.0,
+      "openqasm_stage_ns": {
+        "import": 1702140.0,
+        "assurance": 587884.0,
+        "export": 536629.0
+      },
+      "openqasm_complete_ns": 3090158.0
+    },
+    {
+      "record_id": "holdout-048",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71982,
+        "compiler": 248237,
+        "lowering": 94601,
+        "report": 82249
+      },
+      "adapter_overhead_ratio": 1.0023969029596715,
+      "direct_assurance_ns": 585409.0,
+      "openqasm_stage_ns": {
+        "import": 1953633.0,
+        "assurance": 699402.0,
+        "export": 633805.0
+      },
+      "openqasm_complete_ns": 3545734.0
+    },
+    {
+      "record_id": "holdout-048",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96973,
+        "compiler": 319664,
+        "lowering": 100055,
+        "report": 87320
+      },
+      "adapter_overhead_ratio": 0.889521497572451,
+      "direct_assurance_ns": 759089.0,
+      "openqasm_stage_ns": {
+        "import": 3042841.0,
+        "assurance": 717919.0,
+        "export": 521489.0
+      },
+      "openqasm_complete_ns": 4567103.0
+    },
+    {
+      "record_id": "holdout-048",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 88146,
+        "compiler": 293157,
+        "lowering": 104124,
+        "report": 87175
+      },
+      "adapter_overhead_ratio": 0.9532264281596551,
+      "direct_assurance_ns": 675008.0,
+      "openqasm_stage_ns": {
+        "import": 2102585.0,
+        "assurance": 690934.0,
+        "export": 540345.0
+      },
+      "openqasm_complete_ns": 3508743.0
+    },
+    {
+      "record_id": "holdout-048",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72768,
+        "compiler": 245700,
+        "lowering": 94324,
+        "report": 99321
+      },
+      "adapter_overhead_ratio": 1.0843019943019943,
+      "direct_assurance_ns": 592183.0,
+      "openqasm_stage_ns": {
+        "import": 1693786.0,
+        "assurance": 582658.0,
+        "export": 508268.0
+      },
+      "openqasm_complete_ns": 4020149.0
+    },
+    {
+      "record_id": "holdout-049",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 82339,
+        "compiler": 271741,
+        "lowering": 108568,
+        "report": 85106
+      },
+      "adapter_overhead_ratio": 1.0157208518405394,
+      "direct_assurance_ns": 598592.0,
+      "openqasm_stage_ns": {
+        "import": 1781113.0,
+        "assurance": 635111.0,
+        "export": 563507.0
+      },
+      "openqasm_complete_ns": 2990367.0
+    },
+    {
+      "record_id": "holdout-049",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96459,
+        "compiler": 310526,
+        "lowering": 96718,
+        "report": 87415
+      },
+      "adapter_overhead_ratio": 0.9036022748497711,
+      "direct_assurance_ns": 941021.0,
+      "openqasm_stage_ns": {
+        "import": 2736301.0,
+        "assurance": 729280.0,
+        "export": 541464.0
+      },
+      "openqasm_complete_ns": 4511383.0
+    },
+    {
+      "record_id": "holdout-049",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 95851,
+        "compiler": 301250,
+        "lowering": 115322,
+        "report": 90447
+      },
+      "adapter_overhead_ratio": 1.0012282157676349,
+      "direct_assurance_ns": 690951.0,
+      "openqasm_stage_ns": {
+        "import": 2050840.0,
+        "assurance": 665695.0,
+        "export": 551134.0
+      },
+      "openqasm_complete_ns": 3542385.0
+    },
+    {
+      "record_id": "holdout-049",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73889,
+        "compiler": 252350,
+        "lowering": 96824,
+        "report": 81908
+      },
+      "adapter_overhead_ratio": 1.0010739052902715,
+      "direct_assurance_ns": 578801.0,
+      "openqasm_stage_ns": {
+        "import": 1659283.0,
+        "assurance": 586076.0,
+        "export": 600755.0
+      },
+      "openqasm_complete_ns": 3458896.0
+    },
+    {
+      "record_id": "holdout-050",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76466,
+        "compiler": 261683,
+        "lowering": 100396,
+        "report": 82276
+      },
+      "adapter_overhead_ratio": 0.9902744924202184,
+      "direct_assurance_ns": 590215.0,
+      "openqasm_stage_ns": {
+        "import": 1747953.0,
+        "assurance": 581661.0,
+        "export": 533089.0
+      },
+      "openqasm_complete_ns": 3091439.0
+    },
+    {
+      "record_id": "holdout-050",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 109305,
+        "compiler": 307821,
+        "lowering": 96641,
+        "report": 84875
+      },
+      "adapter_overhead_ratio": 0.9447730986514891,
+      "direct_assurance_ns": 718389.0,
+      "openqasm_stage_ns": {
+        "import": 2724633.0,
+        "assurance": 709499.0,
+        "export": 520084.0
+      },
+      "openqasm_complete_ns": 4678708.0
+    },
+    {
+      "record_id": "holdout-050",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 94096,
+        "compiler": 308641,
+        "lowering": 136335,
+        "report": 92389
+      },
+      "adapter_overhead_ratio": 1.0459401051707324,
+      "direct_assurance_ns": 679006.0,
+      "openqasm_stage_ns": {
+        "import": 2111077.0,
+        "assurance": 667567.0,
+        "export": 575743.0
+      },
+      "openqasm_complete_ns": 3593592.0
+    },
+    {
+      "record_id": "holdout-050",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73529,
+        "compiler": 251387,
+        "lowering": 98497,
+        "report": 83437
+      },
+      "adapter_overhead_ratio": 1.0162140444812182,
+      "direct_assurance_ns": 596474.0,
+      "openqasm_stage_ns": {
+        "import": 1808501.0,
+        "assurance": 653046.0,
+        "export": 575663.0
+      },
+      "openqasm_complete_ns": 3414400.0
+    },
+    {
+      "record_id": "holdout-051",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73818,
+        "compiler": 251514,
+        "lowering": 96268,
+        "report": 83731
+      },
+      "adapter_overhead_ratio": 1.0091565479456412,
+      "direct_assurance_ns": 583265.0,
+      "openqasm_stage_ns": {
+        "import": 1754974.0,
+        "assurance": 586091.0,
+        "export": 558222.0
+      },
+      "openqasm_complete_ns": 3192254.0
+    },
+    {
+      "record_id": "holdout-051",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95203,
+        "compiler": 309598,
+        "lowering": 95898,
+        "report": 86107
+      },
+      "adapter_overhead_ratio": 0.8953804611140899,
+      "direct_assurance_ns": 713764.0,
+      "openqasm_stage_ns": {
+        "import": 2757416.0,
+        "assurance": 702500.0,
+        "export": 512742.0
+      },
+      "openqasm_complete_ns": 4740577.0
+    },
+    {
+      "record_id": "holdout-051",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 85341,
+        "compiler": 279046,
+        "lowering": 105639,
+        "report": 84730
+      },
+      "adapter_overhead_ratio": 0.9880449818309526,
+      "direct_assurance_ns": 639091.0,
+      "openqasm_stage_ns": {
+        "import": 2104820.0,
+        "assurance": 631293.0,
+        "export": 529200.0
+      },
+      "openqasm_complete_ns": 3510781.0
+    },
+    {
+      "record_id": "holdout-051",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72098,
+        "compiler": 250551,
+        "lowering": 98902,
+        "report": 83800
+      },
+      "adapter_overhead_ratio": 1.0169586231944794,
+      "direct_assurance_ns": 587233.0,
+      "openqasm_stage_ns": {
+        "import": 2036695.0,
+        "assurance": 693307.0,
+        "export": 765486.0
+      },
+      "openqasm_complete_ns": 4274299.0
+    },
+    {
+      "record_id": "holdout-052",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 77582,
+        "compiler": 331048,
+        "lowering": 106726,
+        "report": 83564
+      },
+      "adapter_overhead_ratio": 0.8091636258186125,
+      "direct_assurance_ns": 602599.0,
+      "openqasm_stage_ns": {
+        "import": 1753014.0,
+        "assurance": 616423.0,
+        "export": 529710.0
+      },
+      "openqasm_complete_ns": 3074024.0
+    },
+    {
+      "record_id": "holdout-052",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96575,
+        "compiler": 309851,
+        "lowering": 97209,
+        "report": 84446
+      },
+      "adapter_overhead_ratio": 0.8979477232605348,
+      "direct_assurance_ns": 932811.0,
+      "openqasm_stage_ns": {
+        "import": 2931792.0,
+        "assurance": 815980.0,
+        "export": 604680.0
+      },
+      "openqasm_complete_ns": 4385399.0
+    },
+    {
+      "record_id": "holdout-052",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84702,
+        "compiler": 281300,
+        "lowering": 99004,
+        "report": 85627
+      },
+      "adapter_overhead_ratio": 0.9574582296480626,
+      "direct_assurance_ns": 641209.0,
+      "openqasm_stage_ns": {
+        "import": 1991720.0,
+        "assurance": 630286.0,
+        "export": 519384.0
+      },
+      "openqasm_complete_ns": 3545388.0
+    },
+    {
+      "record_id": "holdout-052",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 77446,
+        "compiler": 260914,
+        "lowering": 102668,
+        "report": 85043
+      },
+      "adapter_overhead_ratio": 1.016262063361874,
+      "direct_assurance_ns": 612447.0,
+      "openqasm_stage_ns": {
+        "import": 1808325.0,
+        "assurance": 635330.0,
+        "export": 553533.0
+      },
+      "openqasm_complete_ns": 3248072.0
+    },
+    {
+      "record_id": "holdout-053",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73524,
+        "compiler": 261278,
+        "lowering": 99836,
+        "report": 82432
+      },
+      "adapter_overhead_ratio": 0.9790032073117523,
+      "direct_assurance_ns": 592024.0,
+      "openqasm_stage_ns": {
+        "import": 1698611.0,
+        "assurance": 591466.0,
+        "export": 561330.0
+      },
+      "openqasm_complete_ns": 3159757.0
+    },
+    {
+      "record_id": "holdout-053",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96220,
+        "compiler": 313079,
+        "lowering": 95668,
+        "report": 85896
+      },
+      "adapter_overhead_ratio": 0.8872648756384172,
+      "direct_assurance_ns": 936507.0,
+      "openqasm_stage_ns": {
+        "import": 2938834.0,
+        "assurance": 836410.0,
+        "export": 596549.0
+      },
+      "openqasm_complete_ns": 4460692.0
+    },
+    {
+      "record_id": "holdout-053",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86750,
+        "compiler": 279649,
+        "lowering": 99390,
+        "report": 86892
+      },
+      "adapter_overhead_ratio": 0.9763381953806378,
+      "direct_assurance_ns": 642875.0,
+      "openqasm_stage_ns": {
+        "import": 1989715.0,
+        "assurance": 642105.0,
+        "export": 546109.0
+      },
+      "openqasm_complete_ns": 3748791.0
+    },
+    {
+      "record_id": "holdout-053",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 77792,
+        "compiler": 266928,
+        "lowering": 105542,
+        "report": 87970
+      },
+      "adapter_overhead_ratio": 1.016393933944734,
+      "direct_assurance_ns": 612107.0,
+      "openqasm_stage_ns": {
+        "import": 1710110.0,
+        "assurance": 609644.0,
+        "export": 524368.0
+      },
+      "openqasm_complete_ns": 3329230.0
+    },
+    {
+      "record_id": "holdout-054",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76065,
+        "compiler": 266527,
+        "lowering": 103525,
+        "report": 96069
+      },
+      "adapter_overhead_ratio": 1.0342629452175578,
+      "direct_assurance_ns": 680353.0,
+      "openqasm_stage_ns": {
+        "import": 1806345.0,
+        "assurance": 611970.0,
+        "export": 518160.0
+      },
+      "openqasm_complete_ns": 3198433.0
+    },
+    {
+      "record_id": "holdout-054",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 101064,
+        "compiler": 327348,
+        "lowering": 103421,
+        "report": 87168
+      },
+      "adapter_overhead_ratio": 0.8909570243288488,
+      "direct_assurance_ns": 744178.0,
+      "openqasm_stage_ns": {
+        "import": 2858402.0,
+        "assurance": 751300.0,
+        "export": 564605.0
+      },
+      "openqasm_complete_ns": 4301440.0
+    },
+    {
+      "record_id": "holdout-054",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 83652,
+        "compiler": 277282,
+        "lowering": 99280,
+        "report": 86443
+      },
+      "adapter_overhead_ratio": 0.9714839044727028,
+      "direct_assurance_ns": 678504.0,
+      "openqasm_stage_ns": {
+        "import": 2030378.0,
+        "assurance": 642717.0,
+        "export": 563322.0
+      },
+      "openqasm_complete_ns": 3943620.0
+    },
+    {
+      "record_id": "holdout-054",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 77382,
+        "compiler": 265155,
+        "lowering": 101491,
+        "report": 88583
+      },
+      "adapter_overhead_ratio": 1.008677943089891,
+      "direct_assurance_ns": 618371.0,
+      "openqasm_stage_ns": {
+        "import": 1735441.0,
+        "assurance": 601858.0,
+        "export": 543239.0
+      },
+      "openqasm_complete_ns": 3794719.0
+    },
+    {
+      "record_id": "holdout-055",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73370,
+        "compiler": 250665,
+        "lowering": 98140,
+        "report": 83480
+      },
+      "adapter_overhead_ratio": 1.0172541040831389,
+      "direct_assurance_ns": 590473.0,
+      "openqasm_stage_ns": {
+        "import": 1695749.0,
+        "assurance": 595102.0,
+        "export": 525807.0
+      },
+      "openqasm_complete_ns": 3034783.0
+    },
+    {
+      "record_id": "holdout-055",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 103419,
+        "compiler": 334478,
+        "lowering": 114035,
+        "report": 93529
+      },
+      "adapter_overhead_ratio": 0.9297562171503059,
+      "direct_assurance_ns": 1034350.0,
+      "openqasm_stage_ns": {
+        "import": 2792105.0,
+        "assurance": 755586.0,
+        "export": 566120.0
+      },
+      "openqasm_complete_ns": 4338793.0
+    },
+    {
+      "record_id": "holdout-055",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 81950,
+        "compiler": 295547,
+        "lowering": 117966,
+        "report": 88617
+      },
+      "adapter_overhead_ratio": 0.9762677340659861,
+      "direct_assurance_ns": 674875.0,
+      "openqasm_stage_ns": {
+        "import": 2023869.0,
+        "assurance": 671699.0,
+        "export": 574886.0
+      },
+      "openqasm_complete_ns": 3779028.0
+    },
+    {
+      "record_id": "holdout-055",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73127,
+        "compiler": 254952,
+        "lowering": 97617,
+        "report": 82703
+      },
+      "adapter_overhead_ratio": 0.9940969280492015,
+      "direct_assurance_ns": 592254.0,
+      "openqasm_stage_ns": {
+        "import": 1683056.0,
+        "assurance": 596100.0,
+        "export": 516850.0
+      },
+      "openqasm_complete_ns": 3235606.0
+    },
+    {
+      "record_id": "holdout-056",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71401,
+        "compiler": 249825,
+        "lowering": 95219,
+        "report": 81149
+      },
+      "adapter_overhead_ratio": 0.9917702391674172,
+      "direct_assurance_ns": 588681.0,
+      "openqasm_stage_ns": {
+        "import": 1823145.0,
+        "assurance": 662206.0,
+        "export": 575787.0
+      },
+      "openqasm_complete_ns": 3576109.0
+    },
+    {
+      "record_id": "holdout-056",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 96135,
+        "compiler": 324615,
+        "lowering": 98323,
+        "report": 85461
+      },
+      "adapter_overhead_ratio": 0.8623107373349969,
+      "direct_assurance_ns": 718929.0,
+      "openqasm_stage_ns": {
+        "import": 2851579.0,
+        "assurance": 704090.0,
+        "export": 509927.0
+      },
+      "openqasm_complete_ns": 4296218.0
+    },
+    {
+      "record_id": "holdout-056",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84682,
+        "compiler": 280784,
+        "lowering": 97777,
+        "report": 83138
+      },
+      "adapter_overhead_ratio": 0.9459121602370505,
+      "direct_assurance_ns": 656605.0,
+      "openqasm_stage_ns": {
+        "import": 2041223.0,
+        "assurance": 725482.0,
+        "export": 568192.0
+      },
+      "openqasm_complete_ns": 3813033.0
+    },
+    {
+      "record_id": "holdout-056",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 73501,
+        "compiler": 251188,
+        "lowering": 95765,
+        "report": 84314
+      },
+      "adapter_overhead_ratio": 1.00952274790197,
+      "direct_assurance_ns": 585655.0,
+      "openqasm_stage_ns": {
+        "import": 1753647.0,
+        "assurance": 598059.0,
+        "export": 539259.0
+      },
+      "openqasm_complete_ns": 3117276.0
+    },
+    {
+      "record_id": "holdout-057",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 72309,
+        "compiler": 255452,
+        "lowering": 95604,
+        "report": 81229
+      },
+      "adapter_overhead_ratio": 0.9752986862502544,
+      "direct_assurance_ns": 584536.0,
+      "openqasm_stage_ns": {
+        "import": 1851903.0,
+        "assurance": 657822.0,
+        "export": 579912.0
+      },
+      "openqasm_complete_ns": 3016701.0
+    },
+    {
+      "record_id": "holdout-057",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94705,
+        "compiler": 309903,
+        "lowering": 97464,
+        "report": 85690
+      },
+      "adapter_overhead_ratio": 0.8965999038408793,
+      "direct_assurance_ns": 940222.0,
+      "openqasm_stage_ns": {
+        "import": 2683627.0,
+        "assurance": 749133.0,
+        "export": 538494.0
+      },
+      "openqasm_complete_ns": 4213132.0
+    },
+    {
+      "record_id": "holdout-057",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 82810,
+        "compiler": 277608,
+        "lowering": 96903,
+        "report": 84633
+      },
+      "adapter_overhead_ratio": 0.9522276015100429,
+      "direct_assurance_ns": 672552.0,
+      "openqasm_stage_ns": {
+        "import": 2117644.0,
+        "assurance": 744395.0,
+        "export": 586238.0
+      },
+      "openqasm_complete_ns": 3579851.0
+    },
+    {
+      "record_id": "holdout-057",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 74415,
+        "compiler": 257959,
+        "lowering": 96557,
+        "report": 85354
+      },
+      "adapter_overhead_ratio": 0.9936695366317904,
+      "direct_assurance_ns": 596470.0,
+      "openqasm_stage_ns": {
+        "import": 1773713.0,
+        "assurance": 609713.0,
+        "export": 521825.0
+      },
+      "openqasm_complete_ns": 3625693.0
+    },
+    {
+      "record_id": "holdout-058",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 71319,
+        "compiler": 254730,
+        "lowering": 95167,
+        "report": 81798
+      },
+      "adapter_overhead_ratio": 0.9746947748596553,
+      "direct_assurance_ns": 672050.0,
+      "openqasm_stage_ns": {
+        "import": 1834914.0,
+        "assurance": 699717.0,
+        "export": 684422.0
+      },
+      "openqasm_complete_ns": 2957758.0
+    },
+    {
+      "record_id": "holdout-058",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 94040,
+        "compiler": 311070,
+        "lowering": 94325,
+        "report": 84548
+      },
+      "adapter_overhead_ratio": 0.8773362908670074,
+      "direct_assurance_ns": 929016.0,
+      "openqasm_stage_ns": {
+        "import": 2646613.0,
+        "assurance": 696344.0,
+        "export": 508125.0
+      },
+      "openqasm_complete_ns": 4167137.0
+    },
+    {
+      "record_id": "holdout-058",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 84125,
+        "compiler": 277696,
+        "lowering": 96022,
+        "report": 84349
+      },
+      "adapter_overhead_ratio": 0.9524660059921641,
+      "direct_assurance_ns": 640840.0,
+      "openqasm_stage_ns": {
+        "import": 2073116.0,
+        "assurance": 679127.0,
+        "export": 566673.0
+      },
+      "openqasm_complete_ns": 3586600.0
+    },
+    {
+      "record_id": "holdout-058",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72653,
+        "compiler": 252964,
+        "lowering": 97237,
+        "report": 84369
+      },
+      "adapter_overhead_ratio": 1.005119305513828,
+      "direct_assurance_ns": 587859.0,
+      "openqasm_stage_ns": {
+        "import": 1754449.0,
+        "assurance": 610517.0,
+        "export": 529336.0
+      },
+      "openqasm_complete_ns": 3120729.0
+    },
+    {
+      "record_id": "holdout-059",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 73973,
+        "compiler": 322186,
+        "lowering": 111142,
+        "report": 87201
+      },
+      "adapter_overhead_ratio": 0.8452136343602764,
+      "direct_assurance_ns": 633410.0,
+      "openqasm_stage_ns": {
+        "import": 1781643.0,
+        "assurance": 664634.0,
+        "export": 580120.0
+      },
+      "openqasm_complete_ns": 2968525.0
+    },
+    {
+      "record_id": "holdout-059",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 98087,
+        "compiler": 320350,
+        "lowering": 99097,
+        "report": 94294
+      },
+      "adapter_overhead_ratio": 0.9098735757764944,
+      "direct_assurance_ns": 977849.0,
+      "openqasm_stage_ns": {
+        "import": 2651242.0,
+        "assurance": 775414.0,
+        "export": 521693.0
+      },
+      "openqasm_complete_ns": 4389996.0
+    },
+    {
+      "record_id": "holdout-059",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86112,
+        "compiler": 288933,
+        "lowering": 101132,
+        "report": 88213
+      },
+      "adapter_overhead_ratio": 0.9533594293486726,
+      "direct_assurance_ns": 643628.0,
+      "openqasm_stage_ns": {
+        "import": 2044803.0,
+        "assurance": 661065.0,
+        "export": 544344.0
+      },
+      "openqasm_complete_ns": 3415749.0
+    },
+    {
+      "record_id": "holdout-059",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72347,
+        "compiler": 245956,
+        "lowering": 95110,
+        "report": 83159
+      },
+      "adapter_overhead_ratio": 1.018946478231879,
+      "direct_assurance_ns": 586107.0,
+      "openqasm_stage_ns": {
+        "import": 1594132.0,
+        "assurance": 584316.0,
+        "export": 504147.0
+      },
+      "openqasm_complete_ns": 3062726.0
+    },
+    {
+      "record_id": "holdout-060",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 79104,
+        "compiler": 266408,
+        "lowering": 105208,
+        "report": 84827
+      },
+      "adapter_overhead_ratio": 1.0102511936578482,
+      "direct_assurance_ns": 614290.0,
+      "openqasm_stage_ns": {
+        "import": 1823720.0,
+        "assurance": 661655.0,
+        "export": 568539.0
+      },
+      "openqasm_complete_ns": 2887086.0
+    },
+    {
+      "record_id": "holdout-060",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97467,
+        "compiler": 309292,
+        "lowering": 95561,
+        "report": 86223
+      },
+      "adapter_overhead_ratio": 0.9028717199280938,
+      "direct_assurance_ns": 952612.0,
+      "openqasm_stage_ns": {
+        "import": 2658057.0,
+        "assurance": 702490.0,
+        "export": 510462.0
+      },
+      "openqasm_complete_ns": 4238160.0
+    },
+    {
+      "record_id": "holdout-060",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86708,
+        "compiler": 292083,
+        "lowering": 101667,
+        "report": 90938
+      },
+      "adapter_overhead_ratio": 0.9562795506756641,
+      "direct_assurance_ns": 661109.0,
+      "openqasm_stage_ns": {
+        "import": 2121912.0,
+        "assurance": 679571.0,
+        "export": 568719.0
+      },
+      "openqasm_complete_ns": 3511856.0
+    },
+    {
+      "record_id": "holdout-060",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72871,
+        "compiler": 254030,
+        "lowering": 95785,
+        "report": 83921
+      },
+      "adapter_overhead_ratio": 0.994280203125615,
+      "direct_assurance_ns": 600264.0,
+      "openqasm_stage_ns": {
+        "import": 1614343.0,
+        "assurance": 596402.0,
+        "export": 501881.0
+      },
+      "openqasm_complete_ns": 3654631.0
+    },
+    {
+      "record_id": "holdout-061",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76789,
+        "compiler": 259757,
+        "lowering": 100374,
+        "report": 83404
+      },
+      "adapter_overhead_ratio": 1.0031182990256278,
+      "direct_assurance_ns": 599758.0,
+      "openqasm_stage_ns": {
+        "import": 1818415.0,
+        "assurance": 620970.0,
+        "export": 538949.0
+      },
+      "openqasm_complete_ns": 3117105.0
+    },
+    {
+      "record_id": "holdout-061",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97917,
+        "compiler": 305383,
+        "lowering": 94884,
+        "report": 84979
+      },
+      "adapter_overhead_ratio": 0.9096118644456306,
+      "direct_assurance_ns": 710592.0,
+      "openqasm_stage_ns": {
+        "import": 2725738.0,
+        "assurance": 703923.0,
+        "export": 510915.0
+      },
+      "openqasm_complete_ns": 4373606.0
+    },
+    {
+      "record_id": "holdout-061",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 86299,
+        "compiler": 286337,
+        "lowering": 100376,
+        "report": 92833
+      },
+      "adapter_overhead_ratio": 0.9761504800287772,
+      "direct_assurance_ns": 649131.0,
+      "openqasm_stage_ns": {
+        "import": 2098842.0,
+        "assurance": 634043.0,
+        "export": 552128.0
+      },
+      "openqasm_complete_ns": 3477477.0
+    },
+    {
+      "record_id": "holdout-061",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 81743,
+        "compiler": 268217,
+        "lowering": 105444,
+        "report": 85588
+      },
+      "adapter_overhead_ratio": 1.0169937028599978,
+      "direct_assurance_ns": 616534.0,
+      "openqasm_stage_ns": {
+        "import": 1685041.0,
+        "assurance": 599167.0,
+        "export": 516099.0
+      },
+      "openqasm_complete_ns": 3385304.0
+    },
+    {
+      "record_id": "holdout-062",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 76335,
+        "compiler": 258330,
+        "lowering": 101562,
+        "report": 84612
+      },
+      "adapter_overhead_ratio": 1.016176982928812,
+      "direct_assurance_ns": 601811.0,
+      "openqasm_stage_ns": {
+        "import": 1799661.0,
+        "assurance": 593812.0,
+        "export": 526815.0
+      },
+      "openqasm_complete_ns": 3095395.0
+    },
+    {
+      "record_id": "holdout-062",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 95065,
+        "compiler": 307611,
+        "lowering": 95100,
+        "report": 83941
+      },
+      "adapter_overhead_ratio": 0.8910799678815127,
+      "direct_assurance_ns": 713360.0,
+      "openqasm_stage_ns": {
+        "import": 2774046.0,
+        "assurance": 698040.0,
+        "export": 490237.0
+      },
+      "openqasm_complete_ns": 4733904.0
+    },
+    {
+      "record_id": "holdout-062",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 88240,
+        "compiler": 288231,
+        "lowering": 102650,
+        "report": 88044
+      },
+      "adapter_overhead_ratio": 0.967744621501504,
+      "direct_assurance_ns": 664464.0,
+      "openqasm_stage_ns": {
+        "import": 2114113.0,
+        "assurance": 641897.0,
+        "export": 546170.0
+      },
+      "openqasm_complete_ns": 3520532.0
+    },
+    {
+      "record_id": "holdout-062",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 72156,
+        "compiler": 252870,
+        "lowering": 95148,
+        "report": 81278
+      },
+      "adapter_overhead_ratio": 0.9830426701467158,
+      "direct_assurance_ns": 596976.0,
+      "openqasm_stage_ns": {
+        "import": 1697786.0,
+        "assurance": 592759.0,
+        "export": 514398.0
+      },
+      "openqasm_complete_ns": 3300868.0
+    },
+    {
+      "record_id": "holdout-063",
+      "variant": "direct",
+      "adapter_stage_ns": {
+        "import": 78330,
+        "compiler": 273581,
+        "lowering": 104157,
+        "report": 86344
+      },
+      "adapter_overhead_ratio": 0.9826376831724425,
+      "direct_assurance_ns": 621240.0,
+      "openqasm_stage_ns": {
+        "import": 1752911.0,
+        "assurance": 588355.0,
+        "export": 522366.0
+      },
+      "openqasm_complete_ns": 2923903.0
+    },
+    {
+      "record_id": "holdout-063",
+      "variant": "split",
+      "adapter_stage_ns": {
+        "import": 97875,
+        "compiler": 306248,
+        "lowering": 129744,
+        "report": 91634
+      },
+      "adapter_overhead_ratio": 1.0424655834487082,
+      "direct_assurance_ns": 953035.0,
+      "openqasm_stage_ns": {
+        "import": 2642553.0,
+        "assurance": 695846.0,
+        "export": 522856.0
+      },
+      "openqasm_complete_ns": 4594770.0
+    },
+    {
+      "record_id": "holdout-063",
+      "variant": "identity_inserted",
+      "adapter_stage_ns": {
+        "import": 82917,
+        "compiler": 281547,
+        "lowering": 97350,
+        "report": 83851
+      },
+      "adapter_overhead_ratio": 0.938095593275723,
+      "direct_assurance_ns": 628895.0,
+      "openqasm_stage_ns": {
+        "import": 2000255.0,
+        "assurance": 631036.0,
+        "export": 505676.0
+      },
+      "openqasm_complete_ns": 3432686.0
+    },
+    {
+      "record_id": "holdout-063",
+      "variant": "phase_equivalent",
+      "adapter_stage_ns": {
+        "import": 70635,
+        "compiler": 250590,
+        "lowering": 92980,
+        "report": 82106
+      },
+      "adapter_overhead_ratio": 0.9805698551418652,
+      "direct_assurance_ns": 581132.0,
+      "openqasm_stage_ns": {
+        "import": 1639248.0,
+        "assurance": 617806.0,
+        "export": 576945.0
+      },
+      "openqasm_complete_ns": 4015380.0
+    }
+  ],
+  "gates": {
+    "adapter_overhead_ratio": false,
+    "direct_assurance_p95": true,
+    "openqasm_assurance_p95": true,
+    "openqasm_import_p95": true,
+    "openqasm_processing_p95": true,
+    "openqasm_export_p95": true
+  },
+  "release_gate_passed": false
+}
