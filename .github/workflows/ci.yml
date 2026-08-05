@@ -10,9 +10,68 @@ on:
 permissions:
   contents: read
 
+env:
+  RQM_CORE_COMMIT: 84eada2611b24d145accf801e74eaa46ab7e48dc
+  RQM_COMPILER_COMMIT: b6111abb2cd223328bc5bf20e31aedfe02446815
+
 jobs:
+  build:
+    name: Build exact candidate wheelhouse
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-digest: ${{ steps.upload-wheelhouse.outputs.artifact-digest }}
+    steps:
+      - name: Check out rqm-qiskit candidate
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check out pinned rqm-core candidate
+        uses: actions/checkout@v7
+        with:
+          repository: RQM-Technologies-dev/rqm-core
+          ref: ${{ env.RQM_CORE_COMMIT }}
+          path: candidate-sources/rqm-core
+
+      - name: Check out pinned rqm-compiler candidate
+        uses: actions/checkout@v7
+        with:
+          repository: RQM-Technologies-dev/rqm-compiler
+          ref: ${{ env.RQM_COMPILER_COMMIT }}
+          path: candidate-sources/rqm-compiler
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Build candidate wheels once
+        run: |
+          python -m pip install --upgrade build "twine>=6.0"
+          python -m build --wheel --outdir wheelhouse candidate-sources/rqm-core
+          python -m build --wheel --outdir wheelhouse candidate-sources/rqm-compiler
+          python -m build --wheel --outdir wheelhouse .
+
+      - name: Inspect wheels and write checksums
+        run: |
+          python scripts/install_candidate_wheels.py wheelhouse \
+            --write-manifest \
+            --qiskit-commit "${GITHUB_SHA}" \
+            --core-commit "${RQM_CORE_COMMIT}" \
+            --compiler-commit "${RQM_COMPILER_COMMIT}"
+          python -m twine check wheelhouse/*.whl
+
+      - name: Upload exact candidate wheelhouse
+        id: upload-wheelhouse
+        uses: actions/upload-artifact@v7
+        with:
+          name: candidate-wheelhouse-${{ github.sha }}
+          path: wheelhouse/
+          if-no-files-found: error
+          retention-days: 90
+
   test:
-    name: Test (Python ${{ matrix.python-version }})
+    name: Installed-wheel suite (Linux, Python ${{ matrix.python-version }})
+    needs: build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -27,26 +86,26 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: python -m pip install -e ".[dev]"
-      - run: pytest
-
-  build:
-    name: Build and inspect distributions
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v7
+      - name: Download exact candidate wheelhouse
+        uses: actions/download-artifact@v8
         with:
-          fetch-depth: 0
+          name: candidate-wheelhouse-${{ github.sha }}
+          path: wheelhouse
 
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
+      - name: Install candidate wheels and development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python scripts/install_candidate_wheels.py wheelhouse --extra dev
 
-      - run: python -m pip install --upgrade build "twine>=6.0"
-      - run: python -m build
-      - run: python -m twine check dist/*
+      - name: Prove imports resolve outside the checkout
+        working-directory: ${{ runner.temp }}
+        env:
+          RQM_WORKSPACE: ${{ github.workspace }}
+        run: python "${{ github.workspace }}/scripts/assert_installed_candidate.py"
+
+      - name: Run complete test suite against installed wheels
+        working-directory: ${{ runner.temp }}
+        run: pytest "${{ github.workspace }}/tests"
 
   wheel-smoke:
     name: Pure-wheel smoke (${{ matrix.os }}, Python ${{ matrix.python-version }})
@@ -66,11 +125,70 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: python -m pip install --upgrade build
-      - run: python -m build --wheel
-      - name: Require a platform-independent wheel
-        shell: bash
-        run: compgen -G "dist/*-py3-none-any.whl" > /dev/null
-      - run: python -m pip install "rqm-core>=0.2.2,<0.3" "rqm-entanglement>=0.2,<0.3" "rqm-compiler>=0.3,<0.4" "qiskit>=2.5.1,<2.6" dist/*.whl
-        shell: bash
-      - run: python -c "from qiskit import QuantumCircuit; from rqm_qiskit import analyze_qiskit_circuit; circuit = QuantumCircuit(1); circuit.h(0); assert analyze_qiskit_circuit(circuit).status == 'complete'"
+      - name: Download exact candidate wheelhouse
+        uses: actions/download-artifact@v8
+        with:
+          name: candidate-wheelhouse-${{ github.sha }}
+          path: wheelhouse
+
+      - name: Install exact candidate wheels
+        run: |
+          python -m pip install --upgrade pip
+          python scripts/install_candidate_wheels.py wheelhouse --extra cli
+
+      - name: Exercise installed API, CLI, paths, encoding, and OpenQASM
+        working-directory: ${{ runner.temp }}
+        env:
+          PYTHONUTF8: "1"
+          RQM_WORKSPACE: ${{ github.workspace }}
+          RQM_WHEELHOUSE: ${{ github.workspace }}/wheelhouse
+          RQM_RESULT_PATH: ${{ runner.temp }}/wheel-smoke-result.json
+          RQM_CANDIDATE_COMMIT: ${{ github.sha }}
+          RQM_RUNNER_LABEL: ${{ matrix.os }}
+          RQM_REQUESTED_PYTHON: ${{ matrix.python-version }}
+        run: python "${{ github.workspace }}/scripts/installed_wheel_smoke.py"
+
+      - name: Upload per-runner evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: wheel-smoke-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: ${{ runner.temp }}/wheel-smoke-result.json
+          if-no-files-found: error
+          retention-days: 90
+
+  wheel-matrix-evidence:
+    name: Require and aggregate all nine wheel results
+    needs: [build, wheel-smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Download all per-runner evidence
+        uses: actions/download-artifact@v8
+        with:
+          pattern: wheel-smoke-*
+          path: wheel-smoke-results
+
+      - name: Aggregate the complete matrix
+        env:
+          RQM_CANDIDATE_COMMIT: ${{ github.sha }}
+          RQM_RUN_ID: ${{ github.run_id }}
+          RQM_RUN_ATTEMPT: ${{ github.run_attempt }}
+          RQM_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RQM_WHEELHOUSE_ARTIFACT_DIGEST: ${{ needs.build.outputs.artifact-digest }}
+        run: >-
+          python scripts/aggregate_wheel_matrix.py
+          wheel-smoke-results
+          hosted-wheel-validation.json
+
+      - name: Upload hosted qualification evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: hosted-wheel-validation-${{ github.sha }}
+          path: hosted-wheel-validation.json
+          if-no-files-found: error
+          retention-days: 90
