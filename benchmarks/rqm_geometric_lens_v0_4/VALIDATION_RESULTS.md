@@ -38,3 +38,22 @@ This validation does not authorize release. The frozen relative adapter
 overhead is `98.62%` against the `25%` maximum, so `rqm-qiskit` `0.4.0`
 remains an unreleased candidate. No credentials, remote simulator, provider,
 or quantum hardware were used.
+
+## EXP-015 native follow-up
+
+- `rqm-qiskit`: `556` tests passed, including native/reference differential,
+  fallback, mutation-isolation, register-preservation, `q`/`-q`, injected
+  failure, and repeated reference-count cases.
+- `rqm-compiler`: `357` tests passed and one existing optional test skipped.
+- The native C source compiled with `-Wall -Wextra -Werror` on the local Clang
+  toolchain.
+- Native-required wheels built, installed, and completed assurance smoke tests
+  on CPython `3.11.15`, `3.12.2`, and `3.13.14` with Qiskit `2.5.1`.
+- A source install with the C compiler deliberately disabled selected the
+  Python fallback and still returned `VERIFIED`.
+- CPython 3.11–3.13 wheels and the sdist passed `twine check`.
+
+The native follow-up did not pass the performance gate. Its decision-run ratio
+was `0.7427`, and three fresh processes reproduced ratios from `0.7477` to
+`0.7523`. Release remains blocked; no roadmap item or public performance claim
+is promoted.

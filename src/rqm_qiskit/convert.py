@@ -39,6 +39,7 @@ from qiskit.transpiler import Target
 
 from rqm_qiskit.state import RQMState
 from rqm_qiskit.gates import RQMGate
+from rqm_qiskit._accelerator import build_1q_circuit as _build_1q_circuit
 
 if TYPE_CHECKING:
     from rqm_compiler import Circuit, CompiledCircuit
@@ -106,6 +107,10 @@ def compiled_circuit_to_qiskit(
         num_qubits = source.num_qubits
         operations = list(source.operations)
 
+    native_circuit = _native_single_u1q_circuit(num_qubits, operations)
+    if native_circuit is not None:
+        return (native_circuit, []) if include_synthesis_report else native_circuit
+
     synthesis_reports: list[dict[str, Any]] = []
     circuit = _build_qiskit_from_ops(
         num_qubits,
@@ -122,6 +127,43 @@ def compiled_circuit_to_qiskit(
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+
+def _u1q_unitary_gate(op: "Operation") -> Any:
+    """Create the Qiskit gate for one compiler-owned quaternion operation."""
+
+    if op.controls:
+        raise ValueError(
+            "controlled 'u1q' lowering is unsupported; refusing to drop a "
+            "phase that may be observable under coherent control"
+        )
+    from rqm_core import Quaternion
+    from qiskit.circuit.library import UnitaryGate
+
+    params = op.params
+    matrix = Quaternion(
+        params.get("w", 1.0),
+        params.get("x", 0.0),
+        params.get("y", 0.0),
+        params.get("z", 0.0),
+    ).to_su2_matrix()
+    # The compiler has already validated the unit quaternion and rqm-core
+    # constructs the corresponding SU(2) matrix. Avoid repeating Qiskit's
+    # generic matrix validation on this proof-carrying hot path.
+    return UnitaryGate(matrix, check_input=False)
+
+
+def _native_single_u1q_circuit(
+    num_qubits: int, operations: "list[Operation]"
+) -> QuantumCircuit | None:
+    """Use the guarded native packer for the exact one-u1q lowering shape."""
+
+    if num_qubits != 1 or len(operations) != 1:
+        return None
+    operation = operations[0]
+    if operation.gate != "u1q" or operation.targets != [0]:
+        return None
+    return _build_1q_circuit(_u1q_unitary_gate(operation))
 
 
 def _build_qiskit_from_ops(
@@ -320,25 +362,7 @@ def _apply_operation(
         key = params.get("key", f"m{targets[0]}")
         qc.measure(targets[0], key_to_clbit[key])
     elif gate == "u1q":
-        if controls:
-            raise ValueError(
-                "controlled 'u1q' lowering is unsupported; refusing to drop a "
-                "phase that may be observable under coherent control"
-            )
-        from rqm_core import Quaternion
-        from qiskit.circuit.library import UnitaryGate
-
-        w = params.get("w", 1.0)
-        x = params.get("x", 0.0)
-        y = params.get("y", 0.0)
-        z = params.get("z", 0.0)
-        # rqm-compiler guarantees the quaternion is already unit-normalised;
-        # delegate the SU(2) matrix conversion entirely to rqm-core.
-        matrix = Quaternion(w, x, y, z).to_su2_matrix()
-        # The compiler has already validated the unit quaternion and rqm-core
-        # constructs the corresponding SU(2) matrix. Avoid repeating Qiskit's
-        # generic matrix validation on this proof-carrying hot path.
-        qc.append(UnitaryGate(matrix, check_input=False), [targets[0]])
+        qc.append(_u1q_unitary_gate(op), [targets[0]])
     elif gate == "barrier":
         if targets:
             qc.barrier(targets)

@@ -41,6 +41,13 @@ authorize package release.
 `VALIDATION_RESULTS.md` records the source, distribution, and fresh Python
 3.11–3.13 wheel checks. The separate performance failure still blocks release.
 
+EXP-015 is the guarded-native performance follow-up. Its preregistration mirror,
+decision result, and three-process reproduction retain the exact EXP-014 corpus
+and timing boundary. The relative ratio improved from `0.9862` to `0.7427` in
+the decision run and reproduced between `0.7477` and `0.7523`, but remained far
+above `0.25`. This negative result is retained and does not change the semantic
+fingerprint verdict.
+
 ## Boundary
 
 The quaternionic wavefunction track is a standard-compatible regrouping of a
