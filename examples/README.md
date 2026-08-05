@@ -32,7 +32,7 @@ python examples/bloch_vs_quaternion_demo.py
 # Simulator counts demo: run circuits on Aer, print formatted summaries
 python examples/simulator_counts_demo.py
 
-# Quaternionic circuit lens: inspect one- and two-qubit Qiskit circuits
+# Quaternionic explanation bridge: understand one- and two-qubit Qiskit circuits
 python examples/geometric_circuit_lens.py
 ```
 
@@ -71,8 +71,8 @@ Bell-state preparation.  This is the preferred pattern for new code.
 - Shows how |0>, |+>, and Bloch-angle states behave under measurement
 
 ### `geometric_circuit_lens.py`
-- Produces the versioned JSON-safe quaternion/SU(2) report for a measured
-  one-qubit circuit.
-- Shows canonical fingerprints, ideal probabilities, and fail-closed
-  optimization evidence.
-- Produces SU(4)/Weyl and entanglement diagnostics for a Bell circuit.
+- Produces readable quaternion, rotation-axis, Bloch, phase, and ideal
+  measurement explanations for a measured one-qubit circuit.
+- Shows the canonical phase-aware fingerprint without making optimization the
+  main workflow.
+- Explains SU(4)/Weyl and entanglement structure for a Bell circuit.

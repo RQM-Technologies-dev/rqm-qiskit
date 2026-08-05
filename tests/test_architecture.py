@@ -14,6 +14,7 @@ implementation it will trip these tests before the regression ships.
 """
 
 import math
+import re
 import tomllib
 from pathlib import Path
 from unittest.mock import patch, MagicMock
@@ -21,6 +22,21 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 
 from rqm_core.quaternion import Quaternion as CoreQuaternion
+
+
+def test_released_source_uses_no_private_qiskit_interfaces():
+    """The explanation bridge must rely only on supported public Qiskit APIs."""
+
+    source_root = Path(__file__).parent.parent / "src" / "rqm_qiskit"
+    forbidden = re.compile(r"(?:from|import)\s+qiskit\._|\.\_data\b")
+    violations = []
+    for path in source_root.rglob("*"):
+        if path.suffix not in {".py", ".c", ".h"}:
+            continue
+        if forbidden.search(path.read_text(encoding="utf-8")):
+            violations.append(str(path.relative_to(source_root)))
+    assert violations == []
+    assert not (source_root / "_rqm_adapter_native.c").exists()
 
 
 # ---------------------------------------------------------------------------
@@ -164,9 +180,7 @@ def test_rqmgate_matrix_matches_rqm_core():
 
 def test_pyproject_depends_on_rqm_core():
     """rqm-qiskit must declare rqm-core as a dependency in pyproject.toml."""
-    data = tomllib.loads(
-        (Path(__file__).parent.parent / "pyproject.toml").read_text()
-    )
+    data = tomllib.loads((Path(__file__).parent.parent / "pyproject.toml").read_text())
     deps = data["project"]["dependencies"]
     assert any("rqm-core" in d for d in deps), (
         "pyproject.toml must list rqm-core as a dependency. "
@@ -176,9 +190,7 @@ def test_pyproject_depends_on_rqm_core():
 
 def test_pyproject_depends_on_rqm_compiler():
     """rqm-qiskit must declare rqm-compiler as a dependency in pyproject.toml."""
-    data = tomllib.loads(
-        (Path(__file__).parent.parent / "pyproject.toml").read_text()
-    )
+    data = tomllib.loads((Path(__file__).parent.parent / "pyproject.toml").read_text())
     deps = data["project"]["dependencies"]
     assert any("rqm-compiler" in d for d in deps), (
         "pyproject.toml must list rqm-compiler as a dependency. "

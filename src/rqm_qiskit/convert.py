@@ -39,7 +39,6 @@ from qiskit.transpiler import Target
 
 from rqm_qiskit.state import RQMState
 from rqm_qiskit.gates import RQMGate
-from rqm_qiskit._accelerator import build_1q_circuit as _build_1q_circuit
 
 if TYPE_CHECKING:
     from rqm_compiler import Circuit, CompiledCircuit
@@ -107,10 +106,6 @@ def compiled_circuit_to_qiskit(
         num_qubits = source.num_qubits
         operations = list(source.operations)
 
-    native_circuit = _native_single_u1q_circuit(num_qubits, operations)
-    if native_circuit is not None:
-        return (native_circuit, []) if include_synthesis_report else native_circuit
-
     synthesis_reports: list[dict[str, Any]] = []
     circuit = _build_qiskit_from_ops(
         num_qubits,
@@ -151,19 +146,6 @@ def _u1q_unitary_gate(op: "Operation") -> Any:
     # constructs the corresponding SU(2) matrix. Avoid repeating Qiskit's
     # generic matrix validation on this proof-carrying hot path.
     return UnitaryGate(matrix, check_input=False)
-
-
-def _native_single_u1q_circuit(
-    num_qubits: int, operations: "list[Operation]"
-) -> QuantumCircuit | None:
-    """Use the guarded native packer for the exact one-u1q lowering shape."""
-
-    if num_qubits != 1 or len(operations) != 1:
-        return None
-    operation = operations[0]
-    if operation.gate != "u1q" or operation.targets != [0]:
-        return None
-    return _build_1q_circuit(_u1q_unitary_gate(operation))
 
 
 def _build_qiskit_from_ops(
@@ -294,9 +276,7 @@ def _apply_operation(
             item.operation.num_qubits == 2 for item in selected.data
         )
         selected_two_qubit_depth = int(
-            selected.depth(
-                filter_function=lambda item: item.operation.num_qubits == 2
-            )
+            selected.depth(filter_function=lambda item: item.operation.num_qubits == 2)
             or 0
         )
         source_two_qubit_count: int | None = None
@@ -341,7 +321,9 @@ def _apply_operation(
         qc.compose(selected, qubits=targets, inplace=True)
         routing = params.get("routing")
         report["source_hash"] = (
-            routing.get("source_hash") if isinstance(routing, dict) else block.source_hash
+            routing.get("source_hash")
+            if isinstance(routing, dict)
+            else block.source_hash
         )
         report["window_id"] = (
             routing.get("window_id") if isinstance(routing, dict) else None

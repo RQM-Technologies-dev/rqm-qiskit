@@ -1,61 +1,102 @@
-# Geometric Circuit Lens
+# Qiskit-Compatible Quaternionic Explanation Bridge
 
-`rqm-qiskit` 0.4 accepts ordinary Qiskit circuits and returns a versioned,
-JSON-safe view assembled from existing RQM authorities:
+`rqm-qiskit` 0.4 helps people understand ordinary quantum computing through
+quaternionic geometry while remaining compatible with Qiskit. It analyzes the
+same operators and statevectors that Qiskit exposes through its public APIs;
+it does not introduce alternative mechanics or additional quantum information.
 
-- `rqm-core`: quaternionic wavefunction, quaternion/SU(2), axis-angle, Bloch,
-  and ideal Z-basis probabilities;
-- `rqm-entanglement`: SU(4)/Weyl classification, nonlocal fingerprints,
-  concurrence, and entropy;
-- `rqm-compiler`: fail-closed whole-circuit or regional optimization; and
-- `rqm-qiskit`: Qiskit/OpenQASM adaptation, register preservation, and report
-  shaping.
+## Five-minute path
 
-## Analysis boundary
+After publication, install the CLI extra:
 
-| Input | Result |
-| --- | --- |
-| One-qubit circuit/state | Complete quaternion, SU(2), fingerprint, axis-angle, Bloch, and ideal measurement report |
-| Two-qubit circuit | Complete SU(4)/Weyl, local-equivalence, entanglement, and ideal computational-basis report |
-| Two-qubit state | Complete entanglement and ideal computational-basis report; an input state is not an SU(4) operator |
-| Three-qubit circuit | Partial structural report with bounded whole-circuit assurance; no dense global geometry |
-| More than three qubits | Partial structural and independently verified-regional report; no dense global state or unitary |
-| Terminal measurements | Preserved exactly, including register layout and qubit-to-clbit mapping |
-| Mid-circuit measurement, reset, control flow, symbolic/custom operations | Optimization fails closed and the exact original is returned |
+```bash
+pip install "rqm-qiskit[cli]"
+```
 
-`not_computed` is explicit. A partial report never fabricates missing global
-state, measurement, or entanglement data.
+Explain an OpenQASM 3 circuit offline:
+
+```bash
+rqm-qiskit explain INPUT.qasm \
+  --detail standard \
+  --output EXPLANATION.md \
+  --report REPORT.json
+```
+
+Omit `--output` to write the explanation to stdout. `--report` is optional;
+when present it receives the complete JSON evidence. Exit `0` means complete,
+`2` means a safe partial explanation, and `1` means invalid input or a
+processing failure.
+
+The same workflow is available in Python:
+
+```python
+from qiskit import QuantumCircuit
+from rqm_qiskit import analyze_qiskit_circuit
+
+circuit = QuantumCircuit(1)
+circuit.rz(0.37, 0)
+circuit.ry(-0.81, 0)
+circuit.rz(1.13, 0)
+
+report = analyze_qiskit_circuit(circuit)
+print(report.to_text(detail="standard"))
+evidence = report.to_dict()
+```
+
+`summary` leads with intuition, `standard` adds numerical facts, and
+`technical` adds matrices and fingerprints. All three are deterministic and
+every section carries `evidence_paths` into the JSON report.
+
+## What a complete one-qubit explanation answers
+
+- What is the quaternion `q = w + xi + yj + zk`?
+- What rotation axis and angle does it represent, in radians, degrees, and a
+  recognizable multiple of π?
+- Where does an ordinary |0⟩ input end on the Bloch sphere?
+- Which operator global phase was factored from U(2) to obtain SU(2)?
+- Why do `q` and `−q` give the same isolated Bloch and measurement behavior?
+- Why must a coherently controlled context preserve the original U(2) phase?
+- What are the ideal computational-basis probabilities?
+
+## Supported boundary
+
+| Input | Explanation result | Optimization result |
+| --- | --- | --- |
+| Bound one-qubit public-Qiskit unitary | Complete quaternion, phase, axis-angle, Bloch, and measurement explanation | Changed only if the narrower compiler path verifies it |
+| Bound two-qubit public-Qiskit unitary | Complete verified SU(4)/Weyl, local-equivalence, perfect-entangler, final-state entanglement, and measurement explanation | Changed only if independently verified |
+| One- or two-qubit statevector | Complete bounded state and measurement explanation | Not applicable |
+| Numeric public `UnitaryGate` | Complete explanation | Safe original fallback when not compiler-supported |
+| Terminal measurements | Unitary prefix explained; registers and qubit-to-clbit mapping recorded exactly | Mapping preserved exactly |
+| Symbolic parameters, reset, initialization, control flow, or mid-circuit measurement | Useful structural partial report; unavailable geometry is `not_computed` | Exact original fallback |
+| Three or more qubits | Structural and verified-region partial report; no dense global simulation | Bounded whole/region verification only |
+
+Analysis never mutates the supplied Qiskit circuit. The explanation path uses
+only public Qiskit `Operator`, `Statevector`, circuit, and OpenQASM interfaces.
 
 ## Report contract
 
-`RQMGeometricReport.to_dict()` contains:
+`RQMGeometricReport.to_dict()` preserves the existing versioned fields and adds
+`explanation`:
 
-- `schema_version` and `status`;
-- `circuit_summary`;
-- `local_geometry` and `nonlocal_geometry`;
-- `measurement_predictions`;
-- `optimization` and `assurance` evidence;
-- `not_computed` and `limitations`; and
-- dependency and fingerprint `provenance`.
+- `circuit_summary` records shape, operations, phase, and measurement mapping;
+- `local_geometry` records U(2) phase, SU(2), quaternion, rotation, Bloch, and
+  one-qubit state evidence;
+- `nonlocal_geometry` records verified SU(4), Weyl, local-equivalence, and
+  entanglement evidence;
+- `measurement_predictions` records ideal computational-basis probabilities;
+- `optimization` and `assurance` remain optional and independent;
+- `not_computed` and `limitations` make the boundary explicit; and
+- `explanation.sections[*].evidence_paths` links every prose section back to
+  its numerical source fields.
 
-The quaternionic wavefunction is a regrouping of the same four real
-coefficients in a standard two-component complex spinor. The lens adds a useful
-coordinate system and reproducibility artifact, not additional quantum
-information or a new physical measurement.
+## Evidence boundary
 
-## CLI
+EXP-016 freezes 36 one-qubit, two-qubit, state, and boundary records. Its local
+decision run passed exact Qiskit agreement within `1e-9`, five-run text/JSON
+determinism, input immutability, explanatory coverage, public-API architecture,
+direct p95 `≤50 ms`, and OpenQASM p95 `≤100 ms`.
 
-```bash
-rqm-qiskit analyze examples/terminal_measurement.qasm \
-  --optimize \
-  --report report.json \
-  --output optimized.qasm
-
-rqm-qiskit assure examples/terminal_measurement.qasm \
-  --report assurance.json \
-  --output assured.qasm
-```
-
-Exit `0` means complete/verified, `2` means safe partial/fallback, and `1`
-means invalid input or processing failure. Both commands are offline and do not
-use IBM credentials or quantum hardware.
+EXP-014's `100%` versus `6.25%` phase-aware canonical convergence remains a
+separate semantic result. EXP-015's `0.7427` ratio remains a failed performance
+experiment and is not reclassified. Neither result implies general compiler,
+hardware, circuit-quality, or Qiskit superiority.

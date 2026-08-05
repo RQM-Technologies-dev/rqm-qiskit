@@ -48,13 +48,15 @@ jobs:
       - run: python -m build
       - run: python -m twine check dist/*
 
-  wheels:
-    name: Native wheels (${{ matrix.os }})
+  wheel-smoke:
+    name: Pure-wheel smoke (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-13, macos-14, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
         with:
@@ -62,12 +64,13 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
-      - run: python -m pip install "cibuildwheel==3.4.1"
-      - run: python -m cibuildwheel --output-dir wheelhouse
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: native-wheels-${{ matrix.os }}
-          path: wheelhouse/*.whl
+      - run: python -m pip install --upgrade build
+      - run: python -m build --wheel
+      - name: Require a platform-independent wheel
+        shell: bash
+        run: compgen -G "dist/*-py3-none-any.whl" > /dev/null
+      - run: python -m pip install "rqm-core>=0.2.2,<0.3" "rqm-entanglement>=0.2,<0.3" "rqm-compiler>=0.3,<0.4" "qiskit>=2.5.1,<2.6" dist/*.whl
+        shell: bash
+      - run: python -c "from qiskit import QuantumCircuit; from rqm_qiskit import analyze_qiskit_circuit; circuit = QuantumCircuit(1); circuit.h(0); assert analyze_qiskit_circuit(circuit).status == 'complete'"

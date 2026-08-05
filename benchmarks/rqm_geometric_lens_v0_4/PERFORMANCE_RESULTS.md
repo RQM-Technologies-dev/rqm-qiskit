@@ -1,6 +1,12 @@
 # RQM-Qiskit 0.4 Performance Results
 
-Release gate: **failed**
+Historical EXP-014/EXP-015 performance gate: **failed**
+
+Current lifecycle note: this failure is retained exactly and is not
+reclassified. After the 0.4 mission was formally reframed as a Qiskit-compatible
+quaternionic explanation bridge, relative adapter/compiler performance ceased
+to be a product release criterion. The measurements below remain non-promoted
+engineering evidence and support no Qiskit-superiority claim.
 
 ## Frozen EXP-014 baseline
 
@@ -21,8 +27,8 @@ machine-readable result.
 Using Qiskit's `UnitaryGate(..., check_input=False)` only after compiler
 quaternion validation and `rqm-core` matrix construction reduced an exploratory
 ratio from about `1.24`; the final frozen measurement was `0.9862`. No cache was
-introduced. The remaining failure blocks
-publication of 0.4 but does not change the EXP-014 semantic fingerprint verdict.
+introduced. The failure blocked the then-specified performance-led candidate
+but does not change the EXP-014 semantic fingerprint verdict.
 
 ## EXP-015 guarded-native follow-up
 
@@ -47,8 +53,9 @@ EXP-015 does not use these measurements to claim an absolute regression or
 improvement. The relative failure reproduced consistently and is the release
 decision.
 
-The implementation preserves the Python reference path, requires the native
-path during evidence collection, constructs fresh output objects, and adds no
-circuit-dependent cache. The negative result remains public and leaves 0.4
-blocked. EXP-014's `100%` versus `6.25%` canonical-convergence result remains a
-separate semantic workflow result, not a performance claim.
+The measured implementation preserved the Python reference path, required the
+native path during evidence collection, constructed fresh output objects, and
+added no circuit-dependent cache. The negative result remains public. The
+native implementation is not shipped by the explanation-led candidate.
+EXP-014's `100%` versus `6.25%` canonical-convergence result remains a separate
+semantic workflow result, not a performance claim.

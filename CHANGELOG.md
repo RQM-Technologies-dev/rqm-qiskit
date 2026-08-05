@@ -4,7 +4,28 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
-## [0.4.0] — Unreleased candidate: Quaternionic Circuit Lens
+## [0.4.0] — Unreleased candidate: Qiskit-Compatible Quaternionic Explanation Bridge
+
+- Reframed the candidate mission: help the world understand ordinary quantum
+  computing through quaternionic geometry while remaining compatible with
+  Qiskit.
+- Added deterministic `RQMExplanation` sections,
+  `RQMGeometricReport.explanation`, and `to_text()` detail levels `summary`,
+  `standard`, and `technical`, with evidence paths for every section.
+- Added the offline `rqm-qiskit explain` command with optional Markdown and
+  JSON outputs and safe complete/partial/error exit codes.
+- Decoupled explanation from optimization. Public-Qiskit-evaluable bound
+  one- and two-qubit numeric unitaries can be explained while unsupported
+  optimization still returns the exact original circuit.
+- Added explicit U(2) global-phase, quaternion-sign, controlled-context,
+  rotation-degree/π, ideal measurement, SU(4)/Weyl, perfect-entangler, and
+  final-state entanglement explanations.
+- Removed the EXP-015 C accelerator, private packed-Qiskit access, native wheel
+  requirements, and native-specific tests. The negative experiment remains
+  permanently preserved as evidence.
+- Added EXP-016's frozen 36-record hybrid explanation gate. The local run
+  passed correctness, deterministic rendering, compatibility, fail-closed,
+  public-interface, and absolute responsiveness criteria.
 
 - Added EXP-014-backed canonical SU(2) fingerprints and versioned geometric
   reports for Qiskit circuits and bounded states.
@@ -17,8 +38,10 @@ All notable changes to **rqm-qiskit** are documented here.
   offline `analyze` and `assure` CLI commands.
 - Updated the bounded compatibility target to Qiskit `>=2.5.1,<2.6` and Python
   3.11–3.13.
-- The release remains blocked: absolute latency gates pass, but relative
-  adapter overhead is about `98.6%` versus the required `25%`.
+- Comparative adapter overhead is no longer a product criterion. EXP-015's
+  failed `0.7427` ratio is retained as non-promoted engineering evidence.
+- The candidate remains unreleased pending complete fresh-wheel validation on
+  Python 3.11–3.13 and Linux, macOS, and Windows; no publication is authorized.
 
 ## [0.3.0] — Withdrawn, unreleased candidate
 

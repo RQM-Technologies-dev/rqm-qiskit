@@ -32,7 +32,6 @@ from typing import Any, Literal
 
 from qiskit import QuantumCircuit, qasm3
 
-from rqm_qiskit._accelerator import extract_1q_operations
 from rqm_qiskit.convert import compiled_circuit_to_qiskit
 
 ImportStatus = Literal["SUPPORTED", "UNSUPPORTED", "ERROR"]
@@ -420,25 +419,6 @@ def import_qiskit_circuit(
             )
         )
 
-    if not reasons and circuit.num_qubits == 1:
-        native_records = extract_1q_operations(circuit)
-        if native_records is not None:
-            normalized = Circuit(1)
-            add_operation = normalized.add
-            for gate, angle in native_records:
-                if angle is None:
-                    add_operation(Operation(gate, [0]))
-                else:
-                    add_operation(Operation(gate, [0], [], {"angle": angle}))
-            report = _base_report(
-                status="SUPPORTED",
-                source_format="qiskit",
-                supported=True,
-                num_qubits=1,
-                operation_count=len(native_records),
-            )
-            return QiskitImportResult(circuit=normalized, report=report)
-
     descriptors: list[Operation] = []
     for index, instruction in enumerate(circuit.data):
         operation = instruction.operation
@@ -591,10 +571,16 @@ def import_qiskit_circuit(
 
 def _terminal_measurement_split(
     circuit: QuantumCircuit,
-) -> tuple[QuantumCircuit | None, list[tuple[Any, list[int], list[int]]], QiskitImportReport | None]:
+) -> tuple[
+    QuantumCircuit | None,
+    list[tuple[Any, list[int], list[int]]],
+    QiskitImportReport | None,
+]:
     """Return a unitary/barrier prefix and an exact terminal measurement suffix."""
 
-    prefix = QuantumCircuit(circuit.num_qubits, name=circuit.name, global_phase=circuit.global_phase)
+    prefix = QuantumCircuit(
+        circuit.num_qubits, name=circuit.name, global_phase=circuit.global_phase
+    )
     prefix.metadata = dict(circuit.metadata or {})
     suffix: list[tuple[Any, list[int], list[int]]] = []
     measurement_started = False
@@ -670,7 +656,9 @@ def _rebuild_with_terminal_measurements(
     output.metadata = dict(original.metadata or {})
     for instruction in lowered_prefix.data:
         qubits = [lowered_prefix.find_bit(qubit).index for qubit in instruction.qubits]
-        output.append(instruction.operation, [output.qubits[index] for index in qubits], [])
+        output.append(
+            instruction.operation, [output.qubits[index] for index in qubits], []
+        )
     for operation, qubits, clbits in suffix:
         output.append(
             operation,
@@ -747,9 +735,7 @@ def _isolated_worker_environment() -> dict[str, str]:
     environment = os.environ.copy()
     import_paths = [entry for entry in sys.path if entry]
     configured_paths = [
-        entry
-        for entry in environment.get("PYTHONPATH", "").split(os.pathsep)
-        if entry
+        entry for entry in environment.get("PYTHONPATH", "").split(os.pathsep) if entry
     ]
     environment["PYTHONPATH"] = os.pathsep.join(
         dict.fromkeys([*import_paths, *configured_paths])
@@ -904,7 +890,9 @@ def assure_qiskit_circuit(
                 normalized_input=imported.circuit,
             )
         lowered = compiled_circuit_to_qiskit(returned, target=target)
-        lowered = _rebuild_with_terminal_measurements(circuit, lowered, measurement_suffix)
+        lowered = _rebuild_with_terminal_measurements(
+            circuit, lowered, measurement_suffix
+        )
         return QiskitAssuranceResult(
             returned_circuit=lowered,
             assurance_status="VERIFIED",
@@ -980,7 +968,9 @@ def assure_openqasm3(source: str) -> OpenQASMAssuranceResult:
         optimization_applied=assurance.optimization_applied,
         fallback_reason=None,
         source_sha256=source_sha256,
-        returned_source_sha256=hashlib.sha256(returned_source.encode("utf-8")).hexdigest(),
+        returned_source_sha256=hashlib.sha256(
+            returned_source.encode("utf-8")
+        ).hexdigest(),
         assurance_report=assurance.to_dict(),
     )
 

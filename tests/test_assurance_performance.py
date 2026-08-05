@@ -4,59 +4,57 @@ import statistics
 import time
 
 from qiskit import QuantumCircuit, qasm3
-from qiskit.quantum_info import Operator
-from rqm_compiler import optimize_circuit
 
-from rqm_qiskit import export_openqasm3, import_qiskit_circuit
-
-
-def _representative_circuits() -> list[QuantumCircuit]:
-    circuits: list[QuantumCircuit] = []
-    for index in range(12):
-        circuit = QuantumCircuit(3)
-        circuit.rx(0.01 * (index + 1), 0)
-        circuit.ry(-0.02 * (index + 1), 1)
-        circuit.rz(0.03 * (index + 1), 2)
-        circuit.cx(0, 1)
-        circuit.iswap(1, 2)
-        circuit.rxx(0.04 * (index + 1), 0, 2)
-        circuit.ryy(-0.05 * (index + 1), 1, 2)
-        circuit.rzz(0.06 * (index + 1), 0, 1)
-        circuits.append(circuit)
-    return circuits
+from rqm_qiskit import analyze_qiskit_circuit
+from rqm_qiskit.cli import main as cli_main
 
 
-def test_hot_adapter_path_stays_below_regression_ceiling() -> None:
-    """Protect the latency hardening without pretending CI proves the release gate."""
+def _p95(samples: list[float]) -> float:
+    return sorted(samples)[max(0, int(len(samples) * 0.95) - 1)]
 
-    circuits = _representative_circuits()
-    warm_import = import_qiskit_circuit(circuits[0])
-    assert warm_import.circuit is not None
-    warm_returned, _ = optimize_circuit(warm_import.circuit)
-    assert export_openqasm3(warm_returned).status == "EXPORTED"
 
-    ratios: list[float] = []
+def test_direct_explanation_meets_absolute_responsiveness_gate() -> None:
+    one_qubit = QuantumCircuit(1)
+    one_qubit.rz(0.31, 0)
+    one_qubit.ry(-0.47, 0)
+    one_qubit.rz(0.83, 0)
+    two_qubit = QuantumCircuit(2)
+    two_qubit.h(0)
+    two_qubit.cx(0, 1)
+    circuits = [one_qubit, two_qubit]
+
     for circuit in circuits:
+        assert analyze_qiskit_circuit(circuit).status == "complete"
+
+    samples = []
+    for index in range(40):
         start = time.perf_counter_ns()
-        imported = import_qiskit_circuit(circuit)
-        after_import = time.perf_counter_ns()
-        assert imported.circuit is not None
+        report = analyze_qiskit_circuit(circuits[index % len(circuits)])
+        report.to_text("standard")
+        samples.append((time.perf_counter_ns() - start) / 1_000_000)
 
-        returned, report = optimize_circuit(imported.circuit)
-        after_compiler = time.perf_counter_ns()
-        exported = export_openqasm3(returned)
-        after_export = time.perf_counter_ns()
+    assert _p95(samples) <= 50.0, f"direct p95={_p95(samples):.3f} ms"
 
-        assert report.equivalence_status == "VERIFIED"
-        assert exported.status == "EXPORTED"
-        assert exported.source is not None
-        reparsed = qasm3.loads(exported.source)
-        assert Operator(circuit).equiv(Operator(reparsed))
 
-        compiler_ns = after_compiler - after_import
-        adapter_ns = (after_import - start) + (after_export - after_compiler)
-        ratios.append(adapter_ns / compiler_ns)
+def test_openqasm_cli_explanation_meets_absolute_responsiveness_gate(tmp_path) -> None:
+    circuit = QuantumCircuit(1)
+    circuit.ry(0.42, 0)
+    source = tmp_path / "input.qasm"
+    source.write_text(qasm3.dumps(circuit), encoding="utf-8")
 
-    # This is a broad cross-run regression ceiling, not the frozen 25% release
-    # gate. The release verdict comes only from the preregistered 160-case run.
-    assert statistics.median(ratios) <= 4.0
+    assert (
+        cli_main(["explain", str(source), "--output", str(tmp_path / "warm.md")]) == 0
+    )
+    samples = []
+    for index in range(20):
+        start = time.perf_counter_ns()
+        assert (
+            cli_main(
+                ["explain", str(source), "--output", str(tmp_path / f"run-{index}.md")]
+            )
+            == 0
+        )
+        samples.append((time.perf_counter_ns() - start) / 1_000_000)
+
+    assert _p95(samples) <= 100.0, f"OpenQASM CLI p95={_p95(samples):.3f} ms"
+    assert statistics.median(samples) <= _p95(samples)
