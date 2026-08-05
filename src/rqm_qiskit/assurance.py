@@ -15,6 +15,7 @@ to a coherently controlled subcircuit.
 from __future__ import annotations
 
 import asyncio
+import copy
 import contextlib
 import hashlib
 import io
@@ -24,13 +25,14 @@ import os
 import re
 import subprocess
 import sys
-from dataclasses import asdict, dataclass, replace
+from dataclasses import dataclass, replace
 from functools import cache
 from importlib.metadata import PackageNotFoundError, version
 from typing import Any, Literal
 
 from qiskit import QuantumCircuit, qasm3
 
+from rqm_qiskit._accelerator import extract_1q_operations
 from rqm_qiskit.convert import compiled_circuit_to_qiskit
 
 ImportStatus = Literal["SUPPORTED", "UNSUPPORTED", "ERROR"]
@@ -81,6 +83,24 @@ _LIMITATIONS = (
 )
 
 
+def _copy_report_value(value: Any) -> Any:
+    """Copy report-shaped data without recursive dataclass reflection."""
+
+    value_type = type(value)
+    if value is None or value_type in (str, int, float, bool):
+        return value
+    if value_type is dict:
+        return {
+            _copy_report_value(key): _copy_report_value(item)
+            for key, item in value.items()
+        }
+    if value_type is list:
+        return [_copy_report_value(item) for item in value]
+    if value_type is tuple:
+        return tuple(_copy_report_value(item) for item in value)
+    return copy.deepcopy(value)
+
+
 @cache
 def _package_version(name: str, fallback: str) -> str:
     try:
@@ -103,7 +123,12 @@ class QiskitUnsupportedReason:
     operation_name: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "code": self.code,
+            "message": self.message,
+            "operation_index": self.operation_index,
+            "operation_name": self.operation_name,
+        }
 
 
 @dataclass(frozen=True)
@@ -125,7 +150,23 @@ class QiskitImportReport:
     limitations: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "status": self.status,
+            "source_format": self.source_format,
+            "supported": self.supported,
+            "num_qubits": self.num_qubits,
+            "operation_count": self.operation_count,
+            "source_sha256": self.source_sha256,
+            "unsupported_reasons": tuple(
+                reason.to_dict() for reason in self.unsupported_reasons
+            ),
+            "error": self.error,
+            "error_line": self.error_line,
+            "error_column": self.error_column,
+            "adapter_version": self.adapter_version,
+            "qiskit_version": self.qiskit_version,
+            "limitations": tuple(self.limitations),
+        }
 
 
 @dataclass(frozen=True)
@@ -197,7 +238,16 @@ class OpenQASMAssuranceResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "returned_source": self.returned_source,
+            "assurance_status": self.assurance_status,
+            "optimization_applied": self.optimization_applied,
+            "fallback_reason": self.fallback_reason,
+            "source_sha256": self.source_sha256,
+            "returned_source_sha256": self.returned_source_sha256,
+            "assurance_report": _copy_report_value(self.assurance_report),
+            "error": self.error,
+        }
 
 
 @dataclass(frozen=True)
@@ -213,7 +263,15 @@ class QiskitExportResult:
     limitations: tuple[str, ...]
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "status": self.status,
+            "source": self.source,
+            "source_sha256": self.source_sha256,
+            "error": self.error,
+            "adapter_version": self.adapter_version,
+            "qiskit_version": self.qiskit_version,
+            "limitations": tuple(self.limitations),
+        }
 
 
 def _limitations() -> tuple[str, ...]:
@@ -361,6 +419,25 @@ def import_qiskit_circuit(
                 "OpenQASM assurance v0.4 accepts only circuits with zero declared global phase.",
             )
         )
+
+    if not reasons and circuit.num_qubits == 1:
+        native_records = extract_1q_operations(circuit)
+        if native_records is not None:
+            normalized = Circuit(1)
+            add_operation = normalized.add
+            for gate, angle in native_records:
+                if angle is None:
+                    add_operation(Operation(gate, [0]))
+                else:
+                    add_operation(Operation(gate, [0], [], {"angle": angle}))
+            report = _base_report(
+                status="SUPPORTED",
+                source_format="qiskit",
+                supported=True,
+                num_qubits=1,
+                operation_count=len(native_records),
+            )
+            return QiskitImportResult(circuit=normalized, report=report)
 
     descriptors: list[Operation] = []
     for index, instruction in enumerate(circuit.data):

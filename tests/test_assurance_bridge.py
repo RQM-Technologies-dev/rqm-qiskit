@@ -248,6 +248,42 @@ def test_toolchain_versions_are_cached_across_hot_path_requests(monkeypatch) -> 
     assurance_module._package_version.cache_clear()
 
 
+def test_import_report_to_dict_preserves_dataclass_shape() -> None:
+    from dataclasses import asdict
+
+    circuit = QuantumCircuit(1)
+    circuit.rx(0.25, 0)
+    report = import_qiskit_circuit(circuit).report
+
+    assert report.to_dict() == asdict(report)
+
+
+def test_assurance_report_to_dict_does_not_alias_evidence() -> None:
+    circuit = QuantumCircuit(1)
+    circuit.rx(0.25, 0)
+    circuit.ry(-0.5, 0)
+    result = assure_qiskit_circuit(circuit)
+    payload = result.to_dict()
+
+    payload["compiler_report"]["passes_applied"].append("external_mutation")
+    payload["compiler_report"]["equivalence_report"]["notes"].append(
+        "external_mutation"
+    )
+    payload["normalized_input"]["descriptors"][0]["params"][
+        "external_mutation"
+    ] = True
+
+    assert "external_mutation" not in result.compiler_report.passes_applied
+    assert (
+        "external_mutation"
+        not in result.compiler_report.equivalence_report["notes"]
+    )
+    assert (
+        "external_mutation"
+        not in result.normalized_input.to_descriptors()[0]["params"]
+    )
+
+
 def test_malformed_openqasm_returns_structured_error() -> None:
     result = import_openqasm3("OPENQASM 3.0;\nqubit[1] q;\nrx( q[0];")
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import platform
 import statistics
 import sys
@@ -17,12 +18,19 @@ from qiskit import QuantumCircuit, qasm3
 from rqm_compiler import optimize_circuit
 from rqm_qiskit import assure_openqasm3, assure_qiskit_circuit, import_qiskit_circuit
 from rqm_qiskit.assurance import QiskitAssuranceResult
+from rqm_qiskit._accelerator import native_build_info
 from rqm_qiskit.convert import compiled_circuit_to_qiskit
 
 
 ROOT = Path(__file__).resolve().parent
 CORPUS = json.loads((ROOT / "corpus_manifest.json").read_text(encoding="utf-8"))
-OUTPUT = ROOT / "PERFORMANCE_RESULTS.json"
+OUTPUT = Path(
+    os.environ.get("RQM_PERFORMANCE_OUTPUT", ROOT / "PERFORMANCE_RESULTS.json")
+)
+EXPECTED_CORPUS_DIGEST = (
+    "d244cfaa87ca2775c79845ae546e57e0931d5828aaee0d9b079bd12b51c16459"
+)
+BASELINE_ABSOLUTE_ADAPTER_MEDIAN_US = 274.994
 
 
 def _percentile(values: list[float], q: float) -> float:
@@ -64,6 +72,13 @@ def _circuit(record: dict[str, Any], variant: str) -> QuantumCircuit:
 
 
 def main() -> int:
+    if CORPUS.get("corpus_digest") != EXPECTED_CORPUS_DIGEST:
+        raise RuntimeError("Frozen EXP-014 corpus digest changed; refusing measurement")
+    native_info = native_build_info()
+    if not native_info.get("available"):
+        raise RuntimeError("EXP-015 decision run requires the guarded native adapter")
+    os.environ["RQM_QISKIT_REQUIRE_NATIVE"] = "1"
+
     ratios: list[float] = []
     direct_ns: list[float] = []
     qasm_ns: list[float] = []
@@ -150,6 +165,15 @@ def main() -> int:
 
     metrics = {
         "adapter_overhead_ratio_median": statistics.median(ratios),
+        "absolute_adapter_time_median_us": statistics.median(
+            [
+                sample["adapter_stage_ns"]["import"]
+                + sample["adapter_stage_ns"]["lowering"]
+                + sample["adapter_stage_ns"]["report"]
+                for sample in raw_samples
+            ]
+        )
+        / 1e3,
         "direct_assurance_p95_ms": _percentile(direct_ns, 0.95) / 1e6,
         "openqasm_assurance_p95_ms": _percentile(qasm_ns, 0.95) / 1e6,
         "openqasm_stage_p95_ms": {
@@ -163,6 +187,10 @@ def main() -> int:
     }
     gates = {
         "adapter_overhead_ratio": metrics["adapter_overhead_ratio_median"] <= 0.25,
+        "absolute_adapter_time_improved": metrics[
+            "absolute_adapter_time_median_us"
+        ]
+        < BASELINE_ABSOLUTE_ADAPTER_MEDIAN_US,
         "direct_assurance_p95": metrics["direct_assurance_p95_ms"] <= 5.0,
         "openqasm_assurance_p95": metrics["openqasm_assurance_p95_ms"] <= 25.0,
         "openqasm_import_p95": metrics["openqasm_stage_p95_ms"]["import"] <= 25.0,
@@ -179,9 +207,11 @@ def main() -> int:
             "qiskit": version("qiskit"),
             "rqm_qiskit": version("rqm-qiskit"),
             "rqm_compiler": version("rqm-compiler"),
+            "native_adapter": native_info,
         },
         "thresholds": {
             "adapter_overhead_ratio_max": 0.25,
+            "baseline_absolute_adapter_median_us": BASELINE_ABSOLUTE_ADAPTER_MEDIAN_US,
             "direct_assurance_p95_ms_max": 5.0,
             "openqasm_assurance_p95_ms_max": 25.0,
             "openqasm_each_stage_p95_ms_max": 25.0,
