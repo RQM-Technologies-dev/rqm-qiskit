@@ -38,6 +38,13 @@ def _measurement_mapping(circuit: QuantumCircuit) -> list[dict[str, int]]:
     return analyze_qiskit_circuit(circuit).circuit_summary["terminal_measurements"]
 
 
+def _close_sequence(actual: list[float], expected: list[float]) -> bool:
+    return len(actual) == len(expected) and all(
+        math.isclose(found, wanted, rel_tol=0.0, abs_tol=1e-12)
+        for found, wanted in zip(actual, expected)
+    )
+
+
 def main() -> int:
     workspace = Path(os.environ["RQM_WORKSPACE"]).resolve()
     wheelhouse = Path(os.environ["RQM_WHEELHOUSE"]).resolve()
@@ -74,7 +81,12 @@ def main() -> int:
     check("one_qubit_complete", lambda: one_report.status == "complete")
     check("quaternion_present", lambda: len(local["canonical_quaternion"]) == 4)
     check("rotation_present", lambda: local["angle_pi_multiple"] == "π/2")
-    check("bloch_present", lambda: local["final_state"]["bloch"] == [1.0, 0.0, 0.0])
+    check(
+        "bloch_present",
+        lambda: _close_sequence(
+            local["final_state"]["bloch"], [1.0, 0.0, 0.0]
+        ),
+    )
     check(
         "one_qubit_probabilities",
         lambda: set(one_report.measurement_predictions["probabilities"]) == {"0", "1"},
@@ -98,7 +110,10 @@ def main() -> int:
     check(
         "entanglement_present",
         lambda: any(
-            item["metric_name"] == "Concurrence" and item["metric_value"] == 1.0
+            item["metric_name"] == "Concurrence"
+            and math.isclose(
+                item["metric_value"], 1.0, rel_tol=0.0, abs_tol=1e-12
+            )
             for item in nonlocal_geometry["entanglement"]["entangled_pairs"]
         ),
     )
