@@ -38,6 +38,9 @@ separate representative/boundary extension added after a conformance audit.
 It does not alter the primary cohorts or advantage decision and cannot
 authorize package release.
 
+`VALIDATION_RESULTS.md` records the source, distribution, and fresh Python
+3.11–3.13 wheel checks. The separate performance failure still blocks release.
+
 ## Boundary
 
 The quaternionic wavefunction track is a standard-compatible regrouping of a
