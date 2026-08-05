@@ -8,7 +8,7 @@ from typing import Any
 
 from rqm_compiler import Circuit
 
-from rqm_qiskit.assurance import export_openqasm3, import_openqasm3
+from rqm_qiskit.assurance import assure_openqasm3, export_openqasm3, import_openqasm3
 
 
 def _execute(request: dict[str, Any]) -> dict[str, Any]:
@@ -31,6 +31,8 @@ def _execute(request: dict[str, Any]) -> dict[str, Any]:
             num_qubits=int(circuit_payload["num_qubits"]),
         )
         return export_openqasm3(circuit).to_dict()
+    if action == "assure":
+        return assure_openqasm3(str(request.get("source", ""))).to_dict()
     raise ValueError(f"Unsupported worker action: {action!r}")
 
 

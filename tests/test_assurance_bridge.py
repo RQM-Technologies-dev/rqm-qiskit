@@ -173,18 +173,18 @@ def test_assurance_verifies_rewrites_around_iswap() -> None:
     assert _equivalent_up_to_phase(circuit, result.returned_circuit)
 
 
-def test_assurance_returns_original_for_unsupported_input() -> None:
+def test_assurance_supports_terminal_measurement_suffix() -> None:
     circuit = QuantumCircuit(1, 1)
     circuit.h(0)
     circuit.measure(0, 0)
 
     result = assure_qiskit_circuit(circuit)
 
-    assert result.assurance_status == "FALLBACK_ORIGINAL"
-    assert result.fallback_reason == "unsupported_input"
-    assert result.returned_circuit == circuit
+    assert result.assurance_status == "VERIFIED"
+    assert result.fallback_reason is None
+    assert result.returned_circuit.num_clbits == 1
     assert result.returned_circuit is not circuit
-    assert result.normalized_input is None
+    assert result.normalized_input is not None
 
 
 def test_openqasm_roundtrip_remains_in_supported_subset() -> None:

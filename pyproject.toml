@@ -1,7 +1,7 @@
 [project]
 name = "rqm-qiskit"
-version = "0.2.0"
-description = "Thin Qiskit bridge layer for the RQM quantum ecosystem"
+version = "0.4.0"
+description = "Evidence-backed quaternionic geometric lens and Qiskit bridge for the RQM ecosystem"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
@@ -13,17 +13,21 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-  "qiskit==2.3.0",
+  "qiskit>=2.5.1,<2.6",
   "rqm-core>=0.2,<0.3",
   "rqm-entanglement>=0.2,<0.3",
-  "rqm-compiler>=0.2.1,<0.3",
+  "rqm-compiler>=0.3,<0.4",
 ]
 
 [project.optional-dependencies]
 simulator = ["qiskit-aer==0.17.2"]
 qasm3 = ["qiskit-qasm3-import==0.6.0"]
-ibm = ["qiskit-ibm-runtime==0.45.0"]
+cli = ["qiskit-qasm3-import==0.6.0"]
+ibm = ["qiskit-ibm-runtime>=0.48,<0.49"]
 dev = ["pytest", "qiskit-aer==0.17.2", "qiskit-qasm3-import==0.6.0"]
+
+[project.scripts]
+rqm-qiskit = "rqm_qiskit.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"

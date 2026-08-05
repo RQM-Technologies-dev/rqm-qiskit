@@ -124,10 +124,20 @@ from rqm_qiskit.assurance import (
     QiskitImportReport,
     QiskitImportResult,
     QiskitUnsupportedReason,
+    OpenQASMAssuranceResult,
+    assure_openqasm3,
     assure_qiskit_circuit,
+    async_assure_openqasm3,
     export_openqasm3,
     import_openqasm3,
     import_qiskit_circuit,
+)
+from rqm_qiskit.geometry import (
+    GEOMETRY_SCHEMA_VERSION,
+    RQMGeometricReport,
+    analyze_qiskit_circuit,
+    analyze_qiskit_state,
+    canonical_su2_fingerprint,
 )
 
 __all__ = [
@@ -157,12 +167,20 @@ __all__ = [
     "import_qiskit_circuit",
     "import_openqasm3",
     "assure_qiskit_circuit",
+    "assure_openqasm3",
+    "async_assure_openqasm3",
+    "analyze_qiskit_circuit",
+    "analyze_qiskit_state",
+    "canonical_su2_fingerprint",
     "export_openqasm3",
     "QiskitUnsupportedReason",
     "QiskitImportReport",
     "QiskitImportResult",
     "QiskitAssuranceResult",
     "QiskitExportResult",
+    "OpenQASMAssuranceResult",
+    "RQMGeometricReport",
+    "GEOMETRY_SCHEMA_VERSION",
     "SUPPORTED_QISKIT_GATES",
     "MAX_ASSURANCE_QUBITS",
     # Errors
