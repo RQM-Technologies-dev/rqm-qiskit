@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "EXP-016",
+  "authority_evidence_commit": "c156e6e1691394d79f571af4cf9fbcedc33baf42",
+  "preregistration_commit": "c73fc2df94e98d3a8099cbd9300bdcb51be6e5e5",
+  "implementation_commits": {
+    "rqm_core": "84eada2",
+    "rqm_compiler": "b6111abb2cd223328bc5bf20e31aedfe02446815",
+    "rqm_qiskit": "6b520bec7cdf2be6e4bc0fc070ef1a66ceb21389"
+  },
+  "corpus_digest": "a1e511885f42ea526ca4406f28d58797a3c4de5480e76ac96b629dd2aebae14e",
+  "files": {
+    "PREREGISTRATION.json": {
+      "sha256": "ab30acbb37f567a1d91b059fd450fd7e03bafcd0c504a811c807d744ccd33162"
+    },
+    "corpus_manifest.json": {
+      "sha256": "4b6b5bee44d7665c1cbc3edc6f523ac09ae986e85284246eabc0b574927f5699"
+    },
+    "raw_results.json": {
+      "sha256": "6281c60060bef12b84a0ee35ecdb96e60545b349c69914f597269a8a20e3f197"
+    }
+  },
+  "decision": {
+    "record_gate_passed": true,
+    "absolute_latency_gate_passed": true,
+    "private_qiskit_api_gate_passed": true,
+    "verdict": "hybrid_quaternionic_explanation_gate_passed"
+  },
+  "packaging": {
+    "pure_python_wheel": true,
+    "local_macos_python_3_11_to_3_13": "passed",
+    "hosted_linux_macos_windows": "pending",
+    "release_ready": false
+  },
+  "execution": {
+    "provider": "local-only",
+    "hardware": false,
+    "remote_simulator": false,
+    "credentials": false,
+    "network": false
+  }
+}
