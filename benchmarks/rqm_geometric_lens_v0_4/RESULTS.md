@@ -1,7 +1,7 @@
 # EXP-014 Results
 
-Execution status: complete  
-Scientific status: quaternionic circuit lens gate complete  
+Execution status: complete
+Scientific status: quaternionic circuit lens gate complete
 Verdict: `canonical_assurance_workflow_advantage_supported`
 
 ## Primary held-out result

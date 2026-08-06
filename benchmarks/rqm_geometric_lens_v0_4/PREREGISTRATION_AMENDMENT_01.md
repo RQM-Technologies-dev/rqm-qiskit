@@ -1,6 +1,6 @@
 # EXP-014 Preregistration Amendment 01
 
-Status: frozen before extension measurement  
+Status: frozen before extension measurement
 Primary result status: immutable
 
 ## Reason
