@@ -4,7 +4,7 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
-## [0.4.0] — Unreleased candidate: Qiskit-Compatible Quaternionic Explanation Bridge
+## [0.4.0] — Qiskit-Compatible Quaternionic Explanation Bridge
 
 - Reframed the candidate mission: help the world understand ordinary quantum
   computing through quaternionic geometry while remaining compatible with
@@ -40,8 +40,9 @@ All notable changes to **rqm-qiskit** are documented here.
   3.11–3.13.
 - Comparative adapter overhead is no longer a product criterion. EXP-015's
   failed `0.7427` ratio is retained as non-promoted engineering evidence.
-- The candidate remains unreleased pending complete fresh-wheel validation on
-  Python 3.11–3.13 and Linux, macOS, and Windows; no publication is authorized.
+- Qualified one immutable pure-Python candidate wheel bundle on hosted Linux,
+  macOS, and Windows runners with Python 3.11–3.13. Release remains contingent
+  on the controlled publication and clean public-PyPI qualification gates.
 
 ## [0.3.0] — Withdrawn, unreleased candidate
 

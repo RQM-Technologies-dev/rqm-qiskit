@@ -28,10 +28,12 @@ SU(4)/Weyl, and entanglement geometry. Explanation uses Qiskit's public
 Optimization is an optional, narrower, independently verified workflow.
 
 EXP-016 passed its 36-record local correctness, determinism, compatibility,
-and absolute-responsiveness gate. The candidate is still **not released**:
-fresh Python 3.11–3.13 wheel installs and Linux/macOS/Windows workflow runs must
-also pass before release readiness is recorded. No publication or invitation is
-authorized by this repository state.
+and absolute-responsiveness gate. One immutable pure-Python wheel bundle also
+passed the hosted Linux, macOS, and Windows matrix on Python 3.11–3.13 in
+[run 31057445168](https://github.com/RQM-Technologies-dev/rqm-qiskit/actions/runs/31057445168).
+The candidate is release-ready but still **not released**; public-PyPI
+qualification remains a post-publication closure gate. This status does not
+authorize invitations or outreach.
 
 EXP-014's `100%` versus `6.25%` canonical-convergence result remains valid.
 EXP-015's failed `0.7427` native-adapter ratio also remains valid historical

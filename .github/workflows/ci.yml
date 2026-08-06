@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    name: Build exact candidate wheelhouse
+    name: Build and inspect distributions
     runs-on: ubuntu-latest
     outputs:
       artifact-digest: ${{ steps.upload-wheelhouse.outputs.artifact-digest }}
@@ -70,7 +70,7 @@ jobs:
           retention-days: 90
 
   test:
-    name: Installed-wheel suite (Linux, Python ${{ matrix.python-version }})
+    name: Test (Python ${{ matrix.python-version }})
     needs: build
     runs-on: ubuntu-latest
     strategy:
@@ -143,7 +143,8 @@ jobs:
           RQM_WORKSPACE: ${{ github.workspace }}
           RQM_WHEELHOUSE: ${{ github.workspace }}/wheelhouse
           RQM_RESULT_PATH: ${{ runner.temp }}/wheel-smoke-result.json
-          RQM_CANDIDATE_COMMIT: ${{ github.sha }}
+          RQM_DISTRIBUTION_SOURCE: candidate
+          RQM_QUALIFICATION_REF: ${{ github.sha }}
           RQM_RUNNER_LABEL: ${{ matrix.os }}
           RQM_REQUESTED_PYTHON: ${{ matrix.python-version }}
         run: python "${{ github.workspace }}/scripts/installed_wheel_smoke.py"
@@ -175,11 +176,12 @@ jobs:
 
       - name: Aggregate the complete matrix
         env:
-          RQM_CANDIDATE_COMMIT: ${{ github.sha }}
+          RQM_DISTRIBUTION_SOURCE: candidate
+          RQM_QUALIFICATION_REF: ${{ github.sha }}
           RQM_RUN_ID: ${{ github.run_id }}
           RQM_RUN_ATTEMPT: ${{ github.run_attempt }}
           RQM_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          RQM_WHEELHOUSE_ARTIFACT_DIGEST: ${{ needs.build.outputs.artifact-digest }}
+          RQM_WHEEL_BUNDLE_ARTIFACT_DIGEST: ${{ needs.build.outputs.artifact-digest }}
         run: >-
           python scripts/aggregate_wheel_matrix.py
           wheel-smoke-results

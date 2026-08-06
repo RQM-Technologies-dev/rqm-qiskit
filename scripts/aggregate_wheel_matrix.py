@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import urllib.request
 from pathlib import Path
 
 
@@ -33,27 +34,49 @@ def main() -> int:
         )
     if any(record.get("status") != "pass" for record in records):
         raise RuntimeError("at least one wheel-smoke result did not pass")
-    expected_commit = os.environ["RQM_CANDIDATE_COMMIT"]
-    if {record["candidate_commit"] for record in records} != {expected_commit}:
-        raise RuntimeError("matrix records do not share the dispatched candidate commit")
+    expected_source = os.environ.get("RQM_DISTRIBUTION_SOURCE", "candidate")
+    if {record["distribution_source"] for record in records} != {expected_source}:
+        raise RuntimeError("matrix records do not share the expected distribution source")
+    expected_ref = os.environ["RQM_QUALIFICATION_REF"]
+    if {record["qualification_ref"] for record in records} != {expected_ref}:
+        raise RuntimeError("matrix records do not share the dispatched qualification ref")
     wheel_hash_sets = {
         json.dumps(record["wheel_hashes"], sort_keys=True) for record in records
     }
     if len(wheel_hash_sets) != 1:
         raise RuntimeError("matrix jobs did not install the identical wheel bundle")
+    pypi_digests: dict[str, str] | None = None
+    if expected_source == "pypi":
+        pypi_digests = {}
+        versions = records[0]["installed"]["versions"]
+        for project in ("rqm-core", "rqm-compiler", "rqm-qiskit"):
+            url = f"https://pypi.org/pypi/{project}/{versions[project]}/json"
+            with urllib.request.urlopen(url, timeout=30) as response:
+                metadata = json.load(response)
+            for artifact in metadata["urls"]:
+                if artifact["filename"].endswith(".whl"):
+                    pypi_digests[artifact["filename"]] = artifact["digests"]["sha256"]
+        installed_hashes = records[0]["wheel_hashes"]
+        if installed_hashes != {
+            filename: pypi_digests[filename] for filename in installed_hashes
+        }:
+            raise RuntimeError("downloaded wheel hashes do not match PyPI metadata")
+
     payload = {
-        "schema_version": "1",
+        "schema_version": "2",
         "status": "pass",
-        "candidate_commit": expected_commit,
+        "distribution_source": expected_source,
+        "qualification_ref": expected_ref,
         "github": {
             "run_id": os.environ["RQM_RUN_ID"],
             "run_attempt": os.environ["RQM_RUN_ATTEMPT"],
             "run_url": os.environ["RQM_RUN_URL"],
         },
-        "wheelhouse_artifact_digest": os.environ[
-            "RQM_WHEELHOUSE_ARTIFACT_DIGEST"
-        ],
+        "wheel_bundle_artifact_digest": os.environ.get(
+            "RQM_WHEEL_BUNDLE_ARTIFACT_DIGEST"
+        ),
         "wheel_hashes": records[0]["wheel_hashes"],
+        "pypi_sha256_digests": pypi_digests,
         "matrix": records,
     }
     output.write_text(
