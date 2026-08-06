@@ -46,8 +46,10 @@
     "historical_performance_result_reclassified": false,
     "native_accelerator_shipped": false,
     "local_explanation_gate_passed": true,
-    "packaging_and_cross_platform_gate": "pending",
-    "release_authorized": false
+    "packaging_and_cross_platform_gate": "passed",
+    "hosted_qualification_run": "https://github.com/RQM-Technologies-dev/rqm-qiskit/actions/runs/31057445168",
+    "candidate_release_ready": true,
+    "release_authorized": true
   },
   "provider": "local-only",
   "hardware": false,

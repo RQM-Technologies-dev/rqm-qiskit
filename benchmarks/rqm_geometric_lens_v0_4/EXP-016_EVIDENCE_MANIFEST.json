@@ -29,8 +29,21 @@
   "packaging": {
     "pure_python_wheel": true,
     "local_macos_python_3_11_to_3_13": "passed",
-    "hosted_linux_macos_windows": "pending",
-    "release_ready": false
+    "hosted_linux_macos_windows": "passed",
+    "release_ready": true,
+    "qualification": {
+      "candidate_commit": "1db19ea8604008843846535dbd8fea50aee00b32",
+      "run_url": "https://github.com/RQM-Technologies-dev/rqm-qiskit/actions/runs/31057445168",
+      "wheelhouse_artifact_digest": "sha256:4cc8b6899b7aab8fc967298ea2cc2f5c2afa8ba4e48ee3600de5f7b862a18127",
+      "aggregate_artifact_digest": "sha256:385f90058a0429578216ec3106a9f1129fd7f57de417960dc62f0b9ce387b98a",
+      "matrix_jobs_passed": 9,
+      "matrix_jobs_expected": 9,
+      "wheel_sha256": {
+        "rqm_core-0.2.2-py3-none-any.whl": "57f5a6ed7702b6b56b3ecc94c68034b21aabbff939d1a7cae6133594d94e4f26",
+        "rqm_compiler-0.3.0-py3-none-any.whl": "66b1db5b9e0fa5cccfbf038a0b77918bc8b50a0bea204c1169856afc6fd1005b",
+        "rqm_qiskit-0.4.0-py3-none-any.whl": "c6daba5b8991ce0d56bf40b4d0e3030a58f3e498d2bc0ca77a86fe08ceb14f86"
+      }
+    }
   },
   "execution": {
     "provider": "local-only",

@@ -49,9 +49,30 @@ sdists and `py3-none-any` wheels built and passed `twine check`. Fresh local
 macOS wheel environments on Python 3.11.15, 3.12.2, and 3.13.14 passed Python
 and `rqm-qiskit explain` smoke tests with Qiskit 2.5.1.
 
-Hosted Linux, macOS, and Windows workflow results are still pending because no
-branch was pushed. EXP-016 is complete, but full package release readiness is
-not recorded and no publication is authorized.
+Hosted qualification
+[run 31057445168](https://github.com/RQM-Technologies-dev/rqm-qiskit/actions/runs/31057445168)
+passed all nine Linux, macOS, and Windows jobs on Python 3.11–3.13 from the
+same immutable wheel bundle at candidate commit
+`1db19ea8604008843846535dbd8fea50aee00b32`. Imports resolved outside the
+checkout; `pip check`, the installed API and CLI, UTF-8 and space-containing
+paths, Windows `.EXE` entry points, and OpenQASM round trips all passed.
+
+The candidate wheelhouse artifact digest is
+`sha256:4cc8b6899b7aab8fc967298ea2cc2f5c2afa8ba4e48ee3600de5f7b862a18127`;
+the aggregate evidence artifact digest is
+`sha256:385f90058a0429578216ec3106a9f1129fd7f57de417960dc62f0b9ce387b98a`.
+The three wheel hashes were:
+
+- `rqm_core-0.2.2-py3-none-any.whl`:
+  `57f5a6ed7702b6b56b3ecc94c68034b21aabbff939d1a7cae6133594d94e4f26`
+- `rqm_compiler-0.3.0-py3-none-any.whl`:
+  `66b1db5b9e0fa5cccfbf038a0b77918bc8b50a0bea204c1169856afc6fd1005b`
+- `rqm_qiskit-0.4.0-py3-none-any.whl`:
+  `c6daba5b8991ce0d56bf40b4d0e3030a58f3e498d2bc0ca77a86fe08ceb14f86`
+
+This completes candidate release readiness. Public-PyPI installation remains
+a separate post-publication qualification gate and no package is represented
+here as already published.
 
 ## Preserved prior evidence
 

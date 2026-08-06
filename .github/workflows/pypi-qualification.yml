@@ -1,0 +1,99 @@
+name: Public PyPI qualification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-wheel-smoke:
+    name: Public wheel smoke (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install the public release from PyPI only
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://pypi.org/simple --no-cache-dir "rqm-qiskit[cli]==0.4.0"
+          python -m pip check
+
+      - name: Download public RQM wheels for provenance hashes
+        run: >-
+          python -m pip download
+          --index-url https://pypi.org/simple
+          --no-cache-dir
+          --no-deps
+          --only-binary=:all:
+          --dest "${{ runner.temp }}/public-rqm-wheels"
+          "rqm-core==0.2.2"
+          "rqm-compiler==0.3.0"
+          "rqm-qiskit==0.4.0"
+
+      - name: Exercise public API, CLI, paths, encoding, and OpenQASM
+        working-directory: ${{ runner.temp }}
+        env:
+          PYTHONUTF8: "1"
+          RQM_WORKSPACE: ${{ github.workspace }}
+          RQM_WHEELHOUSE: ${{ runner.temp }}/public-rqm-wheels
+          RQM_RESULT_PATH: ${{ runner.temp }}/wheel-smoke-result.json
+          RQM_DISTRIBUTION_SOURCE: pypi
+          RQM_QUALIFICATION_REF: v0.4.0
+          RQM_RUNNER_LABEL: ${{ matrix.os }}
+          RQM_REQUESTED_PYTHON: ${{ matrix.python-version }}
+        run: python "${{ github.workspace }}/scripts/installed_wheel_smoke.py"
+
+      - name: Upload per-runner public-PyPI evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: pypi-wheel-smoke-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: ${{ runner.temp }}/wheel-smoke-result.json
+          if-no-files-found: error
+          retention-days: 90
+
+  public-wheel-evidence:
+    name: Require all nine public-wheel results
+    needs: public-wheel-smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Download all public-PyPI evidence
+        uses: actions/download-artifact@v8
+        with:
+          pattern: pypi-wheel-smoke-*
+          path: public-wheel-results
+
+      - name: Aggregate and compare with public PyPI digests
+        env:
+          RQM_DISTRIBUTION_SOURCE: pypi
+          RQM_QUALIFICATION_REF: v0.4.0
+          RQM_RUN_ID: ${{ github.run_id }}
+          RQM_RUN_ATTEMPT: ${{ github.run_attempt }}
+          RQM_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: >-
+          python scripts/aggregate_wheel_matrix.py
+          public-wheel-results
+          public-pypi-validation.json
+
+      - name: Upload public-PyPI qualification evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: public-pypi-validation-v0.4.0
+          path: public-pypi-validation.json
+          if-no-files-found: error
+          retention-days: 90

@@ -12,7 +12,7 @@ import platform
 import shutil
 import subprocess
 import tempfile
-from importlib.metadata import version
+from importlib.metadata import distribution, version
 from pathlib import Path
 from typing import Callable
 
@@ -49,6 +49,9 @@ def main() -> int:
     workspace = Path(os.environ["RQM_WORKSPACE"]).resolve()
     wheelhouse = Path(os.environ["RQM_WHEELHOUSE"]).resolve()
     result_path = Path(os.environ["RQM_RESULT_PATH"]).resolve()
+    distribution_source = os.environ.get("RQM_DISTRIBUTION_SOURCE", "candidate")
+    if distribution_source not in {"candidate", "pypi"}:
+        raise RuntimeError(f"unsupported distribution source: {distribution_source}")
     module_path = Path(rqm_qiskit.__file__).resolve()
     if module_path.is_relative_to(workspace):
         raise RuntimeError(f"rqm_qiskit resolved inside the checkout: {module_path}")
@@ -71,6 +74,15 @@ def main() -> int:
     versions = {project: version(project) for project in expected_versions}
     check("exact_dependency_versions", lambda: versions == expected_versions)
     check("installed_module_outside_checkout", lambda: not module_path.is_relative_to(workspace))
+    if distribution_source == "pypi":
+        direct_urls = {
+            project: distribution(project).read_text("direct_url.json")
+            for project in ("rqm-core", "rqm-compiler", "rqm-qiskit")
+        }
+        check(
+            "public_index_install_provenance",
+            lambda: all(value is None for value in direct_urls.values()),
+        )
 
     one_qubit = QuantumCircuit(1)
     one_qubit.ry(math.pi / 2, 0)
@@ -229,21 +241,24 @@ def main() -> int:
         )
         check("cli_qasm_mapping", lambda: _measurement_mapping(assured_circuit) == expected_mapping)
 
-    wheel_manifest = json.loads(
-        (wheelhouse / "candidate-wheelhouse.json").read_text(encoding="utf-8")
-    )
     wheel_hashes = {
         path.name: _sha256(path) for path in sorted(wheelhouse.glob("*.whl"))
     }
-    manifest_hashes = {
-        item["filename"]: item["sha256"] for item in wheel_manifest["wheels"]
-    }
-    check("wheel_checksums", lambda: wheel_hashes == manifest_hashes)
+    check("three_rqm_wheels_recorded", lambda: len(wheel_hashes) == 3)
+    if distribution_source == "candidate":
+        wheel_manifest = json.loads(
+            (wheelhouse / "candidate-wheelhouse.json").read_text(encoding="utf-8")
+        )
+        manifest_hashes = {
+            item["filename"]: item["sha256"] for item in wheel_manifest["wheels"]
+        }
+        check("wheel_checksums", lambda: wheel_hashes == manifest_hashes)
 
     result = {
         "schema_version": "1",
         "status": "pass",
-        "candidate_commit": os.environ["RQM_CANDIDATE_COMMIT"],
+        "distribution_source": distribution_source,
+        "qualification_ref": os.environ["RQM_QUALIFICATION_REF"],
         "runner": {
             "label": os.environ["RQM_RUNNER_LABEL"],
             "os": platform.system(),
