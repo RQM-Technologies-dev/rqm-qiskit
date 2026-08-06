@@ -22,9 +22,9 @@ All notable changes to **rqm-qiskit** are documented here.
 * repair latency evidence serialization ([#27](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/27)) ([ca9937c](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca9937c12a6c2d8de264826999244fc6758d1005))
 
 
-### Performance Improvements
+### Performance engineering history
 
-* add guarded native qiskit adapter ([206b4ce](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/206b4cef4820961bfb80b0fba71037efe6613e10))
+* preserve the guarded native Qiskit adapter as a failed experiment; the accelerator is not shipped ([206b4ce](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/206b4cef4820961bfb80b0fba71037efe6613e10))
 * preregister Qiskit assurance latency hardening ([#26](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/26)) ([13da830](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/13da830d703b033e8d20150e1041453587ed76b0))
 * remove repeated provenance metadata work ([1931ea2](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/1931ea247269d6ef7ee311e1c95dd547f41adff0))
 
@@ -44,7 +44,7 @@ All notable changes to **rqm-qiskit** are documented here.
 * close release evidence integrity checks ([81bd320](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/81bd32030def9ac8e8a8ee33c2103de508869eff))
 * prepare 0.4.0 controlled release ([e037063](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/e03706340a3fb680abee7fe2444701901c17fcd2))
 
-## [0.4.0] — Qiskit-Compatible Quaternionic Explanation Bridge
+### Qiskit-Compatible Quaternionic Explanation Bridge summary and limitations
 
 - Reframed the candidate mission: help the world understand ordinary quantum
   computing through quaternionic geometry while remaining compatible with
@@ -81,8 +81,8 @@ All notable changes to **rqm-qiskit** are documented here.
 - Comparative adapter overhead is no longer a product criterion. EXP-015's
   failed `0.7427` ratio is retained as non-promoted engineering evidence.
 - Qualified one immutable pure-Python candidate wheel bundle on hosted Linux,
-  macOS, and Windows runners with Python 3.11–3.13. Release remains contingent
-  on the controlled publication and clean public-PyPI qualification gates.
+  macOS, and Windows runners with Python 3.11–3.13. Post-publication public-PyPI
+  qualification is tracked separately from this candidate evidence.
 
 ## [0.3.0] — Withdrawn, unreleased candidate
 
