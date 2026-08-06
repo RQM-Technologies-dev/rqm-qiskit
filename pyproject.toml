@@ -15,7 +15,7 @@ classifiers = [
 dependencies = [
   "qiskit>=2.5.1,<2.6",
   "rqm-core>=0.2.2,<0.3",
-  "rqm-entanglement>=0.2,<0.3",
+  "rqm-entanglement>=0.2.1,<0.3",
   "rqm-compiler>=0.3,<0.4",
 ]
 
@@ -34,5 +34,5 @@ Homepage = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 Repository = "https://github.com/RQM-Technologies-dev/rqm-qiskit"
 
 [build-system]
-requires = ["setuptools>=42"]
+requires = ["setuptools>=83.0.0"]
 build-backend = "setuptools.build_meta"
