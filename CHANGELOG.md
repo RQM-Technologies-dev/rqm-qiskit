@@ -4,7 +4,47 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
-## [0.4.0] — Qiskit-Compatible Quaternionic Explanation Bridge
+## [0.4.0](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.2.0...v0.4.0) (2026-08-06)
+
+
+### Features
+
+* add evidence-first geometric circuit lens ([f8de989](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/f8de989b9489d00faf0a6dff3672e1097876754a))
+* add fail-closed Qiskit assurance bridge ([#17](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/17)) ([73c987e](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/73c987e6811da99ee0f6cc1e3bf0c83f9f3c4070))
+* reframe 0.4 as quaternionic explanation bridge ([8101bb8](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/8101bb872eb7a26b6d1909b8c07730b47369b849))
+
+
+### Bug Fixes
+
+* dispatch release pull request CI reliably ([#23](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/23)) ([5f7fbdf](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/5f7fbdf1648de28b040c73703f30c1994048e11f))
+* keep generated releases verifiable ([#24](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/24)) ([cb3c058](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/cb3c058e0656b7f66dcb4152b8d38c4288c1e74d))
+* preserve serverless QASM worker imports ([#30](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/30)) ([3984c3c](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/3984c3cd868b6237b380c44f3e641ad8ba2d4510))
+* repair latency evidence serialization ([#27](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/27)) ([ca9937c](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca9937c12a6c2d8de264826999244fc6758d1005))
+
+
+### Performance engineering history
+
+* preserve the guarded native Qiskit adapter as a failed experiment; the accelerator is not shipped ([206b4ce](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/206b4cef4820961bfb80b0fba71037efe6613e10))
+* preregister Qiskit assurance latency hardening ([#26](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/26)) ([13da830](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/13da830d703b033e8d20150e1041453587ed76b0))
+* remove repeated provenance metadata work ([1931ea2](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/1931ea247269d6ef7ee311e1c95dd547f41adff0))
+
+
+### Documentation
+
+* mirror EXP-016 explanation evidence ([b404100](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/b4041009e844c50763cda41f4b1aee2f30f111ba))
+* name quantum-compiler-api as the canonical service ([#29](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/29)) ([ca03735](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca03735b6ba8a2d5857052c82bc52f76e683f7ed))
+* publish Qiskit latency gate result ([#28](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/28)) ([a5a6f9f](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/a5a6f9f2eba6d1f01a2e7f9d715175307265d7c6))
+* publish the sanitized 0.4 evidence packet ([a86e45e](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/a86e45ecbe4025bc1403d755598c772afc0a598f))
+* record negative EXP-015 evidence ([1c83ed3](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/1c83ed3bd1dbaace680ca3392a97e2ea2a9102a1))
+* record the candidate validation matrix ([23a67f1](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/23a67f1ef3b1406bb7ba46c2f1b72eb7fb23579a))
+
+
+### Miscellaneous Chores
+
+* close release evidence integrity checks ([81bd320](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/81bd32030def9ac8e8a8ee33c2103de508869eff))
+* prepare 0.4.0 controlled release ([e037063](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/e03706340a3fb680abee7fe2444701901c17fcd2))
+
+### Qiskit-Compatible Quaternionic Explanation Bridge summary and limitations
 
 - Reframed the candidate mission: help the world understand ordinary quantum
   computing through quaternionic geometry while remaining compatible with
@@ -41,8 +81,8 @@ All notable changes to **rqm-qiskit** are documented here.
 - Comparative adapter overhead is no longer a product criterion. EXP-015's
   failed `0.7427` ratio is retained as non-promoted engineering evidence.
 - Qualified one immutable pure-Python candidate wheel bundle on hosted Linux,
-  macOS, and Windows runners with Python 3.11–3.13. Release remains contingent
-  on the controlled publication and clean public-PyPI qualification gates.
+  macOS, and Windows runners with Python 3.11–3.13. Post-publication public-PyPI
+  qualification is tracked separately from this candidate evidence.
 
 ## [0.3.0] — Withdrawn, unreleased candidate
 
