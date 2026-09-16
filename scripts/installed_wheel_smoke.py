@@ -45,6 +45,17 @@ def _close_sequence(actual: list[float], expected: list[float]) -> bool:
     )
 
 
+def _supported_qiskit_25(value: str) -> bool:
+    parts = value.split(".")
+    if len(parts) < 3 or parts[0] != "2" or parts[1] != "5":
+        return False
+    try:
+        patch = int(parts[2].split("+")[0].split("-")[0])
+    except ValueError:
+        return False
+    return patch >= 1
+
+
 def main() -> int:
     workspace = Path(os.environ["RQM_WORKSPACE"]).resolve()
     wheelhouse = Path(os.environ["RQM_WHEELHOUSE"]).resolve()
@@ -63,26 +74,26 @@ def main() -> int:
             raise AssertionError(name)
         checks.append(name)
 
-    expected_versions = {
+    exact_versions = {
         "rqm-core": "0.2.2",
         "rqm-compiler": "0.3.0",
         "rqm-qiskit": "0.4.0",
         "rqm-entanglement": "0.2.1",
-        "qiskit": "2.5.1",
         "qiskit-qasm3-import": "0.6.0",
     }
-    versions = {project: version(project) for project in expected_versions}
-    check("exact_dependency_versions", lambda: versions == expected_versions)
+    versions = {project: version(project) for project in (*exact_versions, "qiskit")}
+    check(
+        "exact_rqm_dependency_versions",
+        lambda: all(versions[project] == wanted for project, wanted in exact_versions.items()),
+    )
+    check("qiskit_declared_2_5_range", lambda: _supported_qiskit_25(versions["qiskit"]))
     check("installed_module_outside_checkout", lambda: not module_path.is_relative_to(workspace))
     if distribution_source == "pypi":
         direct_urls = {
             project: distribution(project).read_text("direct_url.json")
             for project in ("rqm-core", "rqm-compiler", "rqm-qiskit")
         }
-        check(
-            "public_index_install_provenance",
-            lambda: all(value is None for value in direct_urls.values()),
-        )
+        check("public_index_install_provenance", lambda: all(value is None for value in direct_urls.values()))
 
     one_qubit = QuantumCircuit(1)
     one_qubit.ry(math.pi / 2, 0)
@@ -93,16 +104,8 @@ def main() -> int:
     check("one_qubit_complete", lambda: one_report.status == "complete")
     check("quaternion_present", lambda: len(local["canonical_quaternion"]) == 4)
     check("rotation_present", lambda: local["angle_pi_multiple"] == "π/2")
-    check(
-        "bloch_present",
-        lambda: _close_sequence(
-            local["final_state"]["bloch"], [1.0, 0.0, 0.0]
-        ),
-    )
-    check(
-        "one_qubit_probabilities",
-        lambda: set(one_report.measurement_predictions["probabilities"]) == {"0", "1"},
-    )
+    check("bloch_present", lambda: _close_sequence(local["final_state"]["bloch"], [1.0, 0.0, 0.0]))
+    check("one_qubit_probabilities", lambda: set(one_report.measurement_predictions["probabilities"]) == {"0", "1"})
 
     qreg = QuantumRegister(2, "science")
     creg = ClassicalRegister(2, "readout")
@@ -119,20 +122,8 @@ def main() -> int:
     check("two_qubit_complete", lambda: bell_report.status == "complete")
     check("su4_present", lambda: bool(nonlocal_geometry["su4"]))
     check("weyl_present", lambda: len(nonlocal_geometry["weyl_coordinates"]) == 3)
-    check(
-        "entanglement_present",
-        lambda: any(
-            item["metric_name"] == "Concurrence"
-            and math.isclose(
-                item["metric_value"], 1.0, rel_tol=0.0, abs_tol=1e-12
-            )
-            for item in nonlocal_geometry["entanglement"]["entangled_pairs"]
-        ),
-    )
-    check(
-        "terminal_measurement_mapping",
-        lambda: bell_report.circuit_summary["terminal_measurements"] == expected_mapping,
-    )
+    check("entanglement_present", lambda: any(item["metric_name"] == "Concurrence" and math.isclose(item["metric_value"], 1.0, rel_tol=0.0, abs_tol=1e-12) for item in nonlocal_geometry["entanglement"]["entangled_pairs"]))
+    check("terminal_measurement_mapping", lambda: bell_report.circuit_summary["terminal_measurements"] == expected_mapping)
 
     unitary = QuantumCircuit(2)
     unitary.h(0)
@@ -155,10 +146,7 @@ def main() -> int:
     executable_name = "rqm-qiskit.exe" if os.name == "nt" else "rqm-qiskit"
     executable = shutil.which("rqm-qiskit")
     check("console_entry_point", lambda: executable is not None)
-    check(
-        "windows_executable_entry_point",
-        lambda: os.name != "nt" or Path(executable or "").name.lower() == executable_name,
-    )
+    check("windows_executable_entry_point", lambda: os.name != "nt" or Path(executable or "").name.lower() == executable_name)
 
     env = os.environ.copy()
     env["PYTHONUTF8"] = "1"
@@ -172,86 +160,29 @@ def main() -> int:
         assurance_report_path = unicode_dir / "Assurance report π.json"
         input_path.write_text(measured_source, encoding="utf-8")
 
-        explain = subprocess.run(
-            [
-                executable or "rqm-qiskit",
-                "explain",
-                str(input_path),
-                "--detail",
-                "standard",
-                "--output",
-                str(explanation_path),
-                "--report",
-                str(report_path),
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            env=env,
-        )
+        explain = subprocess.run([executable or "rqm-qiskit", "explain", str(input_path), "--detail", "standard", "--output", str(explanation_path), "--report", str(report_path)], check=False, capture_output=True, text=True, encoding="utf-8", env=env)
         check("cli_explain_exit", lambda: explain.returncode == 0)
         explanation = explanation_path.read_text(encoding="utf-8")
         report_payload = json.loads(report_path.read_text(encoding="utf-8"))
-        check(
-            "cli_utf8_markdown",
-            lambda: "⟩" in explanation and "Weyl" in explanation,
-        )
+        check("cli_utf8_markdown", lambda: "⟩" in explanation and "Weyl" in explanation)
         check("cli_json_report", lambda: report_payload["status"] == "complete")
 
-        stdout_explain = subprocess.run(
-            [executable or "rqm-qiskit", "explain", str(input_path), "--detail", "standard"],
-            check=False,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            env=env,
-        )
+        stdout_explain = subprocess.run([executable or "rqm-qiskit", "explain", str(input_path), "--detail", "standard"], check=False, capture_output=True, text=True, encoding="utf-8", env=env)
         check("cli_stdout_exit", lambda: stdout_explain.returncode == 0)
-        check(
-            "cli_utf8_stdout",
-            lambda: stdout_explain.stdout.startswith("# Quaternionic explanation")
-            and "Weyl" in stdout_explain.stdout,
-        )
+        check("cli_utf8_stdout", lambda: stdout_explain.stdout.startswith("# Quaternionic explanation") and "Weyl" in stdout_explain.stdout)
 
-        assure = subprocess.run(
-            [
-                executable or "rqm-qiskit",
-                "assure",
-                str(input_path),
-                "--output",
-                str(assured_path),
-                "--report",
-                str(assurance_report_path),
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            env=env,
-        )
+        assure = subprocess.run([executable or "rqm-qiskit", "assure", str(input_path), "--output", str(assured_path), "--report", str(assurance_report_path)], check=False, capture_output=True, text=True, encoding="utf-8", env=env)
         check("cli_assure_exit", lambda: assure.returncode == 0)
         assured_circuit = qasm3.loads(assured_path.read_text(encoding="utf-8"))
-        assurance_payload = json.loads(
-            assurance_report_path.read_text(encoding="utf-8")
-        )
-        check(
-            "cli_assure_report",
-            lambda: assurance_payload["assurance_status"] == "VERIFIED",
-        )
+        assurance_payload = json.loads(assurance_report_path.read_text(encoding="utf-8"))
+        check("cli_assure_report", lambda: assurance_payload["assurance_status"] == "VERIFIED")
         check("cli_qasm_mapping", lambda: _measurement_mapping(assured_circuit) == expected_mapping)
 
-    wheel_hashes = {
-        path.name: _sha256(path) for path in sorted(wheelhouse.glob("*.whl"))
-    }
+    wheel_hashes = {path.name: _sha256(path) for path in sorted(wheelhouse.glob("*.whl"))}
     check("three_rqm_wheels_recorded", lambda: len(wheel_hashes) == 3)
     if distribution_source == "candidate":
-        wheel_manifest = json.loads(
-            (wheelhouse / "candidate-wheelhouse.json").read_text(encoding="utf-8")
-        )
-        manifest_hashes = {
-            item["filename"]: item["sha256"] for item in wheel_manifest["wheels"]
-        }
+        wheel_manifest = json.loads((wheelhouse / "candidate-wheelhouse.json").read_text(encoding="utf-8"))
+        manifest_hashes = {item["filename"]: item["sha256"] for item in wheel_manifest["wheels"]}
         check("wheel_checksums", lambda: wheel_hashes == manifest_hashes)
 
     result = {
@@ -259,24 +190,12 @@ def main() -> int:
         "status": "pass",
         "distribution_source": distribution_source,
         "qualification_ref": os.environ["RQM_QUALIFICATION_REF"],
-        "runner": {
-            "label": os.environ["RQM_RUNNER_LABEL"],
-            "os": platform.system(),
-            "architecture": platform.machine(),
-            "python_requested": os.environ["RQM_REQUESTED_PYTHON"],
-            "python": platform.python_version(),
-        },
-        "installed": {
-            "module_path": str(module_path),
-            "entry_point": executable,
-            "versions": versions,
-        },
+        "runner": {"label": os.environ["RQM_RUNNER_LABEL"], "os": platform.system(), "architecture": platform.machine(), "python_requested": os.environ["RQM_REQUESTED_PYTHON"], "python": platform.python_version()},
+        "installed": {"module_path": str(module_path), "entry_point": executable, "versions": versions},
         "wheel_hashes": wheel_hashes,
         "checks": checks,
     }
-    result_path.write_text(
-        json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    result_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
 
