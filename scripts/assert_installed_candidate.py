@@ -20,10 +20,24 @@ expected = {
     "rqm-compiler": "0.3.0",
     "rqm-qiskit": "0.4.0",
     "rqm-entanglement": "0.2.1",
-    "qiskit": "2.5.1",
     "qiskit-qasm3-import": "0.6.0",
 }
-actual = {project: version(project) for project in expected}
-if actual != expected:
-    raise RuntimeError(f"installed versions differ: expected {expected}, found {actual}")
+actual = {project: version(project) for project in (*expected, "qiskit")}
+for project, expected_version in expected.items():
+    if actual[project] != expected_version:
+        raise RuntimeError(
+            f"installed {project} differs: expected {expected_version}, found {actual[project]}"
+        )
+
+qiskit_parts = actual["qiskit"].split(".")
+if len(qiskit_parts) < 2 or qiskit_parts[0] != "2" or qiskit_parts[1] != "5":
+    raise RuntimeError(
+        "installed Qiskit is outside rqm-qiskit's declared >=2.5.1,<2.6 range: "
+        f"found {actual['qiskit']}"
+    )
+patch = int(qiskit_parts[2].split("+")[0].split("-")[0]) if len(qiskit_parts) > 2 else 0
+if patch < 1:
+    raise RuntimeError(f"Qiskit {actual['qiskit']} is below the supported 2.5.1 minimum")
+
 print(f"installed candidate import: {module_path}")
+print(f"supported Qiskit: {actual['qiskit']}")
