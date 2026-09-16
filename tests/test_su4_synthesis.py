@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import qiskit
+from packaging.version import Version
 from qiskit.circuit import Measure, Parameter
 from qiskit.circuit.library import CZGate, RXGate, RZGate, RZZGate, SXGate, XGate
 from qiskit.quantum_info import Operator
@@ -64,7 +65,8 @@ def _assert_semantic(block: QuaternionCartanBlock, circuit) -> float:
 
 
 def test_qiskit_25_compatibility_range_is_active() -> None:
-    assert qiskit.__version__ == "2.5.1"
+    installed = Version(qiskit.__version__)
+    assert Version("2.5.1") <= installed < Version("2.6")
     pyproject = (Path(__file__).parents[1] / "pyproject.toml").read_text()
     assert '"qiskit>=2.5.1,<2.6"' in pyproject
 
