@@ -198,6 +198,14 @@ def test_pyproject_depends_on_rqm_compiler():
     )
 
 
+def test_pyproject_accepts_rqm_compiler_0_4():
+    """The bridge must remain installable with the compiler 0.4 release line."""
+    data = tomllib.loads((Path(__file__).parent.parent / "pyproject.toml").read_text())
+    deps = data["project"]["dependencies"]
+    spec = next(d for d in deps if d.startswith("rqm-compiler"))
+    assert ">=0.3" in spec and "<0.5" in spec, spec
+
+
 # ---------------------------------------------------------------------------
 # No local math duplication: utils.py must not contain spinor normalize
 # ---------------------------------------------------------------------------
