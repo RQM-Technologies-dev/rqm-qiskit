@@ -42,7 +42,7 @@ Tier 1 — Execution  (start here)
         → QiskitJob  (handle with .job_id(), .status(), .result())
 
     execute_rqm_program(program_descriptor, *, backend, shots, optimize)
-        → dict  (accepts canonical RQM descriptors from quantum-compiler-api)
+        → dict  (accepts canonical RQM descriptors from rqm-api)
 
   OO (equivalent):
     QiskitBackend().run(circuit, *, shots, optimize, include_report)
