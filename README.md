@@ -392,7 +392,7 @@ result = job.result(timeout=300)  # blocks until done or timeout
 Accepts a compiler-compatible program descriptor dict.  In the full RQM stack,
 API and Studio traffic originates as `rqm-circuits` payloads; those are parsed
 and validated upstream before reaching this layer as descriptor dicts.  If you
-are integrating directly with `quantum-compiler-api`, the API layer handles the
+are integrating directly with `rqm-api`, the API layer handles the
 `rqm-circuits` → descriptor conversion for you.
 
 ```python
