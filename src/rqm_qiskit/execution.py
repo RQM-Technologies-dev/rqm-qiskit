@@ -531,6 +531,55 @@ def execute_rqm_program(
     )
 
 
+def async_execute_rqm_program(
+    program_descriptor: "dict[str, Any]",
+    *,
+    backend: "str | Any",
+    shots: int = 1024,
+    optimize: bool = False,
+    include_report: bool = False,
+) -> "rqm_qiskit.job.QiskitJob":
+    """Build an rqm-compiler Circuit and submit it without waiting for results.
+
+    This is the canonical bridge for rqm-api real-provider execution.  It keeps
+    compiler ownership in rqm-compiler/rqm-qiskit while allowing rqm-api to
+    retain the provider job identifier and poll/retrieve later.
+    """
+    from rqm_qiskit.errors import TranslationError
+
+    if not isinstance(program_descriptor, dict):
+        raise ValueError("program_descriptor must be a dict")
+
+    try:
+        from rqm_compiler import Circuit
+        from rqm_compiler.ops import Operation
+
+        operations_raw = program_descriptor.get("operations", [])
+        num_qubits = program_descriptor.get("num_qubits")
+        if num_qubits is None:
+            wires = [
+                q
+                for op in operations_raw
+                for q in (*op.get("targets", []), *op.get("controls", []))
+            ]
+            num_qubits = max(wires, default=0) + 1
+        circuit = Circuit(num_qubits)
+        for op_desc in operations_raw:
+            circuit.add(Operation.from_descriptor(op_desc))
+    except Exception as exc:
+        raise TranslationError(
+            f"Could not build Circuit from program_descriptor: {exc}"
+        ) from exc
+
+    return async_run_qiskit(
+        circuit,
+        optimize=optimize,
+        shots=shots,
+        backend=backend,
+        include_report=include_report,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Internal shared helpers
 # ---------------------------------------------------------------------------
