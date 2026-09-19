@@ -129,6 +129,7 @@ from rqm_qiskit.execution import (
     run_qiskit,
     async_run_qiskit,
     execute_rqm_program,
+    async_execute_rqm_program,
 )
 from rqm_qiskit.backend import QiskitBackend
 from rqm_qiskit.result import QiskitResult
