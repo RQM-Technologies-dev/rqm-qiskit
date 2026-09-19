@@ -32,7 +32,7 @@ All notable changes to **rqm-qiskit** are documented here.
 ### Documentation
 
 * mirror EXP-016 explanation evidence ([b404100](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/b4041009e844c50763cda41f4b1aee2f30f111ba))
-* name quantum-compiler-api as the canonical service ([#29](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/29)) ([ca03735](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca03735b6ba8a2d5857052c82bc52f76e683f7ed))
+* name rqm-api as the canonical service ([#29](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/29)) ([ca03735](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/ca03735b6ba8a2d5857052c82bc52f76e683f7ed))
 * publish Qiskit latency gate result ([#28](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/28)) ([a5a6f9f](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/a5a6f9f2eba6d1f01a2e7f9d715175307265d7c6))
 * publish the sanitized 0.4 evidence packet ([a86e45e](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/a86e45ecbe4025bc1403d755598c772afc0a598f))
 * record negative EXP-015 evidence ([1c83ed3](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/1c83ed3bd1dbaace680ca3392a97e2ea2a9102a1))
