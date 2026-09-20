@@ -207,6 +207,7 @@ def resolve_backend(
     token: "str | None" = None,
     instance: "str | None" = None,
     channel: "str | None" = None,
+    service: Any = None,
 ) -> "Any | None":
     """Resolve a backend argument to a Qiskit backend object.
 
@@ -253,7 +254,7 @@ def resolve_backend(
 
     # Resolve IBM backend by name
     try:
-        provider = get_ibmq_provider(token=token, instance=instance, channel=channel)
+        provider = service if service is not None else get_ibmq_provider(token=token, instance=instance, channel=channel)
         try:
             return provider.backend(backend)
         except Exception as exc:
@@ -270,6 +271,21 @@ def resolve_backend(
 # ---------------------------------------------------------------------------
 # IBM Runtime execution
 # ---------------------------------------------------------------------------
+
+
+def retrieve_ibm_job(job_id: str, *, service: Any = None,
+                     backend_name: str = "ibm", shots: int = 1024):
+    """Retrieve an existing IBM job; never submit a replacement task.
+
+    Inject an authenticated Runtime service to avoid process-global credentials.
+    Callers restore measurement mappings from their durable execution record.
+    """
+    from rqm_qiskit.job import QiskitJob
+    if not isinstance(job_id, str) or not job_id.strip():
+        raise ValueError("A saved IBM job ID is required")
+    provider = service if service is not None else get_ibmq_provider()
+    return QiskitJob(ibm_job=provider.job(job_id), job_id=job_id,
+                     backend_name=backend_name, shots=shots)
 
 
 def run_on_ibm_runtime(

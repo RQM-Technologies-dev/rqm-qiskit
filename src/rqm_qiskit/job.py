@@ -83,8 +83,10 @@ class QiskitJob:
             try:
                 raw = ibm_job.job_id()
                 self._job_id = raw if isinstance(raw, str) else str(raw)
-            except Exception:
-                self._job_id = _generate_local_id()
+            except Exception as exc:
+                raise RuntimeError("IBM acceptance has no retrievable job ID") from exc
+            if not isinstance(raw, str) or not raw.strip():
+                raise RuntimeError("IBM acceptance has no retrievable job ID")
         else:
             self._job_id = _generate_local_id()
 
@@ -214,10 +216,16 @@ class QiskitJob:
         counts: dict[str, int] = {}
         try:
             pub_result = ibm_result[0]
-            for reg_name in pub_result.data:
-                bit_array = getattr(pub_result.data, reg_name)
-                for bitstring, count in bit_array.get_counts().items():
-                    counts[bitstring] = counts.get(bitstring, 0) + count
+            # Join shot-aligned registers before counting: marginal counts lose
+            # correlations and multiply the apparent shot count. Qiskit count
+            # strings place the last classical register on the left.
+            if callable(getattr(pub_result, 'join_data', None)):
+                counts = pub_result.join_data().get_counts()
+            else:
+                registers = list(pub_result.data)
+                if len(registers) != 1:
+                    raise ValueError('Joint shot-aligned data required for split registers')
+                counts = getattr(pub_result.data, registers[0]).get_counts()
         except Exception as exc:
             raise JobFailedError(
                 job_id=self._job_id,

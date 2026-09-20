@@ -135,7 +135,7 @@ from rqm_qiskit.backend import QiskitBackend
 from rqm_qiskit.result import QiskitResult
 from rqm_qiskit.job import QiskitJob
 from rqm_qiskit.bridges import spinor_to_circuit, bloch_to_circuit
-from rqm_qiskit.ibm import get_ibmq_provider
+from rqm_qiskit.ibm import get_ibmq_provider, retrieve_ibm_job
 from rqm_qiskit.errors import (
     RQMQiskitError,
     BackendNotFoundError,
@@ -184,6 +184,7 @@ __all__ = [
     "QiskitResult",
     "QiskitJob",
     "get_ibmq_provider",
+    "retrieve_ibm_job",
     "compiled_circuit_to_qiskit",
     "compile_to_qiskit_circuit",
     "to_backend_circuit",

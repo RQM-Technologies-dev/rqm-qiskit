@@ -365,7 +365,10 @@ def async_run_qiskit(
         # Real IBM backend – submit asynchronously
         try:
             from qiskit_ibm_runtime import SamplerV2 as IBMSampler
+            from qiskit import transpile
 
+            qc = transpile(qc, backend=resolved_backend, optimization_level=1,
+                           seed_transpiler=17)
             sampler = IBMSampler(resolved_backend)
             ibm_job = sampler.run([qc], shots=shots)
         except ImportError as exc:
