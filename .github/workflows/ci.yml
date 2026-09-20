@@ -11,8 +11,8 @@ permissions:
   contents: read
 
 env:
-  RQM_CORE_COMMIT: 84eada2611b24d145accf801e74eaa46ab7e48dc
-  RQM_COMPILER_COMMIT: 6604ccf437378093272d107d7c0de70a55fec43a
+  RQM_CORE_COMMIT: 6d1a06dfa7d40847df3d0fc60f635c78365abec8
+  RQM_COMPILER_COMMIT: 8cdf4ec9a27d93d46c7daeb921fc10cc2491eb30
 
 jobs:
   build:

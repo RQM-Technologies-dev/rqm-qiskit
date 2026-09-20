@@ -76,9 +76,9 @@ def main() -> int:
 
     exact_versions = {
         "rqm-core": "0.2.2",
-        "rqm-compiler": "0.3.0",
-        "rqm-qiskit": "0.4.0",
-        "rqm-entanglement": "0.2.1",
+        "rqm-compiler": "0.3.7",
+        "rqm-qiskit": "0.4.1",
+        "rqm-entanglement": "0.2.2",
         "qiskit-qasm3-import": "0.6.0",
     }
     versions = {project: version(project) for project in (*exact_versions, "qiskit")}

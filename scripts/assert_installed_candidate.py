@@ -17,9 +17,9 @@ if module_path.is_relative_to(workspace):
 
 expected = {
     "rqm-core": "0.2.2",
-    "rqm-compiler": "0.3.0",
-    "rqm-qiskit": "0.4.0",
-    "rqm-entanglement": "0.2.1",
+    "rqm-compiler": "0.3.7",
+    "rqm-qiskit": "0.4.1",
+    "rqm-entanglement": "0.2.2",
     "qiskit-qasm3-import": "0.6.0",
 }
 actual = {project: version(project) for project in (*expected, "qiskit")}
