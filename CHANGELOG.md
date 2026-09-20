@@ -4,6 +4,18 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.4.1](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.0...v0.4.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* qualify qiskit bridge for compiler 0.4 ([833e9f8](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/833e9f8f165d7a604db7bb372d58260c91a428b4))
+
+
+### Documentation
+
+* align backend with adaptive relational IR ([7034701](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/70347019eb6889f0dbd07e685d3f200643a84a27))
+
 ## [0.4.0](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.2.0...v0.4.0) (2026-08-06)
 
 
