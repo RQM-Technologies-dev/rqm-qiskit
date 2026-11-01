@@ -1041,17 +1041,36 @@ def export_openqasm3(source: Any) -> QiskitExportResult:
         from qiskit.quantum_info import Operator
         import numpy as np
 
-        original = compiled_circuit_to_qiskit(source)
-        # Qiskit's custom-unitary QASM definition can omit its scalar phase.
-        # Delegate exact named rotation export to the compiler/math owners.
-        working = getattr(source, "circuit", None) or source
-        circuit = compiled_circuit_to_qiskit(lower_u1q_named_1q_pass(working))
-        exported = qasm3.dumps(circuit)
+        from rqm_compiler import Circuit, CompiledCircuit
+        from rqm_compiler.validate import validate_circuit
+
+        # Descriptors are authoritative for CompiledCircuit lowering, including
+        # transport objects whose optional Circuit cache is absent.
+        working = (Circuit.from_descriptors(source.descriptors, num_qubits=source.num_qubits)
+                   if isinstance(source, CompiledCircuit) else source)
+        validate_circuit(working)
+        original = compiled_circuit_to_qiskit(working)
         if original.num_qubits > 8:
             raise ValueError("Exact OpenQASM export verification is bounded to eight qubits.")
+        before_prefix, before_suffix, split_error = _terminal_measurement_split(original)
+        if split_error is not None:
+            raise ValueError("Export requires a unitary prefix and terminal measurements only.")
+        # Qiskit's custom-unitary QASM definition can omit its scalar phase.
+        # Delegate exact named rotation export to the compiler/math owners.
+        circuit = compiled_circuit_to_qiskit(lower_u1q_named_1q_pass(working))
+        exported = qasm3.dumps(circuit)
         restored = qasm3.loads(exported)
-        before = Operator(original).data
-        after = Operator(restored).data
+        after_prefix, after_suffix, split_error = _terminal_measurement_split(restored)
+        if split_error is not None:
+            raise ValueError("Export changed terminal measurement semantics.")
+        def measurement_signature(circuit, suffix):
+            return (circuit.num_qubits, circuit.num_clbits,
+                    [(register.name, len(register)) for register in circuit.cregs],
+                    [(op.name, qubits, clbits) for op, qubits, clbits in suffix])
+        if measurement_signature(original, before_suffix) != measurement_signature(restored, after_suffix):
+            raise ValueError("Export changed terminal measurement mapping.")
+        before = Operator(before_prefix).data
+        after = Operator(after_prefix).data
         error = np.linalg.norm(before - after) / np.sqrt(len(before))
         if not np.isfinite(error) or error > 1e-10:
             raise ValueError(f"OpenQASM export changed the phase-preserving operator: {error}")

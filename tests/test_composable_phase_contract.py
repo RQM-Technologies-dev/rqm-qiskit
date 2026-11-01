@@ -61,3 +61,76 @@ def test_qasm_export_rejects_scalar_phase_loss(monkeypatch):
     assert result.status == "ERROR"
     assert result.source is None
     assert "phase-preserving" in result.error
+
+
+@pytest.mark.parametrize("descriptor_only", [False, True])
+@pytest.mark.parametrize("measured", [False, True])
+def test_export_transport_and_terminal_measurement_contract(descriptor_only, measured):
+    from qiskit import qasm3
+    from rqm_compiler import CompiledCircuit, Operation
+    from rqm_qiskit import export_openqasm3
+    from rqm_qiskit.assurance import _terminal_measurement_split
+
+    circuit = Circuit(2)
+    circuit.rx(0, 2 * math.pi)
+    circuit.ry(1, 0.2)
+    if measured:
+        for wire, key in [(1, "right"), (0, "left"), (1, "right")]:
+            circuit.add(Operation(gate="measure", targets=[wire], params={"key": key}))
+    source = CompiledCircuit(circuit.to_descriptors(), 2) if descriptor_only else circuit
+    result = export_openqasm3(source)
+    assert result.status == "EXPORTED", result.error
+    expected = to_qiskit_circuit(circuit)
+    restored = qasm3.loads(result.source)
+    before, suffix, error = _terminal_measurement_split(expected)
+    after, restored_suffix, restored_error = _terminal_measurement_split(restored)
+    assert error is restored_error is None
+    assert [(q, c) for _, q, c in suffix] == [(q, c) for _, q, c in restored_suffix]
+    assert [(r.name, len(r)) for r in expected.cregs] == [(r.name, len(r)) for r in restored.cregs]
+    assert np.max(abs(Operator(before).data - Operator(after).data)) < 1e-10
+
+
+def test_export_rejects_mid_circuit_measurement():
+    from rqm_qiskit import export_openqasm3
+
+    circuit = Circuit(1)
+    circuit.measure(0)
+    circuit.x(0)
+    result = export_openqasm3(circuit)
+    assert result.status == "ERROR"
+    assert "terminal" in result.error
+
+
+def test_export_rejects_corrupted_measurement_mapping(monkeypatch):
+    from qiskit import QuantumCircuit
+    from rqm_qiskit import assurance
+
+    circuit = Circuit(2)
+    circuit.measure(1)
+    replacement = QuantumCircuit(2, 1)
+    replacement.measure(0, 0)
+    text = assurance.qasm3.dumps(replacement)
+    monkeypatch.setattr(assurance.qasm3, "dumps", lambda _: text)
+    result = assurance.export_openqasm3(circuit)
+    assert result.status == "ERROR"
+    assert "mapping" in result.error
+
+
+def test_export_rejects_invalid_descriptor_transport():
+    from rqm_compiler import CompiledCircuit
+    from rqm_qiskit import export_openqasm3
+
+    result = export_openqasm3(CompiledCircuit([{"gate": "x", "targets": [9]}], 1))
+    assert result.status == "ERROR"
+    assert result.source is None
+
+
+def test_export_rejects_control_flow_descriptor():
+    from rqm_compiler import CompiledCircuit
+    from rqm_qiskit import export_openqasm3
+
+    result = export_openqasm3(CompiledCircuit([
+        {"gate": "if_else", "targets": [0], "controls": [], "params": {}}
+    ], 1))
+    assert result.status == "ERROR"
+    assert result.source is None
