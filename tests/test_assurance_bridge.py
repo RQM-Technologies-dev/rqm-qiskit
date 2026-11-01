@@ -160,9 +160,9 @@ def test_assurance_returns_verified_compiler_result() -> None:
 
 def test_assurance_verifies_rewrites_around_iswap() -> None:
     circuit = QuantumCircuit(2, name="iswap-regression")
-    circuit.h(0)
+    circuit.rx(.23,0)
     circuit.iswap(0, 1)
-    circuit.h(0)
+    circuit.rx(.23,0)
 
     result = assure_qiskit_circuit(circuit)
 
