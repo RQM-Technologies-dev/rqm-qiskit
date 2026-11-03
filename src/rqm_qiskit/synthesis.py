@@ -255,11 +255,12 @@ def _qpy_size(circuit: QuantumCircuit) -> int:
 def _semantic_error(
     source: NDArray[np.complex128], circuit: QuantumCircuit
 ) -> tuple[float, bool]:
+    """Require exact composable operator semantics, including global phase."""
     if circuit.num_qubits != 2:
         return math.inf, False
     candidate = np.asarray(Operator(circuit).data, dtype=np.complex128)
-    error, _ = phase_aligned_operator_error(source, candidate)
-    return error, error <= _SEMANTIC_TOLERANCE
+    exact_error = float(np.max(np.abs(source - candidate)))
+    return exact_error, exact_error <= _SEMANTIC_TOLERANCE
 
 
 def _candidate_metrics(
@@ -271,7 +272,8 @@ def _candidate_metrics(
     metadata: dict[str, Any],
 ) -> dict[str, Any]:
     compatibility = _target_compatibility(circuit, target)
-    operator_error, semantic_valid = _semantic_error(source, circuit)
+    exact_operator_error, semantic_valid = _semantic_error(source, circuit)
+    operator_error, _ = phase_aligned_operator_error(source, Operator(circuit).data)
     two_qubit_count = sum(
         instruction.operation.num_qubits == 2 for instruction in circuit.data
     )
@@ -285,6 +287,7 @@ def _candidate_metrics(
         "valid": valid,
         "semantic_valid": semantic_valid,
         "phase_aligned_operator_error": operator_error,
+        "exact_operator_error": exact_operator_error,
         "target_compatible": compatibility["compatible"],
         "unsupported_operations": compatibility["unsupported"],
         "generic_unitary_count": generic_unitary_count,
@@ -320,7 +323,11 @@ def synthesize_su4_block(
     strategy: SynthesisStrategy = "best_native",
     include_report: bool = False,
 ) -> QuantumCircuit | tuple[QuantumCircuit, dict[str, Any]]:
-    """Generate, validate, and select local/native Qiskit synthesis candidates."""
+    """Generate, validate, and select phase-preserving native candidates.
+
+    ``best_native`` evaluates the complete candidate portfolio. An explicit
+    strategy evaluates only that family and fails closed if it is invalid.
+    """
     if not isinstance(block, QuaternionCartanBlock):
         raise TypeError("block must be a QuaternionCartanBlock")
     if strategy not in {"best_native", *_PATHS}:
@@ -338,6 +345,8 @@ def synthesize_su4_block(
     records: dict[str, dict[str, Any]] = {}
     circuits: dict[str, QuantumCircuit] = {}
     for path, factory in factories:
+        if strategy != "best_native" and path != strategy:
+            continue
         try:
             circuit, latency, metadata = factory()
             circuits[path] = circuit
