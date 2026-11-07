@@ -4,6 +4,18 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.4.3](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.2...v0.4.3) (2026-11-07)
+
+
+### Bug Fixes
+
+* verify exact scalar phase across compiler and QASM export ([#38](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/38)) ([559c03e](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/559c03efac6a566fd139d3c59b94d5e6247b4d7b))
+
+
+### Performance Improvements
+
+* dispatch only the requested SU4 synthesis strategy ([#45](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/45)) ([af6db09](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/af6db0945d7f5f8388cad7bd59a43cece7e98428))
+
 ## [0.4.2](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.1...v0.4.2) (2026-11-07)
 
 
