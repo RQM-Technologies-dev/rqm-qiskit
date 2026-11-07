@@ -145,3 +145,28 @@ def test_export_rejects_circuits_above_exact_verification_bound():
     assert result.status == "ERROR"
     assert result.source is None
     assert "eight qubits" in result.error
+
+
+@pytest.mark.parametrize("angle", [2 * math.pi, 0.17, 1e-8])
+def test_qasm_export_lowers_u1q_without_losing_scalar_phase(angle):
+    from qiskit import qasm3
+    from rqm_compiler import Operation
+    from rqm_qiskit import export_openqasm3
+
+    circuit = Circuit(1)
+    circuit.add(Operation(
+        gate="u1q", targets=[0],
+        params={"w": math.cos(angle / 2), "x": math.sin(angle / 2),
+                "y": 0.0, "z": 0.0},
+    ))
+    result = export_openqasm3(circuit)
+    assert result.status == "EXPORTED", result.error
+    expected = to_qiskit_circuit(circuit)
+    restored = qasm3.loads(result.source)
+    np.testing.assert_allclose(
+        Operator(expected).data, Operator(restored).data, atol=1e-10, rtol=0
+    )
+    np.testing.assert_allclose(
+        Operator(expected.to_gate().control()).data,
+        Operator(restored.to_gate().control()).data, atol=1e-10, rtol=0,
+    )
