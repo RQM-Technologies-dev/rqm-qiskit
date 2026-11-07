@@ -134,3 +134,14 @@ def test_export_rejects_control_flow_descriptor():
     ], 1))
     assert result.status == "ERROR"
     assert result.source is None
+
+
+def test_export_rejects_circuits_above_exact_verification_bound():
+    from rqm_qiskit import export_openqasm3
+
+    circuit = Circuit(9)
+    circuit.x(0)
+    result = export_openqasm3(circuit)
+    assert result.status == "ERROR"
+    assert result.source is None
+    assert "eight qubits" in result.error
