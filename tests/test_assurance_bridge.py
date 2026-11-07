@@ -176,6 +176,24 @@ def test_assurance_preserves_named_gate_phase_around_iswap() -> None:
     )
 
 
+
+def test_assurance_verifies_rotation_rewrites_around_iswap() -> None:
+    circuit = QuantumCircuit(2, name="iswap-rotation-regression")
+    circuit.rx(0.23, 0)
+    circuit.iswap(0, 1)
+    circuit.rx(0.23, 0)
+
+    result = assure_qiskit_circuit(circuit)
+
+    assert result.assurance_status == "VERIFIED"
+    assert result.optimization_applied is True
+    assert result.fallback_reason is None
+    assert result.compiler_report.equivalence_status == "VERIFIED"
+    np.testing.assert_allclose(
+        Operator(circuit).data, Operator(result.returned_circuit).data, atol=1e-10, rtol=0
+    )
+
+
 def test_assurance_supports_terminal_measurement_suffix() -> None:
     circuit = QuantumCircuit(1, 1)
     circuit.h(0)

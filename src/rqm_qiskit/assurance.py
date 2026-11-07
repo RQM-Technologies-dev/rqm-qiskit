@@ -7,9 +7,8 @@ Qiskit always routes through :func:`compiled_circuit_to_qiskit`.
 The v0.4 boundary accepts bound unitary regions of at most three qubits and an
 optional terminal-measurement suffix. Larger circuits are partitioned at
 measurement and barrier boundaries and are changed only when every affected
-region is independently verified. Equivalence is established up to global
-phase; callers must not treat a returned circuit as safe to promote directly
-to a coherently controlled subcircuit.
+region is independently verified. Compiler reports state the equivalence
+contract explicitly; only phase-preserving evidence justifies coherent reuse.
 """
 
 from __future__ import annotations
@@ -76,7 +75,7 @@ _PARSE_LOCATION_PATTERNS = (
 _LIMITATIONS = (
     "Dense whole-circuit assurance is limited to one to three qubits; larger circuits use verified regions of at most three qubits.",
     "Only terminal measurement suffixes are preserved; mid-circuit measurement and control flow fail closed.",
-    "Semantic equivalence is bounded numerical or canonical verification up to global phase.",
+    "Semantic equivalence follows the compiler report phase_invariant contract; exact evidence is required for coherent reuse.",
     "The result is not formal verification and contains no simulator, emulator, or QPU evidence.",
     "Do not promote the returned circuit directly to a coherently controlled subcircuit.",
 )
@@ -653,6 +652,7 @@ def _rebuild_with_terminal_measurements(
 ) -> QuantumCircuit:
     output = original.copy_empty_like()
     output.name = original.name
+    output.global_phase = lowered_prefix.global_phase
     output.metadata = dict(original.metadata or {})
     for instruction in lowered_prefix.data:
         qubits = [lowered_prefix.find_bit(qubit).index for qubit in instruction.qubits]
@@ -1037,11 +1037,43 @@ def export_openqasm3(source: Any) -> QiskitExportResult:
     """Lower compiler IR through the canonical bridge and emit OpenQASM 3."""
 
     try:
-        circuit = compiled_circuit_to_qiskit(source)
-        # Canonical lowering has already resolved every compiler operation to
-        # a Qiskit instruction or failed closed. Re-transpiling here repeats
-        # instruction analysis without adding a semantic or portability gate.
+        from rqm_compiler.passes.lower_u1q_named_1q import lower_u1q_named_1q_pass
+        from qiskit.quantum_info import Operator
+        import numpy as np
+
+        from rqm_compiler import Circuit, CompiledCircuit
+        from rqm_compiler.validate import validate_circuit
+
+        # Descriptors are authoritative for CompiledCircuit lowering, including
+        # transport objects whose optional Circuit cache is absent.
+        working = (Circuit.from_descriptors(source.descriptors, num_qubits=source.num_qubits)
+                   if isinstance(source, CompiledCircuit) else source)
+        validate_circuit(working)
+        original = compiled_circuit_to_qiskit(working)
+        if original.num_qubits > 8:
+            raise ValueError("Exact OpenQASM export verification is bounded to eight qubits.")
+        before_prefix, before_suffix, split_error = _terminal_measurement_split(original)
+        if split_error is not None:
+            raise ValueError("Export requires a unitary prefix and terminal measurements only.")
+        # Qiskit's custom-unitary QASM definition can omit its scalar phase.
+        # Delegate exact named rotation export to the compiler/math owners.
+        circuit = compiled_circuit_to_qiskit(lower_u1q_named_1q_pass(working))
         exported = qasm3.dumps(circuit)
+        restored = qasm3.loads(exported)
+        after_prefix, after_suffix, split_error = _terminal_measurement_split(restored)
+        if split_error is not None:
+            raise ValueError("Export changed terminal measurement semantics.")
+        def measurement_signature(circuit, suffix):
+            return (circuit.num_qubits, circuit.num_clbits,
+                    [(register.name, len(register)) for register in circuit.cregs],
+                    [(op.name, qubits, clbits) for op, qubits, clbits in suffix])
+        if measurement_signature(original, before_suffix) != measurement_signature(restored, after_suffix):
+            raise ValueError("Export changed terminal measurement mapping.")
+        before = Operator(before_prefix).data
+        after = Operator(after_prefix).data
+        error = np.linalg.norm(before - after) / np.sqrt(len(before))
+        if not np.isfinite(error) or error > 1e-10:
+            raise ValueError(f"OpenQASM export changed the phase-preserving operator: {error}")
     except Exception as exc:  # noqa: BLE001 - public export must return structured failure
         return QiskitExportResult(
             status="ERROR",

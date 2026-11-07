@@ -144,6 +144,13 @@ To import and export OpenQASM 3:
 pip install "rqm-qiskit[qasm3]"
 ```
 
+`export_openqasm3` verifies a round trip through the optional QASM importer
+before returning source. Export accepts at most eight qubits with a unitary
+prefix and optional terminal measurements. It preserves the full operator,
+including scalar phase, and the terminal measurement/register mapping.
+Unsupported inputs or failed round-trip checks return an error without source.
+This bounded export contract is separate from the assurance limits below.
+
 After 0.4 is published, the five-minute circuit-lens installation will be:
 
 ```bash
