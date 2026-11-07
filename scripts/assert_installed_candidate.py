@@ -9,19 +9,16 @@ from pathlib import Path
 
 import rqm_qiskit
 
+from release_stack import CANDIDATE_VERSIONS
+
 
 workspace = Path(os.environ["RQM_WORKSPACE"]).resolve()
 module_path = Path(rqm_qiskit.__file__).resolve()
 if module_path.is_relative_to(workspace):
     raise RuntimeError(f"rqm_qiskit resolved inside the checkout: {module_path}")
 
-expected = {
-    "rqm-core": "0.2.2",
-    "rqm-compiler": "0.3.7",
-    "rqm-qiskit": "0.4.1",
-    "rqm-entanglement": "0.2.2",
-    "qiskit-qasm3-import": "0.6.0",
-}
+expected = CANDIDATE_VERSIONS
+
 actual = {project: version(project) for project in (*expected, "qiskit")}
 for project, expected_version in expected.items():
     if actual[project] != expected_version:

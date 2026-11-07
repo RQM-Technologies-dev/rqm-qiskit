@@ -12,12 +12,14 @@ from email.parser import BytesParser
 from pathlib import Path
 from zipfile import ZipFile
 
+from release_stack import CANDIDATE_VERSIONS
+
 
 EXPECTED_WHEELS = {
-    "rqm-core": ("0.2.2", "rqm_core-0.2.2-py3-none-any.whl"),
-    "rqm-compiler": ("0.3.7", "rqm_compiler-0.3.7-py3-none-any.whl"),
-    "rqm-qiskit": ("0.4.1", "rqm_qiskit-0.4.1-py3-none-any.whl"),
+    project: (CANDIDATE_VERSIONS[project], f"{project.replace('-', '_')}-{CANDIDATE_VERSIONS[project]}-py3-none-any.whl")
+    for project in ("rqm-core", "rqm-compiler", "rqm-qiskit")
 }
+
 NATIVE_SUFFIXES = (".so", ".pyd", ".dylib", ".dll")
 
 
@@ -138,7 +140,7 @@ def install(wheelhouse: Path, wheels: dict[str, Path], *, extra: str) -> None:
         f"rqm-qiskit[{extra}] @ {wheels['rqm-qiskit'].resolve().as_uri()}",
         "qiskit==2.5.1",
         "qiskit-qasm3-import==0.6.0",
-        "rqm-entanglement==0.2.2",
+        f"rqm-entanglement=={CANDIDATE_VERSIONS['rqm-entanglement']}",
     ]
     subprocess.run(
         [sys.executable, "-m", "pip", "install", *requirements], check=True

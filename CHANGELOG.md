@@ -4,6 +4,13 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.4.2](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.1...v0.4.2) (2026-11-07)
+
+
+### Bug Fixes
+
+* synchronize bridge with exact-phase science releases ([#41](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/41)) ([e96ab83](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/e96ab830c0efd32e43923f32db6a1c5065e57822))
+
 ## [0.4.1](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.0...v0.4.1) (2026-09-20)
 
 

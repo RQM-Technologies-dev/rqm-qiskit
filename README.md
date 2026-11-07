@@ -124,6 +124,11 @@ Dependencies:
 - `rqm-compiler` — optimization engine (produces the circuit representation consumed here)
 - `qiskit` — quantum circuit execution
 
+The next bridge candidate targets core 0.3.1, compiler 0.3.8, and entanglement
+0.2.3. Published bridge 0.4.1 belongs to the older core 0.2 stack. See
+[release stack compatibility](docs/RELEASE_STACK_COMPATIBILITY.md) before
+updating an application's lockfile; candidate qualification is not publication.
+
 > **Note:** `rqm-circuits` (the public circuit IR) is an upstream concern.
 > `rqm-qiskit` works with compiler-lowered circuits, not raw `rqm-circuits` payloads directly.
 
@@ -481,7 +486,8 @@ qc, synthesis_reports = to_qiskit_circuit(
 )
 ```
 
-For each `su4q` block the bridge generates five candidates:
+By default (`strategy="best_native"`), the bridge generates five candidates for
+each `su4q` block:
 
 | Path | Candidate |
 |------|-----------|
@@ -498,6 +504,12 @@ scheduled duration, total native gates, two-qubit depth, full depth,
 compilation latency, and QPY size. The report records every candidate metric,
 failure reason, Weyl class, nonlocal fingerprint, selected path, and selection
 reason.
+
+An explicit strategy (`Q3`, `QF`, `QC`, `QX`, or `RQ`) generates and validates
+only the requested candidate. Its report's `candidates` mapping contains only
+that evaluated path. An invalid requested candidate raises `ValueError`; it
+does not silently fall back to a different strategy. Use `best_native` for the
+full candidate comparison and audit.
 
 `RQ` is deliberately a candidate, not a preferred default. It uses exact
 single-qubit Euler synthesis plus basis-changed, positive-angle `rzz`

@@ -11,10 +11,26 @@ permissions:
   contents: read
 
 env:
-  RQM_CORE_COMMIT: 6d1a06dfa7d40847df3d0fc60f635c78365abec8
-  RQM_COMPILER_COMMIT: 8cdf4ec9a27d93d46c7daeb921fc10cc2491eb30
+  RQM_CORE_COMMIT: 8c3e62d5318eb869bd22afe11092faf3eb48147b
+  RQM_COMPILER_COMMIT: 0feb4af3a9e6f6ff19f5e59b568ce923a7971644
 
 jobs:
+  release-policy:
+    name: Release policy adversarial tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: node --test .github/scripts/test-release-policy.cjs
+      - run: python -m unittest discover -s .github/scripts -p 'test_release_*.py' -v
+
   build:
     name: Build and inspect distributions
     runs-on: ubuntu-latest

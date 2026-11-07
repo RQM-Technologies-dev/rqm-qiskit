@@ -1,0 +1,17 @@
+{
+  "study": "selected-synthesis-dispatch-v0.1",
+  "recorded_utc": "2026-11-07T13:39:28.126410+00:00",
+  "baseline_commit": "5d67721f19be462fca718e2fafa83b885e2a38ef",
+  "baseline_synthesis_identical_to_SIM030": true,
+  "parent_study_unchanged": true,
+  "cases": "all 26 frozen SIM-030 synthesis cases, both cx and rzz targets (52 rows)",
+  "methods": "all five explicit strategies plus best_native; baseline and candidate paired; all three original conventional Qiskit baselines",
+  "timing": "one warmup, seven repeats, rotate method order each repetition; raw-descriptor end-to-end including conversion, decomposition, synthesis and full-operator/native-target validation",
+  "selection": "no cherry-picking; unavailable rows retained; no speed threshold for pass",
+  "correctness": "every available output operator error <=1e-10; explicit baseline/candidate instruction digests must match across all successful samples; matching availability for each strategy and target",
+  "limits": "local synthetic targets only, no hardware, no paid/provider calls; Qiskit 2.5.1 pinned for replay; no general Qiskit parity or superiority claim",
+  "script_sha256": "62a0392df829af29b0b4f8c5d387ad2fcf5bd9564e4d01dc892c4ecbd983e18f",
+  "revision_recorded_utc": "2026-11-07T13:42:51.596733+00:00",
+  "revision_reason": "Independent review found inherited TimeoutError could be swallowed by factory exception handlers. Rerun with BaseException sentinel unwinding outside synthesis. Original first-pass raw.json retained, no results used to choose cases or methods.",
+  "timing_caveat": "Seven repetitions partially rotate fifteen methods; this is not a fully counterbalanced experiment."
+}

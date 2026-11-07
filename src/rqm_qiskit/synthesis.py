@@ -320,7 +320,12 @@ def synthesize_su4_block(
     strategy: SynthesisStrategy = "best_native",
     include_report: bool = False,
 ) -> QuantumCircuit | tuple[QuantumCircuit, dict[str, Any]]:
-    """Generate, validate, and select local/native Qiskit synthesis candidates."""
+    """Generate, validate, and select local/native Qiskit synthesis candidates.
+
+    ``best_native`` evaluates all candidate families. An explicit strategy runs
+    only that family and fails closed if it is invalid; it never falls back to
+    another family. Reports contain only the candidates that were evaluated.
+    """
     if not isinstance(block, QuaternionCartanBlock):
         raise TypeError("block must be a QuaternionCartanBlock")
     if strategy not in {"best_native", *_PATHS}:
@@ -338,6 +343,8 @@ def synthesize_su4_block(
     records: dict[str, dict[str, Any]] = {}
     circuits: dict[str, QuantumCircuit] = {}
     for path, factory in factories:
+        if strategy != "best_native" and path != strategy:
+            continue
         try:
             circuit, latency, metadata = factory()
             circuits[path] = circuit

@@ -19,6 +19,24 @@ from rqm_entanglement import (
 )
 
 from rqm_qiskit import direct_rq_circuit, synthesize_su4_block, to_qiskit_circuit
+from rqm_qiskit import synthesis
+
+
+_STRATEGIES = ("Q3", "QF", "QC", "QX", "RQ")
+
+
+def _track_factories(monkeypatch: pytest.MonkeyPatch) -> list[str]:
+    calls: list[str] = []
+    for path in _STRATEGIES:
+        name = f"_synthesize_{path.lower()}"
+        factory = getattr(synthesis, name)
+
+        def tracked(*args, _path=path, _factory=factory, **kwargs):
+            calls.append(_path)
+            return _factory(*args, **kwargs)
+
+        monkeypatch.setattr(synthesis, name, tracked)
+    return calls
 
 
 def _target(*, fractional: bool) -> Target:
@@ -77,13 +95,17 @@ def test_standard_pair_rotation_translation() -> None:
     assert [item.operation.name for item in translated.data] == ["rxx", "ryy", "rzz"]
 
 
-def test_best_native_generates_all_candidate_families_and_allows_rq_to_lose() -> None:
+def test_best_native_generates_all_candidate_families_and_allows_rq_to_lose(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = _track_factories(monkeypatch)
     block = _generic_block()
     selected, report = synthesize_su4_block(
         block,
         include_report=True,
     )
     assert set(report["candidates"]) == {"Q3", "QF", "QC", "QX", "RQ"}
+    assert calls == list(_STRATEGIES)
     assert report["selected_path"] != "RQ"
     assert report["candidates"]["RQ"]["valid"] is True
     _assert_semantic(block, selected)
@@ -126,19 +148,89 @@ def test_rq_path_uses_positive_supported_rzz_and_no_generic_unitary() -> None:
     _assert_semantic(block, pre_native)
 
 
-@pytest.mark.parametrize("strategy", ["Q3", "QF", "QC", "QX", "RQ"])
-def test_each_supported_fractional_target_candidate_is_semantic_and_native(strategy: str) -> None:
+@pytest.mark.parametrize("strategy", _STRATEGIES)
+@pytest.mark.parametrize("include_report", [False, True])
+def test_explicit_strategy_runs_only_requested_semantic_native_candidate(
+    strategy: str, include_report: bool, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = _track_factories(monkeypatch)
     block = _generic_block()
-    circuit, report = synthesize_su4_block(
+    result = synthesize_su4_block(
         block,
         target=_target(fractional=True),
         strategy=strategy,
-        include_report=True,
+        include_report=include_report,
     )
-    record = report["candidates"][strategy]
-    assert record["valid"] is True
-    assert record["generic_unitary_count"] == 0
+    assert calls == [strategy]
+    if include_report:
+        circuit, report = result
+        assert set(report["candidates"]) == {strategy}
+        assert report["selected_path"] == strategy
+        assert report["selection_reason"] == f"explicit strategy request: {strategy}"
+        record = report["candidates"][strategy]
+        assert record["valid"] is True
+        assert record["generic_unitary_count"] == 0
+    else:
+        circuit = result
     _assert_semantic(block, circuit)
+
+
+@pytest.mark.parametrize("strategy", _STRATEGIES)
+@pytest.mark.parametrize("failure", ["factory", "validation"])
+def test_explicit_failure_does_not_try_other_factories(
+    strategy: str, failure: str, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    if failure == "factory":
+        def fail(*args, **kwargs):
+            raise RuntimeError("requested factory failed")
+
+        monkeypatch.setattr(synthesis, f"_synthesize_{strategy.lower()}", fail)
+    else:
+        # Candidate generation succeeds, but verification must still reject it.
+        monkeypatch.setattr(synthesis, "_semantic_error", lambda *args: (1.0, False))
+    calls = _track_factories(monkeypatch)
+    with pytest.raises(ValueError, match=f"requested synthesis strategy {strategy} is invalid"):
+        synthesize_su4_block(
+            _generic_block(), target=_target(fractional=True), strategy=strategy,
+        )
+    assert calls == [strategy]
+
+
+def test_best_native_continues_after_candidate_factory_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def fail(*args, **kwargs):
+        raise RuntimeError("unavailable candidate")
+
+    monkeypatch.setattr(synthesis, "_synthesize_q3", fail)
+    calls = _track_factories(monkeypatch)
+    block = _generic_block()
+    circuit, report = synthesize_su4_block(block, include_report=True)
+    assert calls == list(_STRATEGIES)
+    assert report["candidates"]["Q3"] == {
+        "path": "Q3", "valid": False,
+        "fallback_reason": "unavailable candidate", "error_type": "RuntimeError",
+    }
+    assert report["selected_path"] != "Q3"
+    assert report["candidates"][report["selected_path"]]["valid"] is True
+    _assert_semantic(block, circuit)
+
+
+def test_best_native_fails_closed_when_no_candidate_is_valid(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(synthesis, "_semantic_error", lambda *args: (1.0, False))
+    calls = _track_factories(monkeypatch)
+    with pytest.raises(ValueError, match="no semantically valid target-compatible"):
+        synthesize_su4_block(_generic_block())
+    assert calls == list(_STRATEGIES)
+
+
+def test_unknown_strategy_does_not_call_factories(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _track_factories(monkeypatch)
+    with pytest.raises(ValueError, match="unsupported synthesis strategy"):
+        synthesize_su4_block(_generic_block(), strategy="unknown")
+    assert calls == []
 
 
 def test_compiler_su4q_round_trip_to_qiskit_operator_and_report() -> None:
@@ -154,13 +246,15 @@ def test_compiler_su4q_round_trip_to_qiskit_operator_and_report() -> None:
     _assert_semantic(block, translated)
 
 
-def test_explicit_invalid_strategy_fails_closed() -> None:
+def test_explicit_invalid_strategy_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _track_factories(monkeypatch)
     with pytest.raises(ValueError, match="QF"):
         synthesize_su4_block(
             _generic_block(),
             target=_target(fractional=False),
             strategy="QF",
         )
+    assert calls == ["QF"]
 
 
 def test_deterministic_landmarks_have_valid_selected_candidates() -> None:
