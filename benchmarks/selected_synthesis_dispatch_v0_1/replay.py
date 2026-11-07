@@ -13,6 +13,7 @@ import importlib.util
 import json
 import platform
 from pathlib import Path
+import signal
 import sys
 
 import numpy as np
@@ -31,6 +32,24 @@ INPUT_SHA256 = {
     "synthesis_benchmark.py": "69a15bca2ee7a60c265f1cfd633700855f1be46f81a7c2780ebdc9d690e65fb4",
 }
 STRATEGIES = ("Q3", "QF", "QC", "QX", "RQ", "best_native")
+
+
+class _MethodTimeout(BaseException):
+    """Escape candidate-level ``except Exception`` without hiding timeouts."""
+
+
+def _preserve_deadline(function):
+    """Use common.measure's alarm, but unwind synthesis before catching it."""
+    def expired(*_):
+        raise _MethodTimeout
+
+    previous_handler = signal.signal(signal.SIGALRM, expired)
+    try:
+        return function()
+    except _MethodTimeout:
+        raise TimeoutError("method exceeded 15s") from None
+    finally:
+        signal.signal(signal.SIGALRM, previous_handler)
 
 
 def sha256(path: Path) -> str:
@@ -148,7 +167,11 @@ def main() -> None:
                     methods[name] = lambda n=name, m=module, s=strategy: evaluate(n, m, s)
             for name in ("qiskit_dedicated", "qiskit_unitary", "qiskit_source"):
                 methods[name] = lambda n=name: evaluate(n)
-            timings, outputs = measure(methods, repeats=7, warmups=1)
+            guarded = {
+                name: lambda method=method: _preserve_deadline(method)
+                for name, method in methods.items()
+            }
+            timings, outputs = measure(guarded, repeats=7, warmups=1)
             for name, metrics in outputs.items():
                 timings[name].update(metrics)
                 timings[name]["all_output_checks"] = samples[name]

@@ -1,0 +1,94 @@
+{
+  "best_native_two_qubit_count_changes": 0,
+  "environment": {
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "versions": {
+      "numpy": "2.3.5",
+      "qiskit": "2.5.1",
+      "rqm-compiler": "0.3.8",
+      "rqm-core": "0.3.1",
+      "rqm-entanglement": "0.2.3",
+      "scipy": "1.16.3"
+    }
+  },
+  "explicit_instruction_digest_changes": 0,
+  "formulas": {
+    "latency_ms": "median across available rows of each method median_ns / 1e6",
+    "speedup": "median across available rows of baseline median_ns / candidate median_ns",
+    "versus_dedicated_ratio": "median across available rows of candidate median_ns / qiskit_dedicated median_ns"
+  },
+  "maximum_operator_error": 8.336663324276285e-14,
+  "paired_availability_changes": 0,
+  "raw_sha256": "09c7e6c2cb5c788a0c6b3c3b49fbdfc5e68ad9d0422c74a4c8d7ec1c5dc80234",
+  "row_count": 52,
+  "strategies": {
+    "Q3": {
+      "available_pairs": 52,
+      "baseline_median_latency_ms": 27.143293,
+      "candidate_median_latency_ms": 10.8439315,
+      "maximum_speedup": 3.795405494786871,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 1.506574197134835,
+      "median_speedup": 2.6944087422507517,
+      "minimum_speedup": 1.5882244400213428,
+      "unavailable_pairs": 0
+    },
+    "QC": {
+      "available_pairs": 26,
+      "baseline_median_latency_ms": 32.771170999999995,
+      "candidate_median_latency_ms": 10.1738045,
+      "maximum_speedup": 4.632131271754315,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 1.5040034334186023,
+      "median_speedup": 3.1746367944214855,
+      "minimum_speedup": 2.574198672011277,
+      "unavailable_pairs": 26
+    },
+    "QF": {
+      "available_pairs": 26,
+      "baseline_median_latency_ms": 32.6802895,
+      "candidate_median_latency_ms": 10.6300285,
+      "maximum_speedup": 3.4821697208602456,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 1.5388890743667245,
+      "median_speedup": 3.1224393867344165,
+      "minimum_speedup": 2.7649584264039775,
+      "unavailable_pairs": 26
+    },
+    "QX": {
+      "available_pairs": 52,
+      "baseline_median_latency_ms": 27.7690425,
+      "candidate_median_latency_ms": 10.521150500000001,
+      "maximum_speedup": 3.4669986525380794,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 1.5167044427233785,
+      "median_speedup": 2.5014244003429535,
+      "minimum_speedup": 1.763796371955283,
+      "unavailable_pairs": 0
+    },
+    "RQ": {
+      "available_pairs": 52,
+      "baseline_median_latency_ms": 27.8808745,
+      "candidate_median_latency_ms": 8.996013999999999,
+      "maximum_speedup": 4.208629569737126,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 1.2741864958365605,
+      "median_speedup": 2.894621422583988,
+      "minimum_speedup": 1.7638117104205437,
+      "unavailable_pairs": 0
+    },
+    "best_native": {
+      "available_pairs": 52,
+      "baseline_median_latency_ms": 28.384335,
+      "candidate_median_latency_ms": 27.938409,
+      "maximum_speedup": 1.3108779632988508,
+      "median_candidate_to_qiskit_dedicated_time_ratio": 3.8396646832159353,
+      "median_speedup": 1.0070285301287054,
+      "minimum_speedup": 0.8293586651162415,
+      "unavailable_pairs": 0
+    }
+  },
+  "successful_method_series": 676,
+  "successful_output_checks": 5408,
+  "unavailable_errors": [
+    "ValueError: requested synthesis strategy QC is invalid: controlled-U/RZZ synthesis requires target RZZ support",
+    "ValueError: requested synthesis strategy QF is invalid: fractional target requires parameterized RX and RZZ support"
+  ],
+  "unavailable_method_series": 104
+}
