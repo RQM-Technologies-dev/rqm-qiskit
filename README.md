@@ -486,7 +486,8 @@ qc, synthesis_reports = to_qiskit_circuit(
 )
 ```
 
-For each `su4q` block the bridge generates five candidates:
+By default (`strategy="best_native"`), the bridge generates five candidates for
+each `su4q` block:
 
 | Path | Candidate |
 |------|-----------|
@@ -503,6 +504,12 @@ scheduled duration, total native gates, two-qubit depth, full depth,
 compilation latency, and QPY size. The report records every candidate metric,
 failure reason, Weyl class, nonlocal fingerprint, selected path, and selection
 reason.
+
+An explicit strategy (`Q3`, `QF`, `QC`, `QX`, or `RQ`) generates and validates
+only the requested candidate. Its report's `candidates` mapping contains only
+that evaluated path. An invalid requested candidate raises `ValueError`; it
+does not silently fall back to a different strategy. Use `best_native` for the
+full candidate comparison and audit.
 
 `RQ` is deliberately a candidate, not a preferred default. It uses exact
 single-qubit Euler synthesis plus basis-changed, positive-angle `rzz`
