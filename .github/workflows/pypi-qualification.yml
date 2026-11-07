@@ -1,4 +1,4 @@
-name: Public PyPI qualification
+name: Historical public PyPI qualification (0.4.1)
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
       - name: Install the public release from PyPI only
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --index-url https://pypi.org/simple --no-cache-dir "rqm-qiskit[cli]==0.4.1"
+          python -m pip install --index-url https://pypi.org/simple --no-cache-dir "rqm-qiskit[cli]==0.4.1" "rqm-core==0.2.2" "rqm-compiler==0.3.7" "rqm-entanglement==0.2.2" "qiskit==2.5.1"
           python -m pip check
 
       - name: Download public RQM wheels for provenance hashes

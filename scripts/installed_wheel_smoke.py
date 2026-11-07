@@ -16,6 +16,8 @@ from importlib.metadata import distribution, version
 from pathlib import Path
 from typing import Callable
 
+from release_stack import versions_for
+
 import rqm_qiskit
 from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister, qasm3
 from rqm_qiskit import (
@@ -74,13 +76,8 @@ def main() -> int:
             raise AssertionError(name)
         checks.append(name)
 
-    exact_versions = {
-        "rqm-core": "0.2.2",
-        "rqm-compiler": "0.3.7",
-        "rqm-qiskit": "0.4.1",
-        "rqm-entanglement": "0.2.2",
-        "qiskit-qasm3-import": "0.6.0",
-    }
+    exact_versions = versions_for(distribution_source)
+
     versions = {project: version(project) for project in (*exact_versions, "qiskit")}
     check(
         "exact_rqm_dependency_versions",
