@@ -124,6 +124,11 @@ Dependencies:
 - `rqm-compiler` — optimization engine (produces the circuit representation consumed here)
 - `qiskit` — quantum circuit execution
 
+The next bridge candidate targets core 0.3.1, compiler 0.3.8, and entanglement
+0.2.3. Published bridge 0.4.1 belongs to the older core 0.2 stack. See
+[release stack compatibility](docs/RELEASE_STACK_COMPATIBILITY.md) before
+updating an application's lockfile; candidate qualification is not publication.
+
 > **Note:** `rqm-circuits` (the public circuit IR) is an upstream concern.
 > `rqm-qiskit` works with compiler-lowered circuits, not raw `rqm-circuits` payloads directly.
 

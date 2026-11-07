@@ -158,7 +158,7 @@ def test_assurance_returns_verified_compiler_result() -> None:
     assert _equivalent_up_to_phase(circuit, result.returned_circuit)
 
 
-def test_assurance_verifies_rewrites_around_iswap() -> None:
+def test_assurance_preserves_named_gate_phase_around_iswap() -> None:
     circuit = QuantumCircuit(2, name="iswap-regression")
     circuit.h(0)
     circuit.iswap(0, 1)
@@ -167,10 +167,13 @@ def test_assurance_verifies_rewrites_around_iswap() -> None:
     result = assure_qiskit_circuit(circuit)
 
     assert result.assurance_status == "VERIFIED"
-    assert result.optimization_applied is True
+    # Compiler 0.3.8 keeps named U(2) gates rather than discard their phase.
+    assert result.optimization_applied is False
     assert result.fallback_reason is None
     assert result.compiler_report.equivalence_status == "VERIFIED"
-    assert _equivalent_up_to_phase(circuit, result.returned_circuit)
+    np.testing.assert_allclose(
+        Operator(circuit).data, Operator(result.returned_circuit).data, atol=1e-10, rtol=0
+    )
 
 
 def test_assurance_supports_terminal_measurement_suffix() -> None:
