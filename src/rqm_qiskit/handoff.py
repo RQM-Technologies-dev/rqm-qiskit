@@ -40,6 +40,31 @@ def _prefix(circuit):
     prefix, suffix, error = _terminal_measurement_split(circuit)
     if error is not None:
         raise ValueError(str(error.to_dict()))
+    # QASM may redefine a familiar name (for example `gate h { U(...) }`).
+    # The compiler importer consumes names, so establish that each actual
+    # SDK operation has the named gate's semantics before handing it off.
+    # Qiskit's QASM exporter also emits legitimate custom rzz definitions;
+    # class/name checks alone cannot distinguish those from altered gates.
+    import numpy as np
+    from qiskit.circuit import Barrier
+    from qiskit.circuit.library import get_standard_gate_name_mapping
+    from qiskit.quantum_info import Operator
+
+    standard = get_standard_gate_name_mapping()
+    for item in prefix.data:
+        operation = item.operation
+        if isinstance(operation, Barrier):
+            continue
+        if operation.name not in standard or operation.num_qubits > 2:
+            raise ValueError("Unsupported gate definition.")
+        expected = standard[operation.name].to_mutable()
+        expected.params = list(operation.params)
+        if expected.num_qubits != operation.num_qubits or not np.allclose(
+            Operator(operation).data, Operator(expected).data, atol=1e-12, rtol=0.0
+        ):
+            raise ValueError(
+                f"Gate definition differs from standard {operation.name} semantics."
+            )
     imported = import_qiskit_circuit(prefix, max_qubits=MAX_QUBITS)
     if imported.circuit is None:
         raise ValueError(str(imported.report.to_dict()))
@@ -79,8 +104,9 @@ def verify_openqasm3_artifact(
 
         if "phase_invariant" not in signature(verify_equivalence).parameters:
             raise ValueError("Compiler runtime lacks explicit phase semantics.")
-        left, _, before = _prefix(qasm3.loads(source))
-        right, _, after = _prefix(qasm3.loads(artifact))
+        original_sdk, returned_sdk = qasm3.loads(source), qasm3.loads(artifact)
+        left, _, before = _prefix(original_sdk)
+        right, _, after = _prefix(returned_sdk)
         result["readout"] = after
         result["measurement_map_preserved"] = before == after
         if before != after:
@@ -101,14 +127,47 @@ def verify_openqasm3_artifact(
         result.update(asdict(proof))
         result["status"] = proof.status.value
         result["equivalent"] = proof.verified
+        # Independently close the adapter boundary on the complete SDK objects.
+        # This checks actual QASM definitions, rather than accumulating a
+        # tolerance across individually named operations. Never promote a
+        # nonverified compiler verdict based on this additional check.
+        if proof.status.value == "VERIFIED" and proof.verified is True:
+            import numpy as np
+            from qiskit.quantum_info import Operator
+
+            actual_before = Operator(
+                original_sdk.remove_final_measurements(inplace=False)
+            )
+            actual_after = Operator(
+                returned_sdk.remove_final_measurements(inplace=False)
+            )
+            preserved = (
+                actual_before.equiv(actual_after, atol=1e-10, rtol=0.0)
+                if phase_semantics == "phase_invariant"
+                else np.allclose(
+                    actual_before.data, actual_after.data, atol=1e-10, rtol=0.0
+                )
+            )
+            result["artifact_semantics_checked"] = True
+            if not preserved:
+                result.update(
+                    status="COUNTEREXAMPLE",
+                    equivalent=False,
+                    reason="Actual serialized operators differ.",
+                )
         result["controlled_reuse_eligible"] = (
-            proof.status.value == "VERIFIED"
-            and proof.verified is True
+            result["status"] == "VERIFIED"
+            and result["equivalent"] is True
             and not proof.phase_invariant
             and not before["measurements"]
         )
     except Exception as exc:
-        result["reason"] = str(exc)
+        result.update(
+            status="UNSUPPORTED",
+            equivalent=None,
+            controlled_reuse_eligible=False,
+            reason=str(exc),
+        )
     return result
 
 
