@@ -13,6 +13,13 @@ from rqm_qiskit.assurance import assure_openqasm3, export_openqasm3, import_open
 
 def _execute(request: dict[str, Any]) -> dict[str, Any]:
     action = request.get("action")
+    if action == "handoff":
+        from rqm_qiskit.handoff import assure_openqasm3_handoff
+
+        return assure_openqasm3_handoff(
+            str(request.get("source", "")),
+            phase_semantics=request.get("phase_semantics", "exact"),
+        )
     if action == "import":
         result = import_openqasm3(str(request.get("source", "")))
         circuit = (
