@@ -4,6 +4,13 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.4.4](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.3...v0.4.4) (2026-11-08)
+
+
+### Bug Fixes
+
+* reject misleading named gate definitions during handoff ([#48](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/48)) ([d692226](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/d6922268973be501512dc7e12fca999772eceff9))
+
 ## [0.4.3](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.2...v0.4.3) (2026-11-08)
 
 

@@ -1,6 +1,6 @@
 [project]
 name = "rqm-qiskit"
-version = "0.4.3"
+version = "0.4.4"
 description = "Evidence-backed quaternionic geometric lens and Qiskit bridge for the RQM ecosystem"
 readme = "README.md"
 license = { file = "LICENSE" }
