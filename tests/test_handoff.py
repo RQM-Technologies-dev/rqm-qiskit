@@ -161,3 +161,15 @@ def test_corrupted_artifact_gate_definition_is_rejected():
     source = qasm3.dumps(circuit())
     artifact = "OPENQASM 3.0; gate h q { U(pi,0,pi) q; } qubit[4] q; h q[0];"
     assert verify_openqasm3_artifact(source, artifact)["status"] == "UNSUPPORTED"
+
+
+def test_sdk_check_failure_cannot_retain_compiler_verified_status(monkeypatch):
+    def failed(*args, **kwargs):
+        raise ValueError("SDK comparison unavailable")
+
+    monkeypatch.setattr(Operator, "equiv", failed)
+    source = qasm3.dumps(circuit())
+    result = verify_openqasm3_artifact(source, source, phase_semantics="phase_invariant")
+    assert result["status"] == "UNSUPPORTED"
+    assert result["equivalent"] is None
+    assert result["controlled_reuse_eligible"] is False
