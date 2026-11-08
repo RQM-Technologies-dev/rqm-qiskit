@@ -40,6 +40,29 @@ def _prefix(circuit):
     prefix, suffix, error = _terminal_measurement_split(circuit)
     if error is not None:
         raise ValueError(str(error.to_dict()))
+    # QASM may redefine a familiar name (for example `gate h { U(...) }`).
+    # The compiler importer consumes names, so establish that each actual
+    # SDK operation has the named gate's semantics before handing it off.
+    # Qiskit's QASM exporter also emits legitimate custom rzz definitions;
+    # class/name checks alone cannot distinguish those from altered gates.
+    import numpy as np
+    from qiskit.circuit import Barrier
+    from qiskit.circuit.library import get_standard_gate_name_mapping
+    from qiskit.quantum_info import Operator
+
+    standard = get_standard_gate_name_mapping()
+    for item in prefix.data:
+        operation = item.operation
+        if isinstance(operation, Barrier):
+            continue
+        if operation.name not in standard or operation.num_qubits > 2:
+            raise ValueError("Unsupported gate definition.")
+        expected = standard[operation.name].to_mutable()
+        expected.params = list(operation.params)
+        if expected.num_qubits != operation.num_qubits or not np.allclose(
+            Operator(operation).data, Operator(expected).data, atol=1e-12, rtol=0.0
+        ):
+            raise ValueError(f"Gate definition differs from standard {operation.name} semantics.")
     imported = import_qiskit_circuit(prefix, max_qubits=MAX_QUBITS)
     if imported.circuit is None:
         raise ValueError(str(imported.report.to_dict()))

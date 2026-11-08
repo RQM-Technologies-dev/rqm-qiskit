@@ -143,3 +143,21 @@ def test_legacy_phase_runtime_is_not_promoted(monkeypatch):
     assert result["assurance_status"] == "FALLBACK_ORIGINAL"
     assert result["verification"]["status"] == "UNSUPPORTED"
     assert result["returned_openqasm3"] == source
+
+
+@pytest.mark.parametrize("definition", [
+    "gate h q { U(pi,0,pi) q; }",
+    "gate h q { U(pi/2,0,pi) q; U(0,0,2*pi) q; U(2*pi,0,0) q; }",
+])
+def test_custom_named_gate_cannot_impersonate_standard_gate(definition):
+    source = "OPENQASM 3.0; " + definition + " qubit[4] q; h q[0];"
+    result = assure_openqasm3_handoff(source)
+    assert result["assurance_status"] == "FALLBACK_ORIGINAL"
+    assert result["verification"]["status"] == "UNSUPPORTED"
+    assert result["returned_openqasm3"] == source
+
+
+def test_corrupted_artifact_gate_definition_is_rejected():
+    source = qasm3.dumps(circuit())
+    artifact = "OPENQASM 3.0; gate h q { U(pi,0,pi) q; } qubit[4] q; h q[0];"
+    assert verify_openqasm3_artifact(source, artifact)["status"] == "UNSUPPORTED"
