@@ -82,11 +82,11 @@ def _assert_semantic(block: QuaternionCartanBlock, circuit) -> float:
     return error
 
 
-def test_qiskit_25_compatibility_range_is_active() -> None:
+def test_declared_qiskit_compatibility_range_is_active() -> None:
     installed = Version(qiskit.__version__)
-    assert Version("2.5.1") <= installed < Version("2.6")
+    assert Version("2.5.1") <= installed < Version("2.7")
     pyproject = (Path(__file__).parents[1] / "pyproject.toml").read_text()
-    assert '"qiskit>=2.5.1,<2.6"' in pyproject
+    assert '"qiskit>=2.5.1,<2.7"' in pyproject
 
 
 def test_standard_pair_rotation_translation() -> None:
