@@ -258,8 +258,8 @@ def _semantic_error(
     if circuit.num_qubits != 2:
         return math.inf, False
     candidate = np.asarray(Operator(circuit).data, dtype=np.complex128)
-    error, _ = phase_aligned_operator_error(source, candidate)
-    return error, error <= _SEMANTIC_TOLERANCE
+    exact_error = float(np.max(np.abs(source - candidate)))
+    return exact_error, exact_error <= _SEMANTIC_TOLERANCE
 
 
 def _candidate_metrics(
@@ -271,7 +271,8 @@ def _candidate_metrics(
     metadata: dict[str, Any],
 ) -> dict[str, Any]:
     compatibility = _target_compatibility(circuit, target)
-    operator_error, semantic_valid = _semantic_error(source, circuit)
+    exact_operator_error, semantic_valid = _semantic_error(source, circuit)
+    operator_error, _ = phase_aligned_operator_error(source, Operator(circuit).data)
     two_qubit_count = sum(
         instruction.operation.num_qubits == 2 for instruction in circuit.data
     )
@@ -285,6 +286,7 @@ def _candidate_metrics(
         "valid": valid,
         "semantic_valid": semantic_valid,
         "phase_aligned_operator_error": operator_error,
+        "exact_operator_error": exact_operator_error,
         "target_compatible": compatibility["compatible"],
         "unsupported_operations": compatibility["unsupported"],
         "generic_unitary_count": generic_unitary_count,
@@ -320,7 +322,7 @@ def synthesize_su4_block(
     strategy: SynthesisStrategy = "best_native",
     include_report: bool = False,
 ) -> QuantumCircuit | tuple[QuantumCircuit, dict[str, Any]]:
-    """Generate, validate, and select local/native Qiskit synthesis candidates.
+    """Generate, validate, and select phase-preserving native Qiskit candidates.
 
     ``best_native`` evaluates all candidate families. An explicit strategy runs
     only that family and fails closed if it is invalid; it never falls back to
