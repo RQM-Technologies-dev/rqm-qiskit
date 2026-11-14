@@ -4,6 +4,13 @@ All notable changes to **rqm-qiskit** are documented here.
 
 ---
 
+## [0.4.5](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.4...v0.4.5) (2026-11-14)
+
+
+### Bug Fixes
+
+* preserve exact phase when validating native synthesis candidates ([#50](https://github.com/RQM-Technologies-dev/rqm-qiskit/issues/50)) ([0dd8250](https://github.com/RQM-Technologies-dev/rqm-qiskit/commit/0dd825062dc04986a9f2f11f295711f68e497be7))
+
 ## [0.4.4](https://github.com/RQM-Technologies-dev/rqm-qiskit/compare/v0.4.3...v0.4.4) (2026-11-08)
 
 
